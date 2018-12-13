@@ -1,0 +1,284 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+<div class="wrapper">
+<div class="container">
+		<div class="row"><div class="col-md-12">
+		<ol class="progress progress--medium progress-custom">
+<li class="is-complete" data-step="S">
+   Start
+   <p>Click on next to start adding.</p>
+  </li>
+  <li class="is-complete" data-step="1">
+   1. Location
+   <p>Address</p>
+  </li>
+  <li class="is-complete" data-step="2">
+    2. About your space
+    <p >Title, Information, Parking Spaces, Capacity, Facility Amenities, Event Type</p>
+  </li>
+  <li class="is-complete" data-step="3">
+    3. Photos
+    <p >Upload photos for space</p>
+  </li>
+  
+  <li  class="is-complete" data-step="4">
+   4. Activities
+   <p >Hourly rate, Minimim hours, Discount, Cleaning, etc.</p>
+  </li>
+  <li data-step="F" class="is-complete progress__last">
+   Finish
+   <p >Review your space and click on agree to confirm</p>
+  </li>
+</ol>
+<div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="details">
+				<div class="main-title-2">
+									<h1>
+										<span>	Review your</span> Space
+									</h1>
+								</div>
+								<hr/>
+	<form method="post" action="" class="submitconfirmform">
+	{% csrf_token %}
+
+     <ul class="address-list edit-dotted-bx">
+     <a href="{% url "frontend:addspacelocation" %}" class="button-sm button-theme pull-right"><i class="fa fa-edit"></i> edit</a>
+     <li>
+     <span>Country:</span>
+     {% if spaceadd.country == 'us' %}United States{% endif %}
+      </li>
+      
+      
+      
+       <li>
+     <span>Address:</span>
+		{{ spaceadd.street_address_1|default_if_none:'' }}&nbsp;{{ spaceadd.street_address_2|default_if_none:'' }}&nbsp;{{ spaceadd.city|default_if_none:'' }}&nbsp;{{ spaceadd.state|default_if_none:'' }}&nbsp;{{ spaceadd.zipcode.zipcode|default_if_none:'' }}
+		</li>
+      </ul>
+      <ul class="address-list edit-dotted-bx">
+      <a href="{% url "frontend:addspaceabout" %}" class="button-sm button-theme pull-right"><i class="fa fa-edit"></i> edit</a>
+       <li>
+     <span>Space title:</span>
+{{ spaceadd.facility_name }}      </li>
+      
+      
+      
+       <li>
+     <span>Facility Information:</span>
+    {{ spaceadd.facility_information }}
+      </li>
+      
+      
+      
+      
+       <li>
+     <span>Parking Spaces:</span>
+     {{ spaceadd.parking_spaces }}
+      </li>
+      
+      
+       <li>
+     <span>Capacity:</span>
+   {{ spaceadd.capacity }}
+      </li>
+      
+      
+      
+       <li>
+     <span>Facility Amenities:</span>
+   {{ spaceadd.fac_amenities }}
+      </li>
+      
+       <li>
+     <span>Event Type:</span>
+     {{ spaceadd.event_type }}
+      </li>
+      
+      </ul>
+      <ul class="address-list edit-dotted-bx">
+      <a href="{% url "frontend:addspaceactivities" %}" class="button-sm button-theme pull-right"><i class="fa fa-edit"></i> edit</a>
+       <li>
+     <span>None refundable fee:</span>
+   {{ spaceadd.none_refundable_fee }}
+      </li>
+      
+      
+       <li>
+     <span>Cost for profit:</span>
+     {{ spaceadd.cost_for_profit }}
+      </li>
+      
+        <li>
+     <span>Cost for non profit:</span>
+     {{ spaceadd.cost_for_non_profit }}
+      </li>
+      
+      
+      
+        <li>
+     <span>Fac cost misc alc:</span>
+     {{ spaceadd.fac_cost_misc_alc }}
+      </li>
+      
+      
+      
+        <li>
+     <span>Fac cost misc rental clean dep no alc:</span>
+     {{ spaceadd.fac_cost_misc_rental_clean_dep_no_alc }}
+      </li>
+      
+      
+      
+      
+      
+         <li>
+     <span>Fac cost misc rental clean dep alc:</span>
+     {{ spaceadd.fac_cost_misc_rental_clean_dep_alc }}
+      </li>
+      
+         <li>
+     <span>Fac cost misc non ref hr mtn:</span>
+    {{ spaceadd.fac_cost_misc_non_ref_hr_mtn }}
+      </li>
+      
+         <li>
+     <span>Fac cost misc:</span>
+    {{ spaceadd.fac_cost_misc }}
+      </li>
+      
+      
+      
+      
+      
+         <li>
+     <span>Staff fee:</span>
+     {{ spaceadd.staff_fee }}
+      </li>
+  <li>
+												<span>Fac surf type: </span> 
+												{{ spaceadd.fac_surf_type }}
+											</li>
+										
+										<li>
+							
+												<span>Fac feature:</span>
+											{{ spaceadd.fac_feature }}
+											</li>
+									
+									
+									<li>
+												<span>Fee based amenities: </span> 
+												{{ spaceadd.fee_based_amenities }}
+										
+    </li>
+    
+    <li>
+									
+												<span>Location type:</span> 
+												 
+                                       
+                                        {{ spaceadd.location_type }}
+                                    
+										</li>
+
+	<li>								
+											<span>Location name:</span>
+{{ spaceadd.location_name }}
+										
+      </li>
+      <li><span>Note 1:</span>{{ spaceadd.note_1 }}</li>
+      <li><span>Note 2:</span>{{ spaceadd.note_2 }}</li>
+      <li><span>Note 3:</span>{{ spaceadd.note_3 }}</li>
+      <li><span>Res 1:</span>{{ spaceadd.res_1 }}</li>
+      <li><span>Res 2:</span>{{ spaceadd.res_2 }}</li>
+      <li><span>Res 3:</span>{{ spaceadd.res_3 }}</li>
+      
+      <li><span>Sun open time:</span>{{ spaceadd.sun_open_time }}</li>
+      <li><span>Sun close time:</span>{{ spaceadd.sun_close_time }}</li>
+      <li><span>Mon open time:</span>{{ spaceadd.mon_open_time }}</li>
+      <li><span>Mon close time:</span>{{ spaceadd.mon_close_time }}</li>
+      <li><span>Tues open time:</span>{{ spaceadd.tue_open_time }}</li>
+      <li><span>Tues close time:</span>{{ spaceadd.tue_close_time }}</li>
+      
+      <li><span>Wed open time:</span>{{ spaceadd.wed_open_time }}</li>
+      <li><span>Wed close time:</span>{{ spaceadd.wed_close_time }}</li>
+      <li><span>Thu open time:</span>{{ spaceadd.thu_open_time }}</li>
+      <li><span>Thu close time:</span>{{ spaceadd.thu_close_time }}</li>
+      <li><span>Fri open time:</span>{{ spaceadd.fri_open_time }}</li>
+      <li><span>Fri close time:</span>{{ spaceadd.fri_close_time }}</li>
+      
+      <li><span>Sat open time:</span>{{ spaceadd.sat_open_time }}</li>
+      <li><span>Sat close time:</span>{{ spaceadd.sat_close_time }}</li>
+      
+     
+     </ul>
+									
+    
+ <div class="col-md-12 edit-dotted-bx">
+  <a href="{% url "frontend:addspacephotos" %}" class="button-sm button-theme pull-right"><i class="fa fa-edit"></i> edit</a>
+	<div class="col-md-12">
+									<label class="control-label">Images:</label>
+									{% if spaceaddimage %}
+				
+				<div class="gallery clearfix">
+				{% for image in spaceaddimage %}
+					<div class='col-md-3'>
+						<div class='text-center image-bx'>
+							<img class='img-hgt' src='/media/{{ image.image_file }}'>
+						</div>
+					</div>
+					{% endfor %}
+					</div>
+					
+					{% endif %}
+	</div>
+	</div>
+	
+	 <div class="row">
+	 <div class="col-md-4 form-group"> 
+		          <input id="agree_confirm" name="agreeconfirm" placeholder="Agree terms and condition" class="hidden" type="checkbox">
+		            <label class="remember-label aggreeerrorlabel" for="agree_confirm">
+		              
+		              Agree terms and condition
+		            </label><br>
+		            <p class="help-block aggreeerror hidden error-msg" >Agree terms and condition is required.</p>
+		            </div>
+	<div class="col-md-12">
+                    <div class="form-group pull-left">
+	
+				<a href='{% url "frontend:addspaceactivities" %}' class="button-sm button-theme"><i class="fa fa-angle-double-left"></i> Back</a>
+				<button type="button" class="button-sm button-theme buttonsubmit">Submit </button>
+												</div>
+												</div>
+												</div>
+												</form>
+</div>
+</div>
+	</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+$('.buttonsubmit').on('click',function(){
+	if($('#agree_confirm:checked').length > 0){
+		$('.aggreeerror').addClass('hidden');
+	}
+	else{
+		$('.aggreeerror').removeClass('hidden');
+	}
+})
+$('.aggreeerrorlabel').on('click',function(){
+	if($('#agree_confirm:checked').length > 0){
+		$('.buttonsubmit').attr('type','button');
+		$('.aggreeerror').removeClass('hidden');
+	}
+	else{
+		$('.buttonsubmit').attr('type','submit');
+		$('.aggreeerror').addClass('hidden');
+	}
+})
+</script>
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends "admin/base_site.html" %}
+{% load core_extras %}
+
+{% block title %}View Proposal | {{ site_title|default:_('Admin') }}{% endblock %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<section class="contact-3 contact-form-section content-area">
+
+<form method="post" action="">
+{% csrf_token %}
+  <div class="row">
+  <div class="col-md-12">
+  <div class="card" >
+   <div class="card-body">
+   <h3 class="text-left">Space Detail</h3>
+   <hr/>
+   <ul class="address-list edit-dotted-bx list-unstyled">
+      <li>
+       <span>Country:</span>
+       {% if spaceadd.country == 'us' %}United States{% endif %}
+	</li>
+    <li>   <span>Country:</span>
+											{{ spaceadd.street_address_1|default_if_none:'' }}&nbsp;{{ spaceadd.street_address_2|default_if_none:'' }}&nbsp;{{ spaceadd.city|default_if_none:'' }}&nbsp;{{ spaceadd.state|default_if_none:'' }}&nbsp;{{ spaceadd.zipcode.zipcode|default_if_none:'' }}
+	</li>
+	<li> <span>Space title</span>
+	{{ spaceadd.facility_name }}
+		</li>
+	<li>
+     <span>facility information</span>
+										
+												{{ spaceadd.facility_information }}
+</li>
+
+
+<li> <span>parking_spaces</span>
+									
+											{{ spaceadd.parking_spaces }}
+			</li>
+<li> <span>
+											capacity</span>
+									
+										{{ spaceadd.capacity }}
+										</li>
+										<li>
+				
+							
+										<span >
+											fac_amenities</span>
+										
+										{{ spaceadd.fac_amenities }}
+									</li>
+									
+									<li>
+										
+											<span>event_type</span>
+										
+										{{ spaceadd.event_type }}
+										</li>
+								
+										<li>
+										
+											<span>		None refundable fee: </span> 
+												{{ spaceadd.none_refundable_fee }}
+												
+												</li>
+												
+												<li><span>
+									Cost for profit:</span>
+											{{ spaceadd.cost_for_profit }}
+											</li>
+									
+									
+									
+									<li><span>Cost for non profit: </span>
+												{{ spaceadd.cost_for_non_profit }}
+										</li>
+										
+										<li><span>Fac cost misc alc:</span>
+											{{ spaceadd.fac_cost_misc_alc }}
+										</li>
+    <li>
+				<span>Fac cost misc rental clean dep no alc: </span>
+												{{ spaceadd.fac_cost_misc_rental_clean_dep_no_alc }}
+											</li>
+												<li> <span>Fac cost misc rental clean dep alc: </span>
+											{{ spaceadd.fac_cost_misc_rental_clean_dep_alc }}
+											</li>
+											
+											<li>
+    <span>Fac cost misc non ref hr mtn: </span>
+												{{ spaceadd.fac_cost_misc_non_ref_hr_mtn }}
+											</li>
+											
+											<li>
+										<span>Fac cost misc: </span>
+											{{ spaceadd.fac_cost_misc }}
+										</li>
+									
+									
+									
+									<li><span>Staff fee: </span>
+												{{ spaceadd.staff_fee }}
+										</li>
+    
+                                <li>
+											<span>Note 1: </span>	
+												<p>{{ spaceadd.note_1 }}</p>
+										
+    </li>
+   
+   <li>
+											<span>Note 2: </span>
+												{{ spaceadd.note_2 }}
+										</li>
+    
+      <li>
+											<span>Note 3:</span>
+												{{ spaceadd.note_3 }}
+												</li>
+										 <li>
+											<span>Res 1:</span>
+												{{ spaceadd.res_1 }}
+											
+    </li>
+    
+    
+    
+       <li>
+											<span>Res 2: </span>
+												{{ spaceadd.res_2 }}
+										</li>
+    
+    
+    
+    
+       <li>
+											<span>Res 3:</span>
+												{{ spaceadd.res_3 }}
+											</li>
+										<li>
+											<span>Fac surf type: </span>
+												{{ spaceadd.fac_surf_type }}
+										</li>
+										
+										
+										<li>
+											<span>Fac feature: </span>
+											{{ spaceadd.fac_feature }}
+										</li>
+										
+										<li>
+											<span>
+									
+									 Fee based amenities: </span> 
+												{{ spaceadd.fee_based_amenities }}
+										<li>
+											<span>Location type:</span>
+												 
+                                       
+                                        {{ spaceadd.location_type }}
+                                    </li>
+										<li>
+											<span>Location name:</span>
+{{ spaceadd.location_name }}
+											</li>
+									<li><span>Images:</span>
+									{% if spaceaddimage %}
+									
+									</li>
+			</ul>
+			
+			
+				<div class="gallery">
+				<div class="row">
+					{% for image in spaceaddimage %}
+					<div class="col-md-3">
+						<div class='text-center image-bx'>
+							<img class='img-hgt' src='/media/{{ image.image_file }}'>
+						</div>
+					</div>
+					
+					{% endfor %}
+					</div>
+					</div>
+					{% endif %}
+
+    
+<br/>
+    <div class="row">
+   
+   <div class="col-md-2">
+   <label>Assigned to:</label>
+    </div>
+     <div class="col-md-4"><select class='form-control search-fields assignedTo' required placeholder="Assigned to" name="assigned_to">
+   <option value="" selected="selected"></option>
+   {% for data in SPACE_ADMIN_LIST %}
+   <option value="{{ data.0 }}">{{ data.1 }}</option>
+   {% endfor %}
+   </select>
+   <input type="checkbox" name="accept" class="acceptinp hidden">
+   <input type="checkbox" name="decline" class="declineinp hidden">
+   </div>
+     <div class="col-md-4">
+<button type="submit" class="btn btn-info acceptbtn" onclick="$('.acceptinp').prop('checked',true)">accept</button>
+  <button type="submit" class="btn btn-danger declinebtn" onclick="$('.declineinp').prop('checked',true);$('.assignedTo').removeAttr('required')">decline</button>
+ 
+  </div>
+  </div>
+ </div>
+
+   </div>
+</div>
+   </div>
+    </form>
+   </section>
+
+
+{% endblock %}

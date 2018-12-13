@@ -1,0 +1,39 @@
+{% extends 'admin/auth/user/add_form.html' %}
+
+
+
+{% block form_below %}
+    <div class="form-row field-upload_button">
+	    <div>
+			<label class="required" for="id_upload_button">Upload photos:</label>
+        	<input name="upload_button" id="fileupload" class="hidden" multiple="" type="file">
+        	<button type="button" class="btn btn-primary js-upload-photos">
+        	      <span class="fa fa-cloud-upload"></span> Upload photos    
+        	</button>
+                   
+    	</div>
+        
+    </div>
+    <div class="uploading-content hidden">
+        <div class="uploading-header">
+          <h4 class="uploading-title">Uploading...</h4>
+        </div>
+        <div class="uploading-body">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+          </div>
+        </div>
+      </div>
+	
+
+  <table class="table table-bordered photos-box hidden">
+    <thead>
+      <tr>
+        <th>Photo's uploaded recent</th>
+      </tr>
+    </thead>
+    <tbody id="gallery">
+    
+    </tbody>
+  </table> 
+{% endblock %}

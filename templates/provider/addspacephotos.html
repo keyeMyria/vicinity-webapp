@@ -1,0 +1,157 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+<div class="wrapper">
+<div class="container">
+		<div class="row"><div class="col-md-offset-1 col-md-10">
+			<ol class="progress progress--medium progress-custom">
+<li class="is-complete" data-step="S">
+   Start
+   <p>Click on next to start adding.</p>
+  </li>
+  <li class="is-complete" data-step="1">
+   1. Location
+   <p>Address</p>
+  </li>
+  <li class="is-complete" data-step="2">
+    2. About your space
+    <p >Title, Information, Parking Spaces, Capacity, Facility Amenities, Event Type</p>
+  </li>
+  <li class="is-complete" data-step="3">
+    3. Photos
+    <p >Upload photos for space</p>
+  </li>
+  
+  <li data-step="4">
+   4. Activities
+  <p >Hourly rate, Minimim hours, Discount, Cleaning, etc.</p>
+  </li>
+  <li data-step="F" class="progress__last">
+   Finish
+   <p >Review your space and click on agree to confirm</p>
+  </li>
+</ol><div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="details">
+				<div class="main-title-2">
+									<h1>
+										<span>Add</span> Photos
+									</h1>
+								</div>
+								<hr/>
+				<p class="help-block text-center text-red hidden error-pic">please upload picture in .png,.jpeg or.jpg format</p>
+				<form method="post" action="" enctype='multipart/form-data' >
+				{% csrf_token %}
+				<div id="gallery-image" class="row">
+				{% if spaceaddimage %}
+				{% for image in spaceaddimage %}
+				<div class="gallery">
+					<div class='col-md-3'>
+						<div class='text-center image-bx'>
+							<img class='img-hgt' src='/media/{{ image.image_file }}'>
+						</div>
+					</div>
+					</div>
+					{% endfor %}
+					{% endif %}
+				
+				
+			</div>
+				<button type="button" class="button-sm button-theme addimagespace"><i class="fa fa-plus"></i>add</button>
+				<hr/>
+				<div class="form-btns">
+					<a href='{% url "frontend:addspaceabout" %}' class="button-sm button-theme"><i class="fa fa-angle-double-left"></i> Back</a>
+				<button type="submit" class="button-sm button-theme">Next <i class="fa fa-angle-double-right"></i></button>
+				
+					</div>							
+			</form>
+			
+				
+			<input class="hidden" type="file" name="imageadd" id="inputimage">
+	</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+$('.addimagespace').on('click',function(){
+	$('#inputimage').trigger('click')
+})
+
+var filesInput = document.getElementById("inputimage");
+		if (filesInput != null){
+	        
+	        filesInput.addEventListener("change", function(event){
+	        	
+	        	$(".uploading-content-image").removeClass('hidden');
+	        	
+	      	  var progress = parseInt($(this).size() * 100, 10);
+	            var strProgress = progress + "%";
+	            $(".uploading-content-image").find(".progress-bar").css({"width": strProgress});
+	            $(".uploading-content-image").find(".progress-bar").text(strProgress);
+
+	            $(".uploading-content-image").addClass('hidden');
+	            
+	            var files = event.target.files; 
+	            var output = document.getElementById("gallery-image");
+	            
+	            
+	            for(var i = 0; i< files.length; i++)
+	            {
+	                var file = files[i];
+	                if(!file.type.match('png') && !file.type.match('jpeg') && !file.type.match('jpg'))
+	                	{$('.error-pic').removeClass('hidden');}
+	                else{
+	                
+	                var picReader = new FileReader();
+	                
+	                picReader.addEventListener("load",function(event){
+	                    
+	                    var picFile = event.target;
+	                    
+	                    var div = document.createElement("span");
+	                    div.className = "gallery";
+	                    div.innerHTML = "<div class='col-md-4'><div class='text-center image-bx'><img class='img-hgt' src='" + picFile.result + "'><input type='file' name='imageadd'></div></div>";
+	                    output.insertBefore(div,null);
+
+	    		        $('#gallery-image').find('.gallery').last().find('input').replaceWith($('#inputimage').clone(true))
+	    		        $('#gallery-image').find('.gallery').last().find('input').removeAttr('id')
+	                
+	                });
+	                
+	                picReader.readAsDataURL(file);
+	                }
+	            }                               
+
+	        });
+	        //filesInput.clone(true)
+		}
+		function handle_post_form(value, type){
+		    var csrfmiddlewaretoken = getCookie('csrftoken');
+		    var data = new FormData($('#userupdate').get(0));
+		            $.ajax({
+		                type: 'POST',
+		                url: '/profile/save',
+		                data: data,
+		                cache: false,
+		                processData: false,
+		                contentType: false,
+		                success: function(data){
+		                	$('#update-modal').modal('hide');
+		                   	$('.userprofileupdate').html(data)
+		                }
+		            });
+		}
+		
+		$('.gallery-image').on('click', function(){
+			handle_post_form($('#addimage').val(),'image')
+		})
+
+</script>
+
+
+{% endblock %}

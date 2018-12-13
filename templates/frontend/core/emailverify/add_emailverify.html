@@ -1,0 +1,27 @@
+{% load static i18n core_extras %}
+<div class="booking-section">
+	<div class="row">
+		<div class="col-md-12"><p id="email_verify_helper_text" for="email_verify"
+			class="verify_email_text">Please enter the
+			4-digit code below to make sure your account is verified.</p>
+			<form>
+		<div class="verify_input_container form-group">
+			<input name="verify_input" class="form-control" required id="email_verify"
+				placeholder="XXXX" type="text">
+				</div>
+				<div class="form-group"><button type="button"
+				onclick="verifyEmailVerificationCode($(this))"
+				class=" verify_modal button button-sm button-theme btn-block">Verify</button>
+		</div>
+		</form>
+		<span class="errorverified hidden">Invalid verification code</span>
+		<div class="verify_email_text">
+			<p class="verify_email_help">
+				<span>Didn’t get an email? </span><strong><a
+					onclick="sendEmailVerificationCode()">Resend
+					code on email</a></strong>
+			</p>
+		</div>
+	</div>
+</div>
+</div>

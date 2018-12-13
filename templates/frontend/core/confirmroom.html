@@ -1,0 +1,80 @@
+{% extends "admin/base_site.html" %}
+{% load core_extras %}
+
+{% block title %}Space Proposals | {{ site_title|default:_('Admin') }}{% endblock %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<section class="contact-3 contact-form-section content-area">
+
+<div class="container">
+  <div class="row">
+  <div class="col-md-12">
+  
+  
+  <table class="table table-dashboard">
+  <thead>
+  <tr>
+  <td>#</td>
+  <td>partner name</td>
+  <td>address</td>
+  <td>action</td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td colspan="4"><strong>pending</strong><hr></td>
+  </tr>
+  {% for spaceadd in spaceadd_list %}
+  {% if spaceadd.approval == 0 %}
+  <tr>
+  <td>{{ forloop.counter }}</td>
+  <td>{{ spaceadd.created_by_id }}</td>
+  <td>{{ spaceadd.address }}</td>
+  <td><a href="{% url 'backend:spacereviewproposal' spaceadd.pk %}" class="btn btn-info">View</a></td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  <tr>
+  <td colspan="4"><strong>accepted</strong><hr></td>
+  </tr>
+  {% for spaceadd in spaceadd_list %}
+  {% if spaceadd.approval == 1 %}
+  <tr>
+  <td>{{ forloop.counter }}</td>
+  <td>{{ spaceadd.created_by_id }}</td>
+  <td>{{ spaceadd.address }}</td>
+  <td><a href="javascrip:void(0);" class="btn btn-warning">Accepted</a></td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  <tr>
+  <td colspan="4"><strong>declined</strong><hr></td>
+  </tr>
+  {% for spaceadd in spaceadd_list %}
+  {% if spaceadd.approval == 2 %}
+  <tr>
+  <td>{{ forloop.counter }}</td>
+  <td>{{ spaceadd.created_by_id }}</td>
+  <td>{{ spaceadd.address }}</td>
+  <td><a href="javascrip:void(0);" class="btn btn-danger">Declined</a></td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  
+  </tbody>
+  </table>
+
+
+    
+
+
+   </div>
+   </div>
+   </div>
+   </section>
+
+
+
+{% endblock %}

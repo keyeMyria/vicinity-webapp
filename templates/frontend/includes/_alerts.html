@@ -1,0 +1,9 @@
+{% for message in messages %}
+   <div class="clearfix"><div class="col-md-offset-2 col-md-8"><div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible" role="alert">
+    <i class="fa fa-spinner" aria-hidden="true"></i>
+     <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>
+    {{ message }}
+  </div>
+  </div>
+  </div>
+{% endfor %}

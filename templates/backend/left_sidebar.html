@@ -1,0 +1,46 @@
+{% if request.user.is_superuser %}
+<div class="left main-sidebar">
+	
+		<div class="sidebar-inner leftscroll">
+
+			<div id="sidebar-menu">
+        
+
+                    <ul class="list-unstyled">								
+						<li class="submenu">
+							<a href="#"><i class="fa fa-fw fa-bars"></i><span>Settings</a>
+						</li>
+						<li class="submenu">
+							<a href="#"><i class="fa fa-fw fa-bars"></i><span>My Profile</a>
+						</li>
+                        <li class="submenu">
+                        	<a href="#"><i class="fa fa-fw fa-bars"></i><span>Users</a>
+                        </li>
+                        <li class="submenu">
+                        	<a href="#"><i class="fa fa-fw fa-bars"></i><span>Articles</a>
+                        </li>
+                        <li class="submenu">
+                        	<a href="#"><i class="fa fa-fw fa-bars"></i><span>Categories</a>
+                        </li>
+						<li class="submenu">
+							<a href="#"><i class="fa fa-fw fa-bars"></i><span>Pages</a>
+						</li>								
+                        <li class="submenu">
+                        	<a href="#"><i class="fa fa-fw fa-bars"></i><span>Contact Messages</a>
+                        </li>
+						<li class="submenu">
+							<a href="#"><i class="fa fa-fw fa-bars"></i><span>Slider</a>
+						</li>
+                    </ul>
+                
+
+            <div class="clearfix"></div>
+
+			</div>
+        
+			<div class="clearfix"></div>
+
+		</div>
+
+	</div>
+	{% endif %}

@@ -1,0 +1,65 @@
+{% extends 'admin/base_site.html' %}
+{% load core_extras %}
+{% block title %}Booking | {{ site_title|default:_('Admin') }}{% endblock %}
+{% block breadcrumbs %}
+{{ block.super }}
+&nbsp; &rsaquo; &nbsp;<a class="breadcrumb-item active">Booking list</a>
+{% endblock %}
+{% block content %}
+<div class="container row">
+<div class="col-sm-3">
+         <div class="searchpanel">
+            <form method="GET" action="{% url 'backend:booking_index' %}">               
+               <div class="form-group ">
+                  <label for="FormSort">Sort</label>
+                  <select name="sorttype" class="form-control">
+	                 <option value="">All</option>
+	                 <option {% if sorttype == '2' %}selected="selected"{% endif %} value="2">Confirmed</option>
+	                 <option {% if sorttype == '1' %}selected="selected"{% endif %} value="1">Queue</option>
+	                 <option {% if sorttype == '3' %}selected="selected"{% endif %} value="3">Cancelled</option>
+	                 <option {% if sorttype == '0' %}selected="selected"{% endif %} value="0">Done</option>
+                  </select>
+               </div>
+               <div class="form-group ">
+                  <button class="filter-button btn-block submit-form" type="submit">Filter</button>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="col-sm-9">
+   {% for book in booking %}
+   <div class="booking-detail">
+      <div class="card">
+         <div class="container-fliud">
+            <div class="wrapper row ">
+               <div class="preview col-md-3">
+                  <div class="preview-pic tab-content">
+                     <div class="tab-pane active" id="pic-1"><img src="/media/{{ book.room_book|roompics }}" /></div>
+                  </div>
+               </div>
+               <div class="details col-md-9">
+                  <h3 class="product-title">{{ book.room_book.title }}
+                  {% if book.priority != 0 %}
+                  <button class="btn btn-{% if book.priority == 1 %}danger{% else %}warning{% endif %} pull-right" type="button">{{ book.priority|get_priority }}</button>
+                  {% endif %}</h3>
+                  <span class=""><strong>Start Date: </strong> {{ book.start_date|date:"d-m-Y" }}</span>
+                  <span class=""><strong>End Date: </strong> {{ book.end_date|date:"d-m-Y" }}</span>
+                  <span class=""><strong><i class="fa fa-user"></i> User Booked: </strong>{{ book.user_subscribe.first_name }} {{ book.user_subscribe.last_name }}</span>
+                  <p class="product-description">{{ book.room_book.description }}</p>
+                  <h4 class="price">Cost: <span>${{ book.amount }}</span></h4>
+                  <div class="action">
+                  <a class="btn btn-view   filter-button" href="{% url 'backend:booking_view' book.id %}">View</a>
+
+                 </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   {% endfor %}
+   </div>
+</div>
+
+
+{% endblock %}
+

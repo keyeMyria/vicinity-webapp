@@ -1,0 +1,22 @@
+{% load core_extras static i18n %}
+ <ul class="list-inline" style="width: 295px;display: inline-flex;overscroll-behavior-x: contain;overflow-x: auto; overflow-y: hidden;margin-left: 0px;padding: 10px 2px;border-bottom: 1px solid #ccc;">
+{% for user in getuser|user_list_get %}
+ 
+<li class="pic-grid text-center getmsglogs pointer" data-room-id="{{ user.pk|get_room_id_user:request.user }}" data-id="{{ user.pk }}" style="height: 63px;width: 74px;padding-top: 5px;border-radius: 8px;">
+                        
+										{% if request.user.profile_file %}
+										<img src="/media/{{ request.user.profile_file }}" style="height: 33px;width: 40px;margin: auto;" class="img-responsive">
+										{% else %}
+										<img src="{% static "images/avatars/admin.png" %}" style="height: 33px;width: 40px;margin: auto;" class="img-responsive">
+										{% endif %}
+										
+										
+                      
+                <label style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</label>
+                {% if user.pk|get_chat_list:request.user %}
+                <span class="bullet-icon"></span>
+                {% endif %}
+                </li>
+                {% endfor %}
+                
+                </ul>

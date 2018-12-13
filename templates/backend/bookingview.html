@@ -1,0 +1,107 @@
+{% extends 'admin/base_site.html' %}
+{% load static core_extras %}
+{% block title %}Booking | {{ site_title|default:_('Admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &nbsp; &rsaquo; &nbsp;<a href="{% url 'backend:booking_index' %}" class="breadcrumb-item">Booking List</a>
+		&nbsp; &rsaquo; &nbsp;<a class="active">Booking view</a>
+{% endblock %}
+
+{% block content %}
+
+	
+	<div class="container">
+		<div class="booking-detail ">
+		<div class="card">
+			<div class="container-fliud">
+				<div class="wrapper row">
+					<div class="preview col-md-5">
+						
+						<div class="preview-pic tab-content">
+						  <div class="tab-pane active" id="pic-1"><img src="/media/{{ roomdata.image_file }}" />
+						  </div>
+						 
+						</div>
+					
+					</div>
+					<div class="details col-md-7">
+						<span class=""><strong>Start Date: </strong> {{ booking.start_date|date:"d-m-Y" }}</span>
+                        <span class=""><strong>End Date: </strong> {{ booking.end_date|date:"d-m-Y" }}</span>
+                        <span class=""><strong><i class="fa fa-user"></i> User Booked: </strong> {{ booking.user_subscribe.first_name }} {{ booking.user_subscribe.last_name }}</span>
+                        <div class="action">
+                        <a class="btn btn-primary" href="/admin/accounts/user/{{ booking.user_subscribe.id }}">view user</a>
+                        {% if booking.status == 1 or booking.status == 2 %}
+                        <a class="btn btn-danger" href="{% url 'core:cancel_booking' booking.id %}">Cancel</a>
+                        {% endif %}
+                        </div>
+                        <div class="claerfix"></div><p></p>
+						<div class="action">
+							<button class="btn btn-{% if booking.queue %}danger{% else %}default add-to-cart{% endif %}" 
+							type="button">
+							{% if booking.status == 1 %}
+							Queue
+							{% elif booking.status == 3 %}
+							Cancelled
+							{% elif booking.status == 2 %}
+							Booked
+							{% else %}
+							Done
+							{% endif %}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+ 	
+<div class="tabe-view">
+   <div class="tabbable-panel">
+      <div class="tabbable-line">
+         <ul class="nav nav-tabs ">
+            <li class="active">
+               <a href="#tab_default_1" data-toggle="tab">
+               Details </a>
+            </li>
+           
+         </ul>
+         <div class="tab-content">
+            <div class="tab-pane active" id="tab_default_1">
+               <div class="mini_box">
+                  <h3 class="product-title">{{ booking.room_book.title }}</h3>
+		           <div class="rating">
+		              <label>Rating:</label>
+		                       {% with booking.room_book|getrating as endvalue %}
+                        		{% for c in 0|filterrange:endvalue %}
+		                          <label>
+		                          <i class="fa fa-star"></i>
+		                          </label>
+		                          {% endfor %}
+		                          {% endwith %}
+		    <p class="product-description">{{ booking.room_book.description }}</p>
+            <h4 class="price">Current price: <span>${{ booking.room_book.cost_for_profit }}</span></h4>
+            <p>{{ booking.room_book.location_id.street_address_1 }} {{ booking.room_book.location_id.city }} {{ booking.room_book.location_id.state }} {{ booking.room_book.location_id.zipcode }}</p>
+             <p>{{ booking.room_book.created_by.contact_no }}</p>
+         	<p>Occupancy <i class="fa fa-users"></i> {{ booking.room_book.capacity }} people</p>
+		           </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div> 
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+{% endblock %}

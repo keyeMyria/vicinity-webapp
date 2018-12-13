@@ -1,0 +1,105 @@
+{% autoescape off %}
+{% load i18n static %}
+{% endautoescape %}
+
+{% block html %}
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body style="font-family:'Helvetica Neue', Roboto, sans-serif; color: #666666; background:white; text-decoration: none;">
+  <table cellspacing="0" cellpadding="0" bgcolor="#f4f4f4" width="100%" border="0">
+    <tbody>
+     <tr align="center">
+       <td style="height: 30px; width: 100%;">&nbsp;</td>
+    </tr>
+    <tr align="center">
+      <td valign="top">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+           <tr align="center">
+             <td style="width: 100%;" valign="middle">
+               <a href="http://{{ domain }}">
+                 <img style="border:0;width:;height:;" src="http://{{ domain }}/static/images/group.png" alt="Vicinity" height="50px">
+              </a>
+            </td>
+           </tr>
+         </tbody>
+        </table>
+       </td>
+      </tr>
+      <tr>
+       <td style="height: 35px; width: 100%;">&nbsp;</td>
+      </tr>
+      <tr align="center">
+        <td style="width: 100%;" valign="top">
+          <table style="padding: 0px; border: 0; width: 600px; text-align: center;" cellspacing="0" cellpadding="10px" bgcolor="#fff" width="100%" border="0">
+           <tbody>
+            <tr>
+             <td style="height: 20px; width: 100%;">&nbsp;</td>
+            </tr>
+            <tr align="center">
+             <td style="width: 100%; margin: 10px 10px; line-height: 24px; font-size: 14pt; font-weight: bold; color: #333333;">
+              <p style="margin: 10px; padding: 0;">Hi {{ superadmin.first_name }} {{ superadmin.last_name }}</p>
+            </td>
+           </tr>
+           <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;">Feedback realated to page {{ feedback.url }}</p>
+             </td>
+            </tr>       
+            <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;">Feedback: {{ feedback.note }}</p>
+             </td>
+            </tr>
+            
+            <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;"><img src='http://{{ domain }}/media/{{ feedback.feedback_image }}'></p>
+             </td>
+            </tr>      
+           
+           <tr>
+            <td style="height: 25px; width: 100%;">&nbsp;</td>
+          </tr>
+         </tbody>
+        </table>
+         <br>
+        
+           </td>
+          </tr>
+    
+          <tr>
+            <td style="height: 25px; width: 100%;">&nbsp;</td>
+          </tr>
+          <tr align="center">
+		   <td class="social-holder" style="padding:0 2px 17px 0;" align="center">
+			 <table style=" margin:0 auto !important; text-align:center;" cellspacing="0" cellpadding="" align="center">
+			  <tbody>
+			   <tr>
+				<td class="social" style="line-height:0;" width="24"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/facebookv2@2xa.png" alt="facebook" height="24" vspace="0" align="left" hspace="0" width="24" border="0"></a></td>
+				<td class="cell1" width="18"></td>
+				<td class="social" style="line-height:0;" width="25"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/twitterv2@2xa.png" alt="twitter" height="24" vspace="0" align="left" hspace="0" width="25" border="0"></a></td>
+				<td class="cell1" width="18"></td>
+				<td class="social" style="line-height:0;" width="25"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/linkedinv2@2xa.png" alt="linkedin" height="24" vspace="0" align="left" hspace="0" width="25" border="0"></a></td>
+				<td class="cell1" width="17"></td>
+				<td class="social" style="line-height:0;" width="25"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/googleplusv2@2xa.png" alt="googleplus" height="24" vspace="0" align="left" hspace="0" width="25" border="0"></a></td>
+				<td class="cell1" width="18"></td>
+				<td class="social" style="line-height:0;" width="24"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/instagramv2@2xa.png" alt="instagram" height="24" vspace="0" align="left" hspace="0" width="24" border="0"></a></td>
+			  </tr>
+			 </tbody>
+			</table>
+		   </td>
+		  </tr>
+		  <tr>
+            <td style="height: 35px; width: 100%;">&nbsp;</td>
+         </tr>
+       </tbody>
+      </table>
+     </body>
+   </html>
+   {% endblock %}

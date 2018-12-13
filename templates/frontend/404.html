@@ -1,0 +1,28 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n %}
+{% block title %}Not Found &middot; {{ block.super }}{% endblock %}
+
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+
+
+<div class="wrap">
+      <div class="center-block text-center error-img">
+        <a href="{% url 'core:home' %}" class="logos">
+                    <img src="{% static 'images/' %}{{ PROJECT_ICON }}" alt="logo"><span class="top green-text">
+								Vicinity
+							</span>
+                </a>
+      </div>
+      <div class="navbar-padding"></div>
+      <section class="center-block text-center padd-btm">
+        <h2 class="text-center">Page not found</h2>
+        <br>
+        <a href="{% url 'core:home' %}" class="btn btn-outline pricing-btn text-center errorbtn">Home</a>
+      </section>
+    </div>
+
+
+
+{% endblock content %}

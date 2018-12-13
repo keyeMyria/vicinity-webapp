@@ -1,0 +1,127 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+<div class="wrapper">
+<div class="container">
+		<div class="row"><div class="col-md-12">
+		
+		<ol class="progress progress--medium progress-custom">
+<li class="is-complete" data-step="S">
+   Start
+   <p>Click on next to start adding.</p>
+  </li>
+  <li class="is-complete" data-step="1">
+   1. Location
+   <p>Address</p>
+  </li>
+  <li class="is-complete" data-step="2">
+    2. About your space
+    <p >Title, Information, Parking Spaces, Capacity, Facility Amenities, Event Type</p>
+  </li>
+  <li data-step="3" >
+    3. Photos
+    <p >Upload photos for space</p>
+  </li>
+  
+  <li data-step="4">
+   4. Activities
+   <p >Hourly rate, Minimim hours, Discount, Cleaning, etc.</p>
+  </li>
+  <li data-step="F" class="progress__last">
+   Finish
+   <p >Review your space and click on agree to confirm</p>
+  </li>
+</ol>
+</div>
+</div>
+
+
+<div class="row"><div class="col-md-offset-2 col-md-8">
+<div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="details">
+				<div class="main-title-2">
+									<h1>
+										<span>About Your</span> Space
+									</h1>
+								</div>
+								<hr/>
+						<form method="post" action="" >
+						{% csrf_token %}
+							
+									<div class="form-group ">
+										<label class="control-label"
+											>Give your space a title</label>
+										
+												{{ form.facility_name }}
+										
+									</div>
+								
+								
+									<div class="form-group">
+										<label class="control-label" >
+											facility information</label>
+										
+												{{ form.facility_information }}
+										
+									</div>
+								
+								
+								
+									<div class="form-group ">
+										<label class="control-label">
+											parking_spaces</label>
+										
+											{{ form.parking_spaces }}
+									
+									</div>
+								
+								
+								
+									<div class="form-group ">
+										<label class="control-label" >
+											capacity</label>
+										
+										{{ form.capacity }}
+										
+									</div>
+								
+								
+									<div class="form-group ">
+										<label class="control-label" >
+											fac_amenities</label>
+										
+										{{ form.fac_amenities }}
+										
+									</div>
+								
+									<div class="form-group ">
+										<label class="control-label" >
+											event_type</label>
+										
+										{{ form.event_type }}
+									
+									</div>
+								
+							
+										<div class="form-btns">
+											<!-- <button
+												class="primary-next-button input-spacing-margin address-form-cta ">Next</button> -->
+												<a href="{% url 'frontend:addspacelocation' %}" class="button-sm button-theme"><i class="fa fa-angle-double-left"></i> Back</a>
+									<button type="submit" class="button-sm button-theme">Next <i class="fa fa-angle-double-right"></i></button>
+										</div>
+								
+							
+						
+						</form>
+					</div>
+					
+				</div>
+			</div>
+	</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

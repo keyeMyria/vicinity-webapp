@@ -1,0 +1,1120 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n core_extras %}
+{% block breadcrumb-wrapper %}
+{% endblock %}	 
+{% block content %}
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places"></script>
+
+ <div class="properties-detail-slider simple-slider mb-40">
+                 <div class="" id="slider">
+                     <!-- Top part of the slider -->
+                     
+                        <div class="" id="carousel-bounding-box">
+                           <div class="carousel slide" id="myCarosel">
+                              <!-- Carousel items -->
+                              <div class="carousel-inner">
+                              {% for data in roomdata %}
+                                 <div class="{% if forloop.first %}active {% endif %}item" data-slide-number="{{ forloop.counter }}">
+                                    <img class="thumb-preview" src="/media/{{ data.image_file }}">
+                                 </div>
+                                 {% endfor %}
+                                 {% if not roomdata  %}
+                                    <div class="active item" data-slide-number="0">
+                        <img src="/static/images/Detail0.jpg" class="img-responsive thumb-preview" alt="...">
+                        </div>
+                        {% endif %}
+                              </div>
+                              <a class="left carousel-control" href="#myCarosel" role="button" data-slide="prev">
+                              <span class="glyphicon glyphicon-chevron-left"></span>                                       
+                              </a>
+                              <a class="right carousel-control" href="#myCarosel" role="button" data-slide="next">
+                              <span class="glyphicon glyphicon-chevron-right"></span>                                       
+                              </a>                                
+                           </div>
+                        </div>
+                        <div class="col-sm-4" id="carousel-text"></div>
+                     
+                  </div>
+                           
+               </div>
+ <div class="content-area  properties-details-page">	
+<div class="container">
+<div class="card-view">
+      <div class="wrapper product-detail">
+      <div class="row">
+         <div class="col-md-7">
+            <div id="main_area">
+             <div class="heading-properties clearfix sidebar-widget">
+						<div class="clearfix">
+						 <div class="col-md-8">
+						   <div class="pull-left pull-left-r">
+							<h3>{{ facility.facility_name }}</h3>
+							<p>
+								<i class="fa fa-map-marker"></i>{{ facility.location_id.city }} {{ facility.location_id.state }} {{ facility.location_id.zipcode }}
+							</p>
+                            <p>{{ facility.location_id.contact_no }}</p>
+							<div class="rating">
+                        {% if facility|getrating %}
+                        {% with facility|getrating as endvalue %}
+                        {% for c in 0|filterrange:endvalue %}
+                           <label class="f-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% for c in endvalue|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endwith %}
+                           {% else %}
+                           {% for c in 1|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endif %}<br><span> {{ facility|getrating|default:'0.0' }} average based on {{ reviews.count }} reviews.</span>
+                        </div>
+						
+						
+						
+						</div>
+ 
+					</div>
+						
+						
+						
+						
+						
+						
+						
+						 <div class="col-md-4">
+						 <div class="pull-right pull-right-l">
+						 					
+						{% if facility.partner %}
+          
+            <div class="img-wrapper text-center">
+             <a href="{% url 'frontend:hostdetail' facility.partner.pk %}"><img src="/static/images/Detail0.jpg" /> </a>
+              <div class="clearfix"></div>
+             <a href="{% url 'frontend:hostdetail' facility.partner.pk %}"> {{ facility.partner.first_name }} {{ facility.partner.last_name }} </a>
+          
+            </div><br>
+            <div class="form-group">
+            {% if request.user.is_authenticated %}
+									<a class="search-button btn-block text-center" onclick="datepicker_setup(new Date(),'contact')" data-toggle="modal" href="#messageModal">Message Host</a>
+									{% else %}
+									
+									<a class="search-button btn-block text-center show_login_auth" onclick="signupmodal();" href="javascript:void(0);">Message Host</a>
+									
+									<a class="search-button btn-block text-center hidden hidden_login_auth" onclick="datepicker_setup(new Date(),'contact')" data-toggle="modal" href="#messageModal">Message Host</a>
+									
+									{% endif %}
+								</div>
+         
+           {% endif %}  </div></div>
+           
+						
+						
+						
+					</div>
+ 
+            </div>
+            </div>
+            
+            
+            
+              <div class="Properties-details-section sidebar-widget">
+            <div class="hidden"><p class="product-description">{{ facility.description }}</p>
+            <h4 class="price">current price: <span>${{ facility|get_price }}</span></h4>
+            <p>{{ facility.location_id.street_address_1 }} {{ facility.location_id.zipcode }}</p>
+             <p>{{ facility.location_id.contact_no }}</p>
+         	<p>Occupancy <i class="fa fa-users"></i> {{ facility.capacity }} people</p>
+            </div>
+      <div class="panel-box properties-panel-box Property-description">
+      	<div class="panel with-nav-tabs panel-default">
+								<div class="panel-body">
+									<div class="panel-div">
+										<div class="panel-group" role="tablist">
+											<div class="panel panel-default">
+												<div class="panel-heading active" role="tab" id="heading1">
+													<h4 class="panel-title">
+														<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="false"> Description <i class="fa"></i>
+														</a>
+													</h4>
+												</div>
+												<div id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-expanded="false">
+													<div class="panel-body panel-body-2">
+														
+														
+ <p>{{ facility.facility_information }}</p>
+
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading" role="tab" id="heading2">
+													<h4 class="panel-title">
+														<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="false"> Amenities <i class="fa"></i>
+														</a>
+													</h4>
+												</div>
+												<div id="collapse2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false">
+													<div class="panel-body panel-body-2">
+														<div class="properties-amenities">
+
+															<div class="row">
+															
+																<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+																	<ul class="amenities">
+																	{% for amenity in facility.fac_amenities|getarry %}
+																		<li><i class="{{ amenity|geticon }}"></i>{{ amenity }}</li>
+																		{% if forloop.counter|divisibleby:5 %}
+																	</ul>
+																</div>
+																		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+																	<ul class="amenities">
+																		{% endif %}
+																	{% endfor %}
+																	</ul>
+																</div>
+																
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+
+
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+      </div>
+      
+   </div>
+
+
+ <div class="hr-top sidebar-widget availability">   
+<div class="main-title-2">
+							<h1>
+								<span>Availability</span>
+							</h1>
+							
+							</div>
+							<div class="data">
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Sunday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span> {{ facility.location_id.sun_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.sun_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Monday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span> {{ facility.location_id.mon_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.mon_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Tuesday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span> {{ facility.location_id.tue_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.tue_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Wednesday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span> {{ facility.location_id.wed_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.wed_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Thursday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span>{{ facility.location_id.thu_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.thu_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Friday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span>{{ facility.location_id.fri_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.fri_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+							<div class="row">
+								<div class="col-md-1 text-left">
+									<span>Saturday</span>
+								</div>
+								<div class="col-md-11 text-right">
+									<span>{{ facility.location_id.sat_open_time|getsettime|date:"h:i A" }} - {{ facility.location_id.sat_close_time|getsettime|date:"h:i A" }}</span>
+								</div>
+							</div>
+							<div class="availability-dots"></div>
+						</div>
+					
+						
+						
+						
+ </div>
+ 
+ 
+   <div class="hr-top sidebar-widget availability">   
+<div class="main-title-2">
+							<h1>
+								<span>Location</span>
+							</h1>
+							</div>
+							<div id="mapdiv"></div>
+						
+							</div>
+							
+							
+							
+								      <div class="hr-top sidebar-widget availability">   
+								      
+							{% if reviews %}
+				<div class="main-title-2">
+							<h1>
+								<span>Reviews</span>
+							</h1>    
+							</div>    
+		
+							       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+        <div class="hr-top sidebar-widget availability"> 
+       
+        
+               <div class="comments-section">
+						
+
+								<ul class="comments">
+									
+									{% for review in reviews %}
+									<li>
+										<div class="comment">
+											<div class="comment-author">
+												<a href="#"> <img src="/static/images/avatars/admin.png" alt="avatar-5">
+												</a>
+											</div>
+											<div class="comment-content">
+												<div class="comment-meta">
+													<div class="comment-meta-author">{{ review.created_by_id.first_name }} {{ review.created_by_id.last_name }}</div>
+
+													<div class="comment-meta-date">
+														<span class="hidden-xs"> {{ review.created_on|date:"d/m/Y" }}</span>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+												<div class="comment-body">
+												<div class="comment-rating">
+													{% if review.rate %}
+							                        {% for c in 0|filterrange:review.rate %}
+							                           <i class="fa fa-star"></i>
+							                           {% endfor %}
+							                           {% for c in review.rate|filterrange:5 %}
+							                          <i class="fa fa-star-o"></i>
+							                           {% endfor %}
+							                           {% else %}
+							                           {% for c in 0|filterrange:5 %}
+							                          <i class="fa fa-star-o"></i>
+							                           {% endfor %}
+							                           {% endif %}
+							                        </div>
+									
+													<p>{{ review.message }}</p>
+												</div>
+											</div>
+										</div>
+
+									</li>
+									  {% endfor %}
+								</ul>
+								
+								{% if reviews_count > 3 %}
+								<div class="text-center morereview"><a href="javascript:void(0);" onclick="getreviews('{{ facility.pk }}',$('.comments').find('li').length)" class="search-button"> More Reviews <i class="fa fa-angle-double-right"></i></a></div>
+								{% endif %}
+								
+							</div> 
+       
+       
+       
+       
+       
+       
+        
+        </div>
+        {% endif %}
+        
+                         
+           <form method="POST" action="{% url 'frontend:roomviewreviews' facility.pk %}">
+            {% csrf_token %}
+               <div class="form-group">
+                  <label for="email" class="control-label">Add Review</label>
+                  <input class="star star-5" id="star-5" type="radio" value="5" name="star"/>
+				   <label class="star star-5" for="star-5"></label>
+				   <input class="star star-4" id="star-4" type="radio" value="4" name="star"/>
+				   <label class="star star-4" for="star-4"></label>
+				   <input class="star star-3" id="star-3" type="radio" value="3" name="star"/>
+				   <label class="star star-3" for="star-3"></label>
+				   <input class="star star-2" id="star-2" type="radio" value="2" name="star"/>
+				   <label class="star star-2" for="star-2"></label>
+				   <input class="star star-1" id="star-1" type="radio" value="1" name="star"/>
+				   <label class="star star-1" for="star-1"></label>
+                  <textarea required class="form-control" name="addComment" id="addComment" rows="2"></textarea>
+               </div>
+               <button class="filter-button btn button-sm button-theme" type="submit">Submit</button>
+               </form>
+               
+               
+             
+               
+            </div>				
+        </div>
+        
+ 
+
+
+ 
+
+
+
+
+
+     
+        
+       
+        
+        
+         <div class="details col-md-5">
+              <div class="sidebar-widget">
+          <div class="clearfix">
+								<div class="pull-left">
+									<h3 class="text-green no-margin">
+										<strong>${{ facility|get_price }} </strong> <span class="per-info"> per
+											hour / day</span>
+									</h3>
+								</div>
+								<div class="pull-right">
+									<h5>
+										<strong><i class="flaticon-social"></i> {{ facility.capacity }} people</strong>
+									</h5>
+								</div>
+
+							</div>
+           <hr/>
+            <form id="{{ subscription.price }}" class="booking-checkout" action="{% url 'core:bookingcheckout' %}" method="post">
+                  {% csrf_token %}
+
+                  <input type="hidden"  value='{{ facility.pk }}' id="roomId"  name='roomId'>
+                  <input type="hidden" value='{{ facility|get_price }}' id="priceset"  name='priceset'>
+                  <input type="hidden" value='{{ facility|get_price }}' id="pricevalue"  name='pricevalue'>
+                  <input name="paymentmethod" checked="checked" id="payment1" value="1" class="hidden" type="radio">
+                  <input name="next" value="{{ request.path }}" type="hidden">
+
+					<input id="id_date_extend-TOTAL_FORMS" name="date_extend_total_forms" value="1" type="hidden">
+					<div class="date_extend">
+						<div class="row">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label">Date</label> <input required class="form-control search-fields form_datetime start_date_book" required="" id="start_date" name="start_date-1" placeholder="Start Date">
+								</div>
+
+							</div>
+							
+							
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label"> Start </label> <input required class="form-control search-fields start_time_book" required="" id="start_time" name="start_time-1" placeholder="Start Time">
+								</div>
+
+							</div>
+
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label"> End </label> <input required class="form-control search-fields form_datetime end_time_book" required="" id="end_time" name="end_time-1" placeholder="End time">
+								</div>
+
+							</div>
+						</div>
+						</div>
+						
+						
+							<div class="form-group text-right">
+								<a href="javascript:void(0);" class="delete-day hidden"><i class="fa fa-trash"></i>
+								Delete</a>
+								</div>
+
+						<div class="form-group text-right">
+							<a href="javascript:void(0);" class="extent-day hidden"><i class="fa fa-plus"></i>
+								Extent a day</a>
+						</div>
+
+<div class="errornotebooking"></div>
+
+						<div class="form-group quote-get-result hidden">
+						<div class="col-xs-12" data-reactid="212">
+							<div class="summary-block">
+								<label>Price</label>
+								<div class="summary-content">
+									<span><span>$<span class="price-quote">{{ facility|get_price }}</span></span>&nbsp; x &nbsp;<span class="hours-quote"></span>
+										<span>hours</span></span><span class="pull-right"><span>$<span class="total-quote total-hours-price"></span></span></span>
+									<div></div>
+								</div>
+								<hr class="summary-line fnb">
+								<h5 class="summary-total">
+									Total
+									<span class="pull-right"><span>$<span class="sub-total-quote"></span></span></span>
+								</h5>
+							</div>
+						</div>
+					</div>
+						<button class="search-button get-quote-booking show_login_auth" {% if request.user.is_authenticated %}onclick="quotecheck($(this), event,'');"{% else %}onclick="signupmodal();" href="javascript:void(0);"{% endif %} type="button">Start Booking</button>
+						
+									<button class="search-button get-quote-booking hidden hidden_login_auth" onclick="quotecheck($(this), event,'');" type="button">Start Booking</button>
+									</a>
+					</form>
+					<div class="date_extend_form hidden">
+						<div class="row dateform">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields form_datetime start_date_book" required="" id="start_date" name="start_date-__prefix__" placeholder="Start Date">
+								</div>
+
+							</div>
+							
+							
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"><input required class="form-control search-fields start_time_book" required="" id="start_time" name="start_time-__prefix__" placeholder="Start Time">
+								</div>
+
+							</div>
+
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields form_datetime end_time_book" required="" id="end_time" name="end_time-__prefix__" placeholder="End time">
+								</div>
+
+							</div>
+						</div>
+						</div>
+               
+               
+               <div class="mt-10">
+                  <a class=" pull-right" data-toggle="modal" data-target="#ReportModal"  name="submit" type="button">
+                  <strong style="font-size: 12px;"><i class="fa fa-bullhorn"></i> Report us</strong></a>
+				</div>   
+
+             
+         </div>
+         
+         
+         
+         <hr/>
+         
+         <div class="form-group mb-0">
+							<div class="row">
+								<div class="col-md-6">
+								{% if request.user.is_authenticated %}
+									<button  onclick="getdetail('board','{{ facility.pk }}')" class="btn button-sm border-button-theme btn-block">
+										{% if facility|getwish:request.user %}
+											<i class="fa fa-heart text-red"></i> Saved
+										{% else %}
+											<i class="fa fa-heart-o"></i> Save to favorites
+										{% endif %}
+									</button>
+									{% else %}
+									<a class="show_login_auth" onclick="signupmodal();" href="javascript:void(0);" class="btn button-sm border-button-theme btn-block">
+										
+											<i class="fa fa-heart-o"></i> Save to favorites
+										
+									</a>
+									
+									<a class="hidden hidden_login_auth btn button-sm border-button-theme btn-block" href="javascript:void(0);" onclick="getdetail('board','{{ facility.pk }}')">
+										
+											<i class="fa fa-heart-o"></i> Save to favorites
+										
+									</a>
+									{% endif %}
+								</div>
+
+
+								<div class="col-md-6">
+									<button class="btn button-sm border-button-theme btn-block">
+										<i class="fa fa-share"></i> Share
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						
+						<hr/>
+         
+         </div>
+        
+     
+
+   </div>
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+	
+	<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Message Host</h4>
+				</div>
+				<div class="modal-body">
+
+					<form id="messagehost" class="message-host" action="{% url 'frontend:messagehost' %}" method="post">
+                  {% csrf_token %}
+
+                  <input name="next" value="{{ request.path }}" type="hidden">
+                  
+                  <input name="roomID" value="{{ facility.pk }}" type="hidden">
+					<input id="id_date_extend-TOTAL_FORMS" name="date_extend_total_forms" value="1" type="hidden">
+					<div class="date_extend">
+						<div class="row">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label">Date</label> <input required class="form-control search-fields form_datetime start_date_book" required="" id="start_date" name="start_date-1" placeholder="Start Date">
+								</div>
+
+							</div>
+							
+							
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label"> Start </label> <input required class="form-control search-fields start_time_book" required="" id="start_time" name="start_time-1" placeholder="Start Time">
+								</div>
+
+							</div>
+
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label"> End </label> <input required class="form-control search-fields form_datetime end_time_book" required="" id="end_time" name="end_time-1" placeholder="End time">
+								</div>
+
+							</div>
+						</div>
+						</div>
+						
+							<div class="form-group text-right">
+								<a href="javascript:void(0);" class="delete-day hidden"><i class="fa fa-trash"></i>
+								Delete</a>
+								</div>
+						<div class="form-group text-right">
+							<a href="javascript:void(0);" class="extent-day hidden"><i class="fa fa-plus"></i>
+								Extent a day</a>
+						</div>
+
+<div class="errornotebooking"></div>
+						
+					<div class="col-lg-12 flextime">
+						<div class="checkbox">
+						<input class="hidden"
+								id="timeflexible" name="timeflexible"
+								type="checkbox">
+							<label class="checkbox-label" for="timeflexible">My timing are flexible</label>
+						</div>
+					</div>
+					<div class="form-group">
+							<label class="control-label"> No. of attendees</label> <input class="form-control search-fields noofattendees" required="required" name="attendnumber" placeholder="No. of attendees">
+						</div>
+
+
+						<div class="form-group message">
+						 <label class="control-label"> Message for host, {{ facility.partner.userID.first_name }} {{ facility.partner.userID.last_name }} </label>
+							<textarea class="form-control" name="message_request" required placeholder="describe how you plan to use the space, describe your activity" rows="4"></textarea>
+						</div>
+						<div class="form-group">
+						<div class="checkbox">
+						<input name="scheduleflexible" class="hidden"
+								id="scheduleflexible" type="checkbox">
+							<label class="checkbox-label" for="scheduleflexible">  I want to schedule a visit
+							</label>
+							</div>
+						</div>
+						<button class="search-button get-quote-booking" onclick="quotecheck($(this), event,'true');" type="button">Message Host</button>
+					</form>
+					
+						<div class="date_extend_form hidden">
+						<div class="row dateform">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields form_datetime start_date_book" required="" id="start_date" name="start_date-__prefix__" placeholder="Start Date">
+								</div>
+
+							</div>
+							
+							
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields start_time_book" required="" id="start_time" name="start_time-__prefix__" placeholder="Start Time">
+								</div>
+
+							</div>
+
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields form_datetime end_time_book" required="" id="end_time" name="end_time-__prefix__" placeholder="End time">
+								</div>
+
+							</div>
+						</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+<div class="modal fade in" id="AgreeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">All copyright, trade marks, design
+				rights, patents and other intellectual property rights (registered
+				and unregistered) in and on {{ PROJECT_NAME }} Online Services and {{ PROJECT_NAME }} Content
+				belong to the {{ PROJECT_NAME }} and/or third parties (which may include you or
+				other users.) The {{ PROJECT_NAME }} reserves all of its rights in {{ PROJECT_NAME }} Content and
+				{{ PROJECT_NAME }} Online Services. Nothing in the Terms grants you a right or
+				license to use any trade mark, design right or copyright owned or
+				controlled by the {{ PROJECT_NAME }} or any other third party except as expressly
+				provided in the Terms.
+				
+		{% if facility.res_1 and facility.res_1 != 'Not Applicable' %}		
+        {{ facility.res_1 }}<br>
+        {% endif %}
+        {% if facility.res_2 and facility.res_2 != 'Not Applicable' %}
+        {{ facility.res_2 }}<br>
+        {% endif %}
+        {% if facility.res_3 and facility.res_3 != 'Not Applicable' %}
+        {{ facility.res_3 }}<br>
+        {% endif %}
+				</div>
+        <div class="modal-footer">
+          <button type="button" id="agreecheckbox" class="btn btn-primary pull-left" data-dismiss="modal">I agree</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="modal fade in" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+        <form method="POST" action="{% url 'core:proof_upload' %}">
+        {% csrf_token %}
+        <label>Proof Liability</label>
+        <input name="proof_liability" type="file" required><br>
+        <label>Proof non-profit status</label>
+        <input name="proof_nonprofit_status" type="file" required><br>
+        
+          <button type="submit" class="btn btn-primary submit-training-data">Add proof</button>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade in" id="ReportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+					       <div class="contact-view">
+    <h1>Report Us</h1>
+
+    <form method="post" action="{% url 'frontend:report' %}?next={{ request.path }}">
+      {% csrf_token %}
+      <input name="currenturl" class="hidden" value="{{ request.path }}">
+{% reportform as formre %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            {% include 'frontend/includes/_field.html' with field=formre.name %}
+          </div>
+        </div>
+         </div>
+
+        <div class="row">
+          <div class="col-md-12">
+          <div class="form-group">
+            {% include 'frontend/includes/_field.html' with field=formre.email %}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            {% include 'frontend/includes/_field.html' with field=formre.subject %}
+          </div>
+        </div>
+        </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            {% include 'frontend/includes/_field.html' with field=formre.message %}
+          </div>
+        </div>
+      </div>
+ <div class="row">
+        <div class="col-md-12">
+      <button class="add-to-cart btn btn-default" name="submit" type="submit">Report</button>
+
+
+</div>
+</div>
+</form>
+  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  function CenterControl(controlDiv, map) {
+
+      // Set CSS for the control border.
+      var controlUI = document.createElement('div');
+      controlUI.style.backgroundColor = '#fff';
+      controlUI.style.border = '2px solid #fff';
+      controlUI.style.borderRadius = '3px';
+      controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+      controlUI.style.cursor = 'pointer';
+      controlUI.style.marginBottom = '22px';
+      controlUI.style.textAlign = 'center';
+      controlUI.title = 'Click to recenter the map';
+      controlDiv.appendChild(controlUI);
+
+      var controlText = document.createElement('div');
+      controlText.style.color = 'rgb(25,25,25)';
+      controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+      controlText.style.fontSize = '16px';
+      controlText.style.lineHeight = '38px';
+      controlText.style.paddingLeft = '5px';
+      controlText.style.paddingRight = '5px';
+      controlText.innerHTML = 'Center Map';
+      controlUI.appendChild(controlText);
+
+      controlUI.addEventListener('click', function() {
+        map.setCenter({lat: {{ facility.latitude }}, lng: {{ facility.longitude }}});
+      });
+
+    }
+
+	      function initMap() {
+	        var map = new google.maps.Map(document.getElementById('mapdiv'), {
+	          zoom: 15,
+	            streetViewControl: false,
+	            mapTypeControl: false,
+	            zoomControlOptions: {
+	                position: google.maps.ControlPosition.LEFT_TOP
+	            },
+	          center: {lat: {{ facility.latitude }}, lng: {{ facility.longitude }}},
+	          gestureHandling: 'greedy'
+	        });
+	        var centerControlDiv = document.createElement('div');
+
+	        var centerControl = new CenterControl(centerControlDiv, map);
+	        centerControlDiv.index = 1;
+	        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+	        
+
+
+	        var cityCircle = new google.maps.Circle({
+	            strokeColor: '#257D7D',
+	            strokeOpacity: 0.8,
+	            strokeWeight: 2,
+	            fillColor: '#257D7D',
+	            fillOpacity: 0.35,
+	            map: map,
+	            gestureHandling: 'none',
+	            zoomControl: false,
+	            center: {lat: {{ facility.latitude }}, lng: {{ facility.longitude }}},
+	            radius: 110
+	          });
+	      }
+	      $(window).on("load", function() {
+  	    	initMap();
+  	    	
+  	    	
+  	});
+
+  $(window).scroll(function(){
+  var sticky = $('.sticky'),
+      scroll = $(window).scrollTop();
+
+  if (scroll >=900) sticky.addClass('fixed');
+  else sticky.removeClass('fixed');
+});
+</script>
+  
+<script type="text/javascript">
+var arry = []
+var bookingdetail = [{% for date in date_generated %}
+new Date('{{ date|date:"Y-m-d H:00" }}'),
+{% endfor %}]
+var bookingarry = []
+
+var datenotavailable = [{% for date in date_not_available %}
+new Date('{{ date|date:"Y-m-d H:00" }}'),
+{% endfor %}]
+
+
+function datepicker_setup(date, type){
+	
+
+$('.date_extend').find('.row').each(function(){
+	var self = $(this);
+	if (type=='contact'){
+	self.find('input').each(function(){
+		$(this).val('');
+	})
+	self.closest('form').find('.form-group').each(function(){
+		$(this).removeClass('has-error');
+		$(this).find('span.help-block').remove();
+	})
+	 
+    		self.closest('form').find('.quote-get-result').addClass('hidden')
+	self.closest('form').find('.noofattendees').val('')
+	self.closest('form').find('textarea').val('')
+	$(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val('1');
+}
+	
+	
+self.find(".start_date_book").datetimepicker({
+	format: 'dd/mm/yyyy',
+  minuteStep: 60,
+  autoclose: false,
+  todayBtn: true,
+  startDate: date,
+  startView: 2,
+  minView: 2,
+  maxView: 1,
+  minDate: 0,
+}).on('changeDate', function(ev){
+	
+ 	var updateddate = $(this).data("datetimepicker").getDate()
+	self.find(".start_date_book").closest('.form-group').removeClass('hidden').find('span.help-block').remove()
+self.find(".start_time_book").val('')
+
+ 	
+
+	self.find(".start_time_book").datetimepicker('remove')
+	
+	self.find(".end_time_book").datetimepicker('remove')
+	
+  	self.find(".start_time_book").datetimepicker({
+	    minuteStep: 60,
+	    pickerPosition: 'bottom-right',
+	    format: 'HH:00 p',
+	    autoclose: true,
+	    showMeridian: true,
+	    startView: 1,
+	    minView: 1,
+	    maxView: 0,
+	    startDate: updateddate,
+	    setDate: updateddate,
+      }).on('changeDate', function(ev){
+    	  self.find(".end_time_book").val('')
+    	  self.find(".end_time_book").datetimepicker('remove')
+    	  $(this).closest('form').find('.extent-day').unbind()
+    		extend_date($(this))
+
+    		var updateddate2 = new Date($(this).data("datetimepicker").getDate())
+    		var newDate = updateddate2
+   	     newDate.setDate(newDate.getDate());
+   	  	newDate.setHours(updateddate2.getHours() + 1);
+    	  self.find(".end_time_book").datetimepicker({
+    			pickDate: false,
+    		    minuteStep: 60,
+    		    pickerPosition: 'bottom-right',
+    		    format: 'HH:00 p',
+    		    autoclose: true,
+    		    showMeridian: true,
+    		    startView: 1,
+    		    minView: 1,
+    		    maxView: 0,
+    		    startDate: newDate,
+    		}).on('changeDate', function(ev){
+    			$(this).closest('form').find('.extent-day').removeClass('hidden');
+    			self.find(".end_time_book").datetimepicker('startDate',newDate)
+    			self.find(".end_time_book").datetimepicker('update'); 
+
+    			self.closest('form').find('.get-quote-booking').attr('type', 'button')
+    			self.closest('form').find('.quote-get-result').addClass('hidden')
+
+    	    	  self.closest('.date_extend').find('input').each(function(){
+    	    	 		if($(this).val() != '' ){
+    	    	 			$(this).closest('.form-group').removeClass('has-error')
+    	    	 			$(this).closest('.form-group').find('span.help-block').remove()
+    	    	 		}
+    	    	 	}) 
+    	    	 	
+    		})
+   			self.find(".end_time_book").datetimepicker('startDate',newDate)
+   			self.find(".end_time_book").datetimepicker('setDatesDisabled',bookingdetail)
+			self.find(".end_time_book").datetimepicker('update'); 
+    		self.closest('form').find('.get-quote-booking').attr('type', 'button')
+    		self.closest('form').find('.quote-get-result').addClass('hidden')
+    		
+    	  
+    	  $(this).closest('form').find('.extent-day').unbind()
+    		extend_date($(this))
+    		
+    	  });
+ 	
+ 	
+
+	self.find(".start_time_book").datetimepicker('startDate',updateddate)
+	self.find(".start_time_book").datetimepicker('setDatesDisabled',bookingdetail)
+	self.find(".start_time_book").datetimepicker('update');
+	self.closest('form').find('.get-quote-booking').attr('type', 'button')
+	self.closest('form').find('.quote-get-result').addClass('hidden')
+	
+	self.closest('.date_extend').find('input').each(function(){
+ 		if($(this).val() != '' ){
+ 			$(this).closest('.form-group').removeClass('has-error')
+ 			$(this).closest('.form-group').find('span.help-block').remove()
+ 		}
+ 	})
+ 	self.find(".end_time_book").val('')
+	  self.find(".end_time_book").datetimepicker('remove')
+	$(this).closest('form').find('.extent-day').unbind()
+		extend_date($(this))
+
+		var updateddate2 = new Date($(this).data("datetimepicker").getDate())
+		var newDate = updateddate2
+	     newDate.setDate(newDate.getDate());
+	  	newDate.setHours(updateddate2.getHours() + 1);
+	  self.find(".end_time_book").datetimepicker({
+			pickDate: false,
+		    minuteStep: 60,
+		    pickerPosition: 'bottom-right',
+		    format: 'HH:00 p',
+		    autoclose: true,
+		    showMeridian: true,
+		    startView: 1,
+		    minView: 1,
+		    maxView: 0,
+		    startDate: newDate,
+		}).on('changeDate', function(ev){
+			$(this).closest('form').find('.extent-day').removeClass('hidden');
+			self.find(".end_time_book").datetimepicker('startDate',newDate)
+			self.find(".end_time_book").datetimepicker('update'); 
+
+			self.closest('form').find('.get-quote-booking').attr('type', 'button')
+			self.closest('form').find('.quote-get-result').addClass('hidden')
+
+	    	  self.closest('.date_extend').find('input').each(function(){
+	    	 		if($(this).val() != '' ){
+	    	 			$(this).closest('.form-group').removeClass('has-error')
+	    	 			$(this).closest('.form-group').find('span.help-block').remove()
+	    	 		}
+	    	 	}) 
+	    	 	
+		})
+			self.find(".end_time_book").datetimepicker('startDate',newDate)
+			self.find(".end_time_book").datetimepicker('setDatesDisabled',bookingdetail)
+		self.find(".end_time_book").datetimepicker('update');
+	
+
+ 	
+})
+   			self.find(".start_date_book").datetimepicker('setHoursDisabled',datenotavailable)
+   			self.find(".start_date_book").datetimepicker('update');
+	})
+}
+
+
+function extend_date(self){
+	self.closest('form').find('.extent-day').each(function(){
+	$(this).on('click', function(){
+		$(this).closest('form').find('.quote-get-result').addClass('hidden')
+		 var form_idx = $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val();
+		$(this).closest('form').find('.date_extend').append($('.date_extend_form').html().replace(/__prefix__/g, parseInt(form_idx) + 1).replace(/has-error/g, ''));
+        $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+		
+		
+		datepicker_setup(new Date()); 
+
+		if($(this).closest('form').find('.date_extend').find('.dateform').length > 0){
+			$(this).closest('form').find('.delete-day').removeClass('hidden');
+		}
+		
+
+		$(this).closest('form').find('.extent-day').unbind();
+
+	})
+})
+}
+$('.delete-day').on('click',function(){
+	$(this).closest('form').find('.quote-get-result').addClass('hidden')
+	 $(this).closest('form').find('.date_extend').find('.dateform:last').remove();
+	 var form_idx = $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val();
+	 $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+	 if($(this).closest('form').find('.date_extend').find('.dateform').length < 1){
+		 $(this).closest('form').find('.delete-day').addClass('hidden');
+	 } 
+	 $(this).closest('form').find('.extent-day').unbind();
+	 extend_date($(this));
+})
+
+		datepicker_setup(new Date(),'contact')
+		
+</script>
+{% endblock %}

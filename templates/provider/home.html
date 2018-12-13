@@ -1,0 +1,70 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+<div class="wrapper">
+		<div class="dashboard-background-grey">
+			<div class="container">
+				<div class="row">
+					
+							<div class="col-md-12">
+								<h4>Rooms</h4>
+
+							</div>
+							
+						</div>
+
+                  
+
+						<div class="row mb-20">
+							<div class="col-md-12">
+
+									<div class="panel panel-default">
+
+					<div class="panel-body">
+							<table class="table table-dashboard">
+									<thead>
+										<tr style="border: none;">
+											<th> Room Name </th>
+											<th> This Week </th>
+											<th> Availability </th>
+											<th> Reservations </th>
+											<th> Earnings </th>
+										</tr>
+									</thead>
+									<tbody>
+									{% for provider in provider_room %}
+										<tr>
+											<td>{{ provider.facility_name }}</td>
+											<td>{{ provider|getreservation }} reservations </td>
+											
+											<td>	
+												<label class="btn-onoff availability">
+												<input type="checkbox"  data-id="{{ provider.pk }}" name="name" {% if provider.availability %} checked="checked" {% endif %} data-onoff="toggle"><span></span>	
+											    </label>
+										   </td>
+
+										   <td  style="line-height:40px;"> <a href="{% url 'managerooms:roomsreservations' provider.pk %}" class="View-reservations"> View Reservations </a> </td>
+										   <td  style="line-height:40px;"> <a href="{% url 'managerooms:partnercharts' provider.pk %}" class="View-reservations"> My Earnings </a> </td>
+										</tr>
+										{% endfor %}
+
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+
+</div>
+
+						</div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+	{% endblock %}

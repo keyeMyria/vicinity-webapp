@@ -1,0 +1,117 @@
+{% autoescape off %}
+{% load i18n static %}
+{% endautoescape %}
+
+{% block html %}
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body style="font-family:'Helvetica Neue', Roboto, sans-serif; color: #666666; background:white; text-decoration: none;">
+  <table cellspacing="0" cellpadding="0" bgcolor="#f4f4f4" width="100%" border="0">
+    <tbody>
+     <tr align="center">
+       <td style="height: 30px; width: 100%;">&nbsp;</td>
+    </tr>
+    <tr align="center">
+      <td valign="top">
+        <table cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+           <tr align="center">
+             <td style="width: 100%;" valign="middle">
+               <a href="http://{{ domain }}">
+                 <img style="border:0;width:;height:;" src="http://{{ domain }}/static/images/group.png" alt="Vicinity" height="50px">
+              </a>
+            </td>
+           </tr>
+         </tbody>
+        </table>
+       </td>
+      </tr>
+      <tr>
+       <td style="height: 35px; width: 100%;">&nbsp;</td>
+      </tr>
+      <tr align="center">
+        <td style="width: 100%;" valign="top">
+          <table style="padding: 0px; border: 0; width: 600px; text-align: center;" cellspacing="0" cellpadding="10px" bgcolor="#fff" width="100%" border="0">
+           <tbody>
+            <tr>
+             <td style="height: 20px; width: 100%;">&nbsp;</td>
+            </tr>
+            <tr align="center">
+             <td style="width: 100%; margin: 10px 10px; line-height: 24px; font-size: 14pt; font-weight: bold; color: #333333;">
+              <p style="margin: 10px; padding: 0;">Verify your email address</p>
+            </td>
+           </tr>
+           <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;">We just need to verify your email address to complete your signup</p>
+             </td>
+            </tr>       
+            <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;">Your email verification code is '{{ user.verification_code }}'</p>
+             </td>
+            </tr>      
+           {% if pwdemail %}    
+            <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;">Your username is '{{ user.email }}'</p>
+             </td>
+            </tr>  
+            <tr style="margin: 0px 10px;" align="center">
+             <td style="width: 100%; line-height: 24px; font-size: 14px;">
+               <p style="margin-top:0px;">Your default password is '{{ password }}'</p>
+             </td>
+            </tr>  
+            {% endif %}
+           {% if not resendemail %}
+            <tr align="center">
+             <td style="width: 100%; margin: 0px 10px; line-height: 24px; font-size: 11pt;">
+              <a style="padding: 10px 20px; border: 1px solid #F50000; -webkit-border-radius: 999em; -moz-border-radius: 999em; border-radius: 999em; line-height: 24px; font-size: 11pt; background-color: #F50000; color: white; text-decoration: none;" href="http://{{ domain }}{{url}}{{uid}}/{{token}}">Verify your email</a>
+            </td>
+           </tr>
+           {% endif %}
+           <tr>
+            <td style="height: 25px; width: 100%;">&nbsp;</td>
+          </tr>
+         </tbody>
+        </table>
+         <br>
+        
+           </td>
+          </tr>
+    
+          <tr>
+            <td style="height: 25px; width: 100%;">&nbsp;</td>
+          </tr>
+          <tr align="center">
+		   <td class="social-holder" style="padding:0 2px 17px 0;" align="center">
+			 <table style=" margin:0 auto !important; text-align:center;" cellspacing="0" cellpadding="" align="center">
+			  <tbody>
+			   <tr>
+				<td class="social" style="line-height:0;" width="24"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/facebookv2@2xa.png" alt="facebook" height="24" vspace="0" align="left" hspace="0" width="24" border="0"></a></td>
+				<td class="cell1" width="18"></td>
+				<td class="social" style="line-height:0;" width="25"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/twitterv2@2xa.png" alt="twitter" height="24" vspace="0" align="left" hspace="0" width="25" border="0"></a></td>
+				<td class="cell1" width="18"></td>
+				<td class="social" style="line-height:0;" width="25"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/linkedinv2@2xa.png" alt="linkedin" height="24" vspace="0" align="left" hspace="0" width="25" border="0"></a></td>
+				<td class="cell1" width="17"></td>
+				<td class="social" style="line-height:0;" width="25"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/googleplusv2@2xa.png" alt="googleplus" height="24" vspace="0" align="left" hspace="0" width="25" border="0"></a></td>
+				<td class="cell1" width="18"></td>
+				<td class="social" style="line-height:0;" width="24"><a href="#"><img src="https://static.cdn.responsys.net/i5/responsysimages/animoto/contentlibrary/oldcontent/Global_Documents/General_Footer_v2/General_Footer_v2.images/instagramv2@2xa.png" alt="instagram" height="24" vspace="0" align="left" hspace="0" width="24" border="0"></a></td>
+			  </tr>
+			 </tbody>
+			</table>
+		   </td>
+		  </tr>
+		  <tr>
+            <td style="height: 35px; width: 100%;">&nbsp;</td>
+         </tr>
+       </tbody>
+      </table>
+     </body>
+   </html>
+   {% endblock %}

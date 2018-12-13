@@ -1,0 +1,109 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles %}
+
+
+
+{% block content %}
+<!-- The comparison graphs are displayed here -->
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+  
+      <h4 class="text-center">Number of bookings per rooms</h4>
+      <canvas id="myChart2" width="400" height="400"></canvas>
+
+  <hr />
+
+      <h4 class="text-center">Yearly earnings from each room</h4>
+      <canvas id="myChart4" width="400" height="400"></canvas>
+  </div>
+  <hr />
+
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.js"></script>
+<script>
+    
+
+labels2 = []
+{% for data in RoomsNames %}
+labels2.push('{{ data }}')
+{% endfor %}
+
+data3 = []
+{% for data in money %}
+data3.push('{{ data }}')
+{% endfor %}
+        
+        data2 = {{ bookings }}
+        
+        var ctx2 = document.getElementById("myChart2");
+        var ctx4 = document.getElementById("myChart4").getContext("2d");
+
+
+        var myChart2 = new Chart(ctx2, {
+             type: 'bar',
+             data: {
+                 labels: labels2,
+                 datasets: [{
+                       label: 'Bookings Per Room',
+                       data: data2,
+                       backgroundColor:  '#257d7d',
+
+                   }]
+                  },
+                  options: {
+                            scales:
+                            {
+                               yAxes:
+                                [{ ticks:
+                                    {
+                                        beginAtZero:true }
+                                }]
+                             }
+                           }
+              });
+
+              // A bar chart that shows the yearly income for each hotel the partner owns
+              var myChart4 = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: labels2,
+                    datasets: [{
+
+                          data: data3,
+
+                          backgroundColor:  '#257d7d',
+
+                          borderWidth: 2,
+                          label: 'Yearly Earnings $'
+                        }]
+                       },
+                       options: {
+                                 scales:
+                                 {
+                                    yAxes:
+                                     [{ ticks:
+                                         {
+                                             beginAtZero:true }
+                                     }]
+                                  }
+                                }
+                              })
+
+     
+
+
+
+</script>
+
+{% endblock%}

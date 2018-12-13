@@ -1,0 +1,266 @@
+{% extends 'frontend/base.html' %} 
+{% load static core_extras %} 
+{% block breadcrumb-wrapper %}{% endblock %} {% block content %}
+
+
+
+<div class="wrapper">
+	<div class="dashboard-background-grey">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-10">
+					<div class="panel panel-default">
+						<div class="form-content-box form-edit-detail">
+							<div class="details">
+								<div class="main-title-2">
+									<h1>
+										<span>Location</span> Edit
+									</h1>
+								</div>
+								<hr />
+								<br/>
+								<form action="" method="post">
+								{% csrf_token %} 
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Location type:</label> 
+												 
+                                       
+                                        {{ form.location_type }}
+                                    
+												
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Location name:</label> 
+{{ form.location_name }}
+											</div>
+										</div>
+									</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="control-label">Location website:</label> {{ form.location_website }}
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Street address 1:</label> {{ form.street_address_1 }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Street address 2:</label> {{ form.street_address_2 }}
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">City:</label> {{ form.city }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">State:</label> {{ form.state }}
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Zipcode:</label>{{ form.zipcode }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Contact no:</label> {{ form.contact_no }}
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="control-label">Hours:</label> {{ form.hours }}
+				</div>
+			</div>
+
+
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="control-label">Email:</label> {{ form.email }}
+				</div>
+			</div>
+
+
+		</div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sun open time:</label>{{ form.sun_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sun close time:</label>{{ form.sun_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Mon open time:</label>{{ form.mon_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Mon close time:</label>{{ form.mon_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Tues open time:</label> {{ form.tue_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Tues close time:</label> {{ form.tue_close_time }}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Wed open time:</label> {{ form.wed_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Wed close time:</label> {{ form.wed_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Thu open time:</label> {{ form.thu_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Thu close time:</label> {{ form.thu_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Fri open time:</label> {{ form.fri_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Fri close time:</label> {{ form.fri_close_time }}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sat open time:</label> {{ form.sat_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sat close time:</label> {{ form.sat_close_time }}
+				</div>
+			</div>
+		</div>
+
+		<br />
+		<div class="row">
+
+			<div class="col-sm-12 text-center">
+				<div class="form-group">
+
+					<button type="submit" class="button-md button-theme ">submit</button>
+				</div>
+			</div>
+		</div>
+
+
+								</form>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

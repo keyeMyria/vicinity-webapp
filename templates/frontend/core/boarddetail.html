@@ -1,0 +1,481 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n core_extras %}
+{% block title %}Booking | {{ site_title|default:_('Admin') }}{% endblock %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places"></script>
+<section class="host-detail-section">
+	<div class="map-content content-area container-fluid">
+		<div
+			class="col-xs-12 col-sm-12 col-md-4 col-lg-4 map-content-sidebar">
+			<div class="host-detail">
+				<div class="clearfix margin-bt-25">
+					<div class="col-sm-9">
+						<h3 class="host-title">{{ board_data.user_subscribe.first_name }} {{ board_data.user_subscribe.last_name }}</h3>
+						<p>{{ board_data.description }}</p>
+
+					</div>
+
+					<div class="col-sm-3">
+						<div class="img-wrapper pull-right">
+						{% if board_data.user_subscribe.profile_file %}
+							<img src="/media/{{ board_data.user_subscribe.profile_file }}" />
+							{% else %}
+							<img src="{% static 'images/avatars/admin.png' %}" />
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+			</div>
+		<hr/>
+		<h4>{{ board_data.event_type }}</h4>
+		{% if roomwishlist %}
+	{% for f in roomwishlist %}
+	<div class="host-spaces">
+	<div class="clearfix"><div class="col-sm-12"><div class="act-header">
+          
+         </div></div> 
+         
+         </div>
+<div class="clearfix">
+<div class="col-sm-12">
+		<div class="property">
+                  <div class="product-item">
+                     <div id="slideshow" class="pi-img-wrapper">
+                     {% if f.room_book|roompics %}
+                      <div class="property-img">
+                       <div class="carousel">
+           						<div
+           							class="carousel-control carousel-control-prev scroll-image-left">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           						<div>
+           							<div class="carousel-item" style="display: block;">
+           								
+           								<div id="picsCarousel_{{ f.room_book.pk }}" class="carousel slide" onclick='window.location.href="{% url 'frontend:roomview' f.room_book.id %}"'>
+           								<div class="carousel-inner product-item">
+           								{% for data in f.room_book|roompics %}
+			<div class="item {% if forloop.first %}active{% endif %}">
+			<img src="/media/{{ data.image_file }}" class="cld-responsive cld-hidpi img-responsive lazyload" alt="vicinity">
+			</div>
+			{% endfor %}
+                                   		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel_{{ f.room_book.pk }}" data-slide="prev">
+                                     <span class="glyphicon glyphicon-chevron-left"></span>
+                                     <span class="sr-only">Previous</span>
+                                   </a>
+                                   <a class="right carousel-control" href="#picsCarousel_{{ f.room_book.pk }}" role="button" data-slide="next">
+                                     <span class="glyphicon glyphicon-chevron-right"></span>
+                                     <span class="sr-only">Next</span>
+                                   </a>
+           							</div>
+           						</div>
+           						<div
+           							class="carousel-control carousel-control-next scroll-image-right">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           					</div>
+                       
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ f.room_book|get_price }}/hr</span></div>
+                       
+                       
+                       </div>
+                        {% else %}
+                         <div class="property-img">
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ f.room_book|get_price }}/hr</span></div>
+                         <div class="property-tag button alt featured"></div><img src="/static/images/Detail0.jpg" class="img-responsive" alt="...">
+                          
+                         </div>
+                        {% endif %}
+                       
+                     </div>
+                     
+                     <div class="property-content">
+                     <h3 class="title clearfix"><span class="pull-left"><a href="{% url 'frontend:roomview' f.room_book.id %}">{{ f.room_book.facility_name }}</a></span>  
+                    </h3>
+                     <h3 class="property-address">{{ f.room_book.location_id.street_address_1 }} {{ f.room_book.location_id.city }} {{ f.room_book.location_id.state }} {{ f.room_book.location_id.zipcode }}</h3>
+                    <div class="property-footer"> <span class="left"><i class="fa fa-users"></i> Occupancy - {{ f.room_book.capacity }}</span>
+                    
+                    
+                     <div class="row">
+                      <div class="p-bottom-section">
+                    
+                        <div class="col-md-6">
+                           <div class="rating">
+                        {% if f.room_book|getrating %}
+                        {% with f.room_book|getrating as endvalue %}
+                        {% for c in 0|filterrange:endvalue %}
+                           <label class="f-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% for c in endvalue|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endwith %}
+                           {% else %}
+                           {% for c in 1|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endif %}
+                        </div>
+                        </div>
+                        
+                         <div class="col-md-6">
+                           <span class="pull-right">
+                     
+                     	{% if request.user.is_authenticated %}
+									<a data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="{% if f.room_book|getwish:request.user %}Remove{% else %}Save{% endif %} space" onclick="getdetail('board','{{ f.room_book.pk }}')">
+										{% if f.room_book|getwish:request.user %}
+											<i class="fa fa-heart text-red"></i>&nbsp;Save
+										{% else %}
+											<i class="fa fa-heart-o"></i>&nbsp;Save 
+										{% endif %}
+									</a>
+									{% else %}
+									<a class="show_login_auth" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Save space" onclick="signupmodal();" href="javascript:void(0);">
+										
+											<i class="fa fa-heart-o"></i>&nbsp;Save
+										
+									</a>
+									<a class="hidden hidden_login_auth" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Save space" onclick="getdetail('board','{{ f.room_book.pk }}')">
+										
+											<i class="fa fa-heart-o"></i>&nbsp;Save 
+										
+									</a>
+									</a>
+									{% endif %}
+                     
+                     </span>
+                         </div>
+                      </div>
+                       
+                    </div>
+                    
+                    
+                     </div>
+                      <a href="{% url 'frontend:roomview' f.room_book.id %}" class="search-button btn-sm btn-block text-center add2cart">More Details</a>
+                  </div>
+                  </div>
+                  </div>
+	</div>
+
+	</div>
+
+</div>
+{% endfor %}
+{% else %}
+<h3>no space added</h3>
+{% endif %}
+
+	
+</div>
+	{% if roomwishlist %}
+		<div
+			class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+			<div class="row">
+				<div id="map"></div>
+			</div>
+		</div>
+		{% endif %}
+</div>
+
+
+
+</section>
+
+<script>
+    	
+var markers = [];
+var map;
+var min = .9999998;
+var max = 1.0000002;
+var marker;
+
+function getBoundsZoomLevel(bounds, mapDim) {
+   var WORLD_DIM = { height: 256, width: 256 };
+   var ZOOM_MAX = 24;
+
+   function latRad(lat) {
+       var sin = Math.sin(lat * Math.PI / 180);
+       var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+       return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+   }
+
+   function zoom(mapPx, worldPx, fraction) {
+       return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
+   }
+
+   var ne = bounds.getNorthEast();
+   var sw = bounds.getSouthWest();
+
+   var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+   
+   var lngDiff = ne.lng() - sw.lng();
+   var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+   
+   var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+   var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+
+   return Math.min(latZoom, lngZoom, ZOOM_MAX);
+}
+
+
+
+function initMap() {
+  var latlng = {lat: {{ res_latitude }}, lng: {{ res_longitude }}};
+ var map = new google.maps.Map(
+     document.getElementById('map'), {zoom: 11, center: latlng,
+           streetViewControl: false,
+           mapTypeControl: false,
+           zoomControlOptions: {
+               position: google.maps.ControlPosition.LEFT_TOP
+           },
+     gestureHandling: 'greedy'});
+ 
+ 
+ var infowindow = new google.maps.InfoWindow({});
+ google.maps.event.addListener(infowindow, 'domready', function() {
+ 	  var iwOuter = $('.gm-style-iw');
+
+       var iwBackground = iwOuter.prev();
+
+       iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+       iwBackground.children(':nth-child(4)').css({'top' : '-200px','display':'none','max-height':'275px'});
+
+       var iwCloseBtn = iwOuter.next();
+       iwOuter.css({'top' : '18px', 'width':'250px;'});
+
+       iwCloseBtn.css({'right':'40px', 'top':'18px'});
+
+       iwCloseBtn.mouseout(function(){
+         $(this).css({opacity: '1'});
+       });
+ 	});
+   var addressesArray = [];
+   
+
+   function createBoundsForMarkers(markers) {
+       var bounds = new google.maps.LatLngBounds();
+       $.each(markers, function() {
+           bounds.extend(this.getPosition());
+       });
+       return bounds;
+   }
+   var bounds = (markers.length > 0) ? createBoundsForMarkers(markers) : new google.maps.LatLngBounds();
+   
+	bounds.extend(new google.maps.LatLng({{ res_latitude }}, {{ res_longitude }}))
+
+	var $mapDiv = $('#map');
+	
+	var mapDim = {
+	    height: $mapDiv.height(),
+	    width: $mapDiv.width()
+	}
+   
+   
+ map.setZoom((bounds) ? (getBoundsZoomLevel(bounds, mapDim) - 5) : 0)
+
+   
+
+   {% for f in roomwishlist %}
+   addressesArray.push({
+   	  "facility":{
+         "address": "{{ f.room_book.location_id.street_address_1 }} {{ f.room_book.location_id.city|cut:" " }} {{ f.room_book.location_id.state|cut:" " }} {{ f.room_book.location_id.zipcode }}",
+         "name":"{{ f.room_book.facility_name }}",
+         "location_id":"{{ f.room_book.location_id.pk }}",
+         "location_lat":"{{ f.room_book.latitude }}",
+         "location_long":"{{ f.room_book.longitude }}",
+         "price":"{{ f.room_book|get_price }}",
+         "rating":"{{ f.room_book|getrating }}",
+         "capacity":"{{ f.room_book.capacity }}",
+       	  "id":"{{ f.room_book.pk }}",
+       	  "imagesrc":{
+       	  {% if f.room_book.pk|roompicsall %}
+       	  {% for data in f.room_book.pk|roompicsall %}
+       	  "{{ forloop.counter }}":"/media/{{ data.image_file.name }}",
+       	  {% endfor %}
+             {% else %}
+       	  "1":"/static/images/Detail0.jpg",
+             {% endif %}
+       	  }
+         }
+   });
+   {% endfor %}
+
+   var icons = {
+		    hotel: {
+		      icon: {url:'{% static "/images/" %}{{ PROJECT_ICON }}',
+     		    
+		    	  scaledSize: new google.maps.Size(17, 19),
+	                origin: new google.maps.Point(0, 0),
+	                anchor: new google.maps.Point(0, 0)}
+		    },
+		  }
+	
+
+
+
+	function geocodeAddress(addressesArray, geocoder, resultsMap) {
+   	$.each(addressesArray, function(i, field){
+   		var myLatLng = new google.maps.LatLng(addressesArray[i]['facility']['location_lat'], addressesArray[i]['facility']['location_long']);
+   		
+             marker = new google.maps.Marker({
+			        icon: icons['hotel'].icon,
+               map: resultsMap,
+               position: myLatLng
+             });
+             bounds.extend(myLatLng)
+
+           	  markers.push(marker);  
+             google.maps.event.addListener(marker, 'mouseover', function() {
+           	  var html = ''
+           	  var ratinghtml = '';
+           	  var imagehtml = '';
+           	  $.each(field.facility.imagesrc, function(i, fielddata){
+           		  var cls = ''
+           		  if(i==1){
+           			  cls = 'active'
+           		  }
+           		  imagehtml += '<div class="item '+ cls +'"><img src="'+ fielddata +'" class="cld-responsive cld-hidpi img-responsive lazyload" alt="vicinity"></div>'
+           	  })
+           	  for(i=1;i<=5;i++){
+   		  
+   		  if(i<=field.facility.rating){
+   			  ratinghtml += `
+                     <label class="f-stars">
+                     <input name="rating" value="`+ i +`" title="0 stars" type="radio"> 0
+                     </label>`
+   		  }
+   		  else{
+   			  ratinghtml += `
+                     <label class="e-stars">
+                     <input name="rating" value="`+ i +`" title="0 stars" type="radio"> 0
+                     </label>`
+   		  }
+   	  }
+           	  html = `
+           		  
+           		  <div class="Listing-Thumbnail">
+           			<div class="carousel-wrapper">
+           			<a href="/room/view/`+ field.facility.id +`">
+           					<div class="carousel">
+           						<div
+           							class="carousel-control carousel-control-prev scroll-image-left">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           						<div>
+           							<div class="carousel-item" style="display: block;">
+           								
+           								<div id="picsCarousel" class="carousel slide">
+           								<div class="carousel-inner product-item">`+imagehtml+`\
+                                   		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel" data-slide="prev">\
+                                     <span class="glyphicon glyphicon-chevron-left"></span>\
+                                     <span class="sr-only">Previous</span>\
+                                   </a>\
+                                   <a class="right carousel-control" href="#picsCarousel" role="button" data-slide="next">\
+                                     <span class="glyphicon glyphicon-chevron-right"></span>\
+                                     <span class="sr-only">Next</span>\
+                                   </a>
+           							</div>
+           						</div>
+           						<div
+           							class="carousel-control carousel-control-next scroll-image-right">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           					</div>
+           					<div class="price-box-wrapper">
+           						<span style="font-weight: bold;">$`+ field.facility.price +`</span><span
+           							style="font-size: 10px;"> / hr</span>
+           					</div>
+           					<div class="rating">`+ ratinghtml +`</div>
+           				</div></a>
+           				<div class="info-container container-fluid">
+           					<div class="row">
+           						<div class="col-xs-12">
+           							<h6 class="listing-title">`+ field.facility.name +`</h6>
+           						</div>
+           					</div>
+           					<div class="row info-row">
+           						<div class="col-xs-12">
+           							<div class="details-wrapper">
+           								<div class="attendee-wrapper">
+           									<i class="fa fa-users"></i>`+ field.facility.capacity +`
+           								</div>
+           							</div>
+           							
+           		  <a href="/room/view/`+ field.facility.id +`" class="search-button btn-sm btn-block text-center add2cart">More Details</a>
+           		  
+           						</div>
+           					</div>
+           				</div>
+           		</div>
+           	  `
+           	  infowindow.setContent(html)
+           	  infowindow.open(map, this);
+         	  
+               
+
+           	  var iwOuter = $('.gm-style-iw');
+
+                 var iwBackground = iwOuter.prev();
+
+                 iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+                 iwBackground.children(':nth-child(4)').css({'top' : '-200px','display':'none','max-height':'275px'});
+
+                 var iwCloseBtn = iwOuter.next();
+                 iwOuter.css({'top' : '18px', 'width':'250px;'});
+
+                 iwCloseBtn.css({'right':'40px', 'top':'18px'});
+
+                 iwCloseBtn.mouseout(function(){
+                   $(this).css({opacity: '1'});
+                 });
+               });
+
+       })
+
+     	map.fitBounds(bounds);
+       
+   }
+
+
+        var geocoder = new google.maps.Geocoder();
+        
+        geocodeAddress(addressesArray, geocoder, map,infowindow);
+
+     }
+     
+  
+
+	    $('#map').css('height', $(this).height() - 110);
+	    $('.map-content-sidebar').css('height', $(this).height() - 110);
+     $(window).resize(function(){
+    	    $('#map').css('height', $(this).height() - 110);
+    	    $('.map-content-sidebar').css('height', $(this).height() - 110);
+     })
+ 	 
+ 	
+
+ 	
+    	
+        $(window).on("load", function() {
+    	    	initMap();
+    	    	
+    	    	
+    	});
+
+
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n core_extras %}
+{% block title %}Wishlist {% endblock %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places&size=600x300"></script>
+<section class="content-area-3 wishlist-section">
+<div class="container">
+
+   <div class="view property-content">
+   {% if board_data %}
+   {% for data in board_data %}
+   <h1 class="title"><span style="color:#333;font-weight:400;">Board Name:</span> {{ data.board_name }} <span class="right" style="margin: 10px;">
+                                   <a href="{% url 'core:boardremove' data.pk %}?next={{ request.path }}"> <i class="fa fa-trash-o"></i></a>
+                                </span><span class="right" style="margin: 10px;">
+                                   <a href="{% url 'core:editboard' data.pk %}?next={{ request.path }}"> <i class="fa fa-pencil"></i></a>
+                                </span></h1>
+                               <div class="clearfix"></div><br>
+                               {% if request.user|getroomboard:data %}
+                               {% for f in request.user|getroomboard:data %}
+                               <div class="col-md-4">
+						<div class="property" style="box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.10), 0 3px 3px 0 rgba(0, 0, 0, 0.10);">
+                  <div class="product-item">
+                     <div id="slideshow" class="pi-img-wrapper">
+                     {% if f|roompics %}
+                       <div class="property-img">
+                       <div class="carousel">
+           						<div
+           							class="carousel-control carousel-control-prev scroll-image-left">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           						<div>
+           							<div class="carousel-item" style="display: block;">
+           								
+           								<div id="picsCarousel_{{ f.pk }}" class="carousel slide" onclick='window.location.href="{% url 'frontend:roomview' f.id %}"'>
+           								<div class="carousel-inner product-item">
+           								{% for data in f|roompics %}
+			<div class="item {% if forloop.first %}active{% endif %}">
+			<img src="/media/{{ data.image_file }}" class="cld-responsive cld-hidpi img-responsive thumb-preview height-image lazyload" alt="vicinity">
+			</div>
+			{% endfor %}
+                                   		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel_{{ f.pk }}" data-slide="prev">
+                                     <span class="glyphicon glyphicon-chevron-left"></span>
+                                     <span class="sr-only">Previous</span>
+                                   </a>
+                                   <a class="right carousel-control" href="#picsCarousel_{{ f.pk }}" role="button" data-slide="next">
+                                     <span class="glyphicon glyphicon-chevron-right"></span>
+                                     <span class="sr-only">Next</span>
+                                   </a>
+           							</div>
+           						</div>
+           						<div
+           							class="carousel-control carousel-control-next scroll-image-right">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           					</div>
+                       
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ f|get_price }}/hr</span></div>
+                       
+                       
+                       </div>
+                        {% else %}
+                         <div class="property-img">
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ f|get_price }}/hr</span></div>
+                         <div class="property-tag button alt featured"></div><img src="/static/images/Detail0.jpg" class="img-responsive thumb-preview height-image" alt="...">
+                          
+                         </div>
+                        {% endif %}
+                       
+                     </div>
+                     
+                     <div class="property-content">
+                    <h3 class="title clearfix"><span class="pull-left"><a href="{% url 'frontend:roomview' f.id %}">{{ f.facility_name }}</a></span>  
+                     </h3>
+                     <h3 class="property-address"><i class="fa fa-map-marker"></i> {{ f.location_id.street_address_1 }} {{ f.location_id.city }} {{ f.location_id.state }} {{ f.location_id.zipcode }}</h3>
+                    <div class="property-footer"> <span class="left"><i class="fa fa-users"></i> Occupancy - {{ f.capacity }}</span>
+                    
+                    
+                     <div class="row">
+                      <div class="p-bottom-section">
+                    
+                        <div class="col-md-6">
+                           <div class="rating">
+                        {% if f|getrating %}
+                        {% with f|getrating as endvalue %}
+                        {% for c in 0|filterrange:endvalue %}
+                           <label class="f-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% for c in endvalue|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endwith %}
+                           {% else %}
+                           {% for c in 1|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endif %}
+                        </div>
+                        </div>
+                        
+                         
+                      </div>
+                       
+                    </div>
+                    
+                    
+                     </div>
+                     </div>
+                     <div class="property-footer">
+                                <span class="right" style="margin: 10px;">
+                                   <a href="{% url 'core:whishlistremove' data.pk f.pk %}?next={{ request.path }}"> <i class="fa fa-trash-o"></i> Delete</a>
+                                </span>
+                            </div>
+                  </div>
+                  </div>
+               </div>       
+			<!-- <div class="col-xs-12 col-sm-4 col-xl-3">
+				<div class="property">
+				 <div class="property-content">
+				<a class="listing-thumbnails "
+					href="{% url 'core:boarddetail' data.pk %}">
+						
+						
+						
+					
+                        Property img
+                        <div class="property-img">
+                            <div class="img-container">
+							
+								<img alt="Vicinity"
+									src="{{ data.event_type.pk|gettypepic }}">
+									
+								
+									
+							</div>
+                           
+                            
+                        </div>
+
+                            <h3 class="property-address">
+                               
+                                    <i class="fa fa-map-marker"></i> {{ data.event_type }} {{ data.location }}
+                                
+                            </h3>
+                            Facilities List
+                           
+                          
+                       
+                    
+						
+						
+						</a>
+						  <div class="property-footer">
+                                <span class="left ">
+                                    <a href="javascript:void(0);" onclick="getdetail('board','','','{{ data.pk }}')"><i class="fa fa-edit"></i> Edit</a>
+                                    
+                                </span>
+                              
+                                <span class="right">
+                                   <a href="{% url 'core:whishlistremove' data.pk data.pk %}?next={{ request.path }}"> <i class="fa fa-trash-o"></i> Delete</a>
+                                </span>
+                            </div>
+						
+					 	</div>
+					</div>
+			</div> -->
+				{% endfor %}
+				
+               {% else %}
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No rooms added</p>
+                         {% endif %} 
+				<div class="clearfix"></div><br>
+			{% endfor %}
+			{% else %}
+			<h3>No space added</h3>
+			{% endif %}
+   </div>
+</section>
+
+{% endblock %}
+

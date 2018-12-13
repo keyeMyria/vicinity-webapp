@@ -1,0 +1,158 @@
+{% load static %}
+{% load core_extras %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+    
+    <title>{% block title %}{{ PROJECT_NAME }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+<meta http-equiv='cache-control' content='no-cache'>
+<meta http-equiv='expires' content='-1'>
+<meta http-equiv='pragma' content='no-cache'>
+    <!-- External CSS libraries -->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-submenu.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/fonts/flaticon/font/flaticon.css">
+  <link rel="icon" type="image/png" href="{% static 'images/' %}{{ PROJECT_ICON }}">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-datetimepicker.min.css" %}">
+
+<link href="/static/css/jquery-ui.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static "notification/css/amaran.min.css" %}">
+    <!-- Custom stylesheet -->
+    
+    <link rel="stylesheet" type="text/css" href="/static/css/vicinity-style.css{{WEBAPP_NOCACHE_TOKEN}}">
+    <link rel="stylesheet" type="text/css" id="style_sheet" href="/static/css/skins/default.css">
+	<link href="/static/css/vicinity-frontstyle.css{{WEBAPP_NOCACHE_TOKEN}}" rel="stylesheet">
+	<link href="/static/css/space_admin.css{{WEBAPP_NOCACHE_TOKEN}}" rel="stylesheet">
+
+<script src="/static/js/jquery-2.2.0.min.js"></script>
+  <script src="{% static 'js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+
+<script src="/static/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="/static/js/rangeslider.js"></script>
+<script src="{% static 'js/datetimepicker.min.js' %}"></script>
+<script src="/static/js/moment.min.js"></script>
+  <script src="/static/js/jquery.validate.min.js"></script>
+
+</head>
+<body>
+<div class="header-update">
+  {% block header %}
+    {% include 'frontend/includes/_header.html' %}
+    {% endblock %}
+</div>
+<div class="message-data-update">
+      {% include 'frontend/includes/_alerts.html' %}
+      </div> 
+{% block content %}
+{% endblock %}
+{% if request.resolver_match.url_name != 'userprofile' %}
+<div class="small-chat-box zoomInUp animated" style="animation-duration: 0.5s;">
+
+        <div class="heading" draggable="true">
+            <span class="send__user">Chat with us!</span>
+            <button type="button" class="close close_chat" data-dismiss="modal">×</button>
+        </div>
+        <div class="list_get" draggable="true">
+            
+        </div>
+
+        <div class="content msg_container">
+
+        </div>
+
+        <div class="form-chat" style="position: absolute;bottom: 0px;">
+          
+          <div class="input-group input-group-sm"><input type="text" class="form-control messagechat"> <span class="input-group-btn"> <button
+            class="btn chat-fill send-message" type="button"> <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button> 
+
+
+          </span>
+          </div>
+        </div>
+
+</div>
+
+    
+    <div id="small-chat" class="" style="display:none;">
+
+     <span class="badge badge-warning pull-right"></span>
+        <a class="open-small-chat chat-link" data-room-id="{% if request.user.is_authenticated %}{{ request.user.pk|get_room_id }}{% endif %}">
+           <div class="openerp o_livechat_button hidden-print"><i class="fa fa-commenting "></i> &nbsp; <span> How can we help you ? </span> </div>
+
+        </a>  
+
+    </div>
+
+{% endif %}
+
+
+
+<div class="loading loader-bg hidden">
+<span class="text-white"><br>updating</span><div class="clrfix"></div>
+  <div class="loading-bar"></div>
+  <div class="loading-bar"></div>
+  <div class="loading-bar"></div>
+  <div class="loading-bar"></div>
+</div>
+
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-submenu.js"></script>
+<script src="/static/js/wow.min.js"></script>
+<script src="/static/js/bootstrap-select.min.js"></script>
+<script src="/static/js/jquery.easing.1.3.js"></script>
+<script src="/static/js/jquery.scrollUp.js"></script>
+<script src="/static/js/leaflet.js"></script>
+<script src="/static/js/leaflet-providers.js"></script>
+<script src="/static/js/leaflet.markercluster.js"></script>
+<script src="/static/js/jquery.filterizr.js"></script>
+<script src="/static/js/jquery.magnific-popup.min.js"></script>
+<script src="/static/js/maps.js"></script> 
+	<script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+
+	<script src="{% static 'notification/js/jquery.amaran.min.js' %}"></script>
+	
+	<script src="{% static 'js/feedback.js' %}"></script>
+	<script src="{% static 'js/html2canvas.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'css/feedback.min.css' %}" />
+	<script type="text/javascript">
+        document.addEventListener('DOMContentLoaded',
+                                  function () {
+        $.feedback({
+            ajaxURL: '/feedback-form',
+            html2canvasURL: '{% static "js/html2canvas.js" %}',
+            onClose: function() {  }
+        });
+        }, false);
+    </script>
+	
+	
+<script src="{% static 'js/datetimepicker.min.js' %}"></script> 
+<script src="/static/js/jquery-ui.min.js"></script>
+<script src="{% static 'js/custom_rental.js' %}{{ WEBAPP_NOCACHE_TOKEN }}"></script>
+
+    
+{% block footer %}
+      {% include 'frontend/includes/_footer.html' %}
+{% endblock %}
+
+
+      
+
+{% block scripts %}
+
+{% endblock %}
+
+</body>
+
+</html>    

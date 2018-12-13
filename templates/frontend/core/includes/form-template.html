@@ -1,0 +1,17 @@
+{% load static %}
+
+  <!-- Template for the forms which is used for all the forms on the website. -->
+{% for field in form %}
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <span class="text-danger small">{{field.errors}}</span>
+  </div>
+  <div class="col-sm-2 text-left">{{ field.label_tag}}</div>
+<div class="clearfix"></div>
+  <div class="col-sm-12"  id="rating">
+
+    {{ field }}
+  </div>
+</div>
+
+{% endfor %}

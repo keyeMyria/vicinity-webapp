@@ -1,0 +1,270 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_tags %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="content-main">
+<div class="row">
+	{% if app_list %}
+    {% for app in app_list %}
+    {% for model in app.models %}
+		<div class="col-xs-12 col-md-6 col-lg-6 col-xl-3 " onclick="window.location.href='{{ model.admin_url }}'">
+			<div class="card-box noradius noborder bg-info box-{{ model.object_name|lower }} pointer">
+				<i class="fa fa-{% if model.object_name|lower == 'user' %}user{% else %}circle-o{% endif %} {{ model.object_name|lower }}_icon float-right text-white"></i>
+				<h6 class="text-white text-uppercase m-b-20">{{ model.name }}</h6>
+				<h1 class="m-b-20 text-white counter">{{ model|get_count }}</h1>
+				<span class="text-white">&nbsp;</span>
+			</div>
+		</div>
+	  {% endfor %}
+	    {% endfor %}
+	{% endif %}
+
+	</div>
+	<hr>
+  <div class="row col-lg-12">
+<div class="col-lg-9">
+  <div class="col-md-12">
+
+  
+      <h4 class="text-center">Number of bookings per rooms</h4>
+      <div id="myChart1" style="height: 300px; width: 100%;"></div>
+
+  <hr />
+  </div>
+  <div class="col-md-12">
+      <h4 class="text-center">Yearly earnings from each room</h4>
+      <div id="myChart2" style="height: 300px; width: 100%;"></div>
+  <hr />
+  </div>
+  <div class="col-md-12">
+      <h4 class="text-center">Monthly Users Registered</h4>
+      <div id="myChart3" style="height: 300px; width: 100%;"></div>
+  <hr />
+  </div>
+  <div class="col-md-12">
+      <h4 class="text-center">User Statistics</h4>
+      <div id="myChart4" style="height: 300px;padding: 0px;"></div>
+  <hr />
+  </div>
+
+
+
+
+</div>
+
+<div id="content-related" class="col-lg-3">
+    <div class="module" id="recent-actions-module">
+        <h2>{% trans 'Recent actions' %}</h2>
+        <h3>{% trans 'My actions' %}</h3>
+            {% load log %}
+            {% get_admin_log 20 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p>{% trans 'None available' %}</p>
+            {% else %}
+            <ul class="actionlist">
+            {% for entry in admin_log %}
+            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                    {{ entry.object_repr }}
+                {% else %}
+                    <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                {% endif %}
+                <br/>
+                {% if entry.content_type %}
+                    <span class="mini quiet">{% filter capfirst %}{{ entry.content_type }}{% endfilter %}</span>
+                {% else %}
+                    <span class="mini quiet">{% trans 'Unknown content' %}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+    </div>
+</div>
+</div>
+	
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.js"></script>
+<script>
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(RoomsChart);
+google.charts.setOnLoadCallback(EarnChart);
+google.charts.setOnLoadCallback(UsersChart);
+google.charts.setOnLoadCallback(UsersActiveChart);
+$(window).resize(function(){
+	google.charts.load('current', {packages: ['corechart', 'bar']});
+	google.charts.setOnLoadCallback(RoomsChart);
+	google.charts.setOnLoadCallback(EarnChart);
+	google.charts.setOnLoadCallback(UsersChart);
+	google.charts.setOnLoadCallback(UsersActiveChart);	
+})
+
+function RoomsChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Room Name');
+      data.addColumn('number', 'Bookings');
+
+      data.addRows([
+    	  {% for data in request.user|get_roomname %}
+        ['{{ data.facility_name }}', {{ data.count }}],
+        {% endfor %}
+      ]);
+
+      var options = {
+        hAxis: {
+          title: 'Rooms',
+        },
+        vAxis: {
+          title: 'Bookings',
+        },
+        bar: { groupWidth: "100%" }
+
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('myChart1'));
+
+      chart.draw(data, options);
+    }
+    
+function EarnChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Room Name');
+    data.addColumn('number', 'Earnings $');
+
+    data.addRows([
+  	  {% for data in request.user|get_money %}
+      ['{{ data.facility_name }}', {{ data.value }}],
+      {% endfor %}
+    ]);
+
+    var options = {
+    		colors: ['#b0120a'],
+      hAxis: {
+        title: 'Rooms',
+      },
+      vAxis: {
+        title: 'Yearly Earnings $'
+      },
+      bar: { groupWidth: "100%" }
+
+    };
+
+    var chart = new google.visualization.ColumnChart(
+      document.getElementById('myChart2'));
+
+    chart.draw(data, options);
+  }
+  
+function UsersChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Month');
+    data.addColumn('number', 'Users');
+    data.addRows([
+  	  {% for data in request.user|get_usermonth reversed %}
+      ['{{ data.month }}', {{ data.value }}],
+      {% endfor %}
+    ]);
+
+    var options = {
+    		colors: ['#28a745'],
+      hAxis: {
+        title: 'Month',
+      },
+      vAxis: {
+        title: 'Users',
+      },
+      bar: { groupWidth: "100%" }
+
+    };
+
+    var chart = new google.visualization.ColumnChart(
+      document.getElementById('myChart3'));
+
+    chart.draw(data, options);
+  }
+
+
+function UsersActiveChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'State');
+    data.addColumn('number', 'Count');
+    data.addRows([
+  	  {% for data in request.user|get_useractive %}
+      ['{{ data.state }}', {{ data.value }}],
+      {% endfor %}
+    ]);
+
+    var options = {
+    		colors: ['#28a745','#b0120a'],
+      hAxis: {
+        title: 'State',
+      },
+      vAxis: {
+        title: 'Count',
+      },
+      bar: { groupWidth: "100%" }
+
+    };
+
+    var chart = new google.visualization.PieChart(
+      document.getElementById('myChart4'));
+
+    chart.draw(data, options);
+  }
+     
+
+
+
+</script>
+
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>{% trans 'Recent actions' %}</h2>
+        <h3>{% trans 'My actions' %}</h3>
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p>{% trans 'None available' %}</p>
+            {% else %}
+            <ul class="actionlist">
+            {% for entry in admin_log %}
+            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                    {{ entry.object_repr }}
+                {% else %}
+                    <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                {% endif %}
+                <br/>
+                {% if entry.content_type %}
+                    <span class="mini quiet">{% filter capfirst %}{{ entry.content_type }}{% endfilter %}</span>
+                {% else %}
+                    <span class="mini quiet">{% trans 'Unknown content' %}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,828 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+
+<div class="formdata-confirm" >
+	{% csrf_token %}
+	<div class="apply-form content-area-3 location-form">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="contact-view form-content-box apply-form-inner">
+
+					<div class="details">
+						<h2 class="no-gutter">Recommend space at Vicinity</h2>
+							<form class="details formdata-confirm-data" method="post"  action="">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" name="CompanyName" placeholder="Name" required="" maxlength="255" id="id_CompanyName" class="form-control input-text">
+											<p class="error error-msg"></p>
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class="form-group">
+											<input type="email" name="CompanyEmail" placeholder="Email" required="" maxlength="254" id="id_CompanyEmail" class="form-control input-text">
+											<p class="error error-msg"></p>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="text" name="HQAddress" placeholder="Address" required="" maxlength="255" id="id_HQAddress" class="form-control input-text" autocomplete="off">
+											<p class="error error-msg"></p>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" name="city" placeholder="City" required="" maxlength="255" id="id_city" class="form-control input-text">
+											<p class="error error-msg"></p>
+										</div>
+									</div>
+	
+									<div class="col-md-4">
+										<div class="form-group">
+											<input type="text" name="state" placeholder="State" required="" maxlength="255" id="id_state" class="form-control input-text">
+											<p class="error error-msg"></p>
+										</div>
+									</div>
+									<div class="col-md-4">
+	
+										<div class="form-group">
+											<input type="text" name="zipcode" placeholder="Zip code" required="" maxlength="255" id="id_zipcode" class="form-control input-text">
+											<p class="error error-msg"></p>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<button type="button" class="btn button-md button-theme addaboutmore">Next</button>
+										</div>
+									</div>
+								</div>
+	
+							</form>
+						</div>
+	
+					</div>
+				</div>
+	<div id="current"></div>
+				<div class="col-md-6">
+					<div class="img-container" id="map" style="height:500px;">
+					</div>
+	
+				</div>
+			</div>
+	
+	
+	
+		</div>
+	</div>
+
+<div class="counters overview-bgi location-form-detail">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 bordered-right">
+				<div class="counter-box">
+					<i class="flaticon-symbol-1"></i>
+					<h1 class="counter">{{ request.user|list_space }}</h1>
+					<p>Listings For Book</p>
+				</div>
+			</div>
+			<div class="col-md-6 bordered-right">
+				<div class="counter-box">
+					<i class="flaticon-people"></i>
+					<h1 class="counter">{{ request.user|user_list_space }}</h1>
+					<p>Agents</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="mb-60 mt-60 our-service mt-80 location-form-detail">
+	<div class="container">
+
+		<div class="main-title">
+			<h1>
+				<span>How it</span> works
+			</h1>
+		</div>
+
+		<div class="row mgn-btm wow">
+			<div
+				class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInLeft delay-04s">
+				<div class="content">
+					<i class="flaticon-apartment"></i>
+					<p>Browse homes, lofts, galleries, and more</p>
+				</div>
+			</div>
+			<div
+				class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInLeft delay-04s">
+				<div class="content">
+					<i class="flaticon-internet"></i>
+					<p>Compare prices and connect with hosts</p>
+				</div>
+			</div>
+			<div
+				class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInRight delay-04s">
+				<div class="content">
+					<i class="flaticon-vehicle"></i>
+					<p>Book in just a few clicks</p>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<div class="recently-properties chevron-icon space-section location-form-detail" >
+	<div class="container">
+		<!-- Main title -->
+		<div class="main-title">
+			<h1><span>
+FEATURED 
+</span>  PLACES</h1>
+		</div>
+		<div class="row">
+			<div class="carousel our-partners slide">
+
+				<div class="">
+{% for event in EVENT_LIST %}
+                {% if forloop.counter0 < 12 %}
+
+					<div class="item">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="property-2">
+                                <div class="property-img">
+                                    <img style="height: 198px;" src="{{ event.0|gettypepic }}" alt="{{ event.1 }}" class="img-responsive">
+                                    <div class="property-overlay">
+                                        <a href="/search?location=United+States&plantype={{ event.1 }}" class="overlay-link">
+                                            <i class="fa fa-link"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4 class="title">
+                                     <a href="/search?location=United+States&plantype={{ event.1 }}">{{ event.1 }}</a>
+                                    </h4>
+                                   
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+
+  {% endif %}
+				
+			{% endfor %}
+                    
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper adddetailmore" style="display:none;">
+<div class="container">
+		<div class="row"><div class="col-md-12">
+		<ol class="progress progress--medium progress-custom">
+  <li class="is-complete" data-step="1">
+   1. Location
+   <p>Address</p>
+  </li>
+  <li data-step="2">
+    2. About your space
+    <p >Title, Information, Parking Spaces, Capacity, Facility Amenities, Event Type</p>
+  </li>
+  
+  <li data-step="3">
+   3. Activities
+  <p >Hourly rate, Minimim hours, Discount, Cleaning, etc.</p>
+  </li>
+  <li data-step="F" class="progress__last">
+   Finish
+   <p>Review your space and click on agree to confirm</p>
+  </li>
+</ol>
+		</div>
+		</div>
+		
+						<div class="spacedetailsave">
+						{% csrf_token %}
+			
+<div class="row"><div class="col-md-offset-2 col-md-8">
+<div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="">
+				
+						<form class="formdata-about details" method="post"  action="">
+				<div class="main-title-2 ">
+									<h1>
+										<span>About Your</span> Space
+									</h1>
+								</div>
+								<hr/>
+							
+									<div class="form-group ">
+										<label class="control-label"
+											>Give your space a title</label>
+										
+												<input type="text" name="facility_name" class="form-control input-text" placeholder="Facility name" required="required" maxlength="100" id="id_facility_name">
+										
+									</div>
+								
+								
+									<div class="form-group">
+										<label class="control-label" >
+											Facility Information</label>
+										
+												<textarea name="facility_information" cols="40" rows="10" class="form-control input-text" placeholder="Enter Facility Information" required="required" id="id_facility_information"></textarea>
+										
+									</div>
+								
+								
+								
+									<div class="form-group ">
+										<label class="control-label">
+											Parking Spaces</label>
+										
+											<input type="text" name="parking_spaces" class="form-control input-text" placeholder="Parking spaces" required="required" maxlength="100" id="id_parking_spaces">
+									
+									</div>
+								
+								
+								
+									<div class="form-group ">
+										<label class="control-label" >
+											Capacity</label>
+										
+										<input type="text" name="capacity"  class="form-control input-text" placeholder="Capacity" required="required" maxlength="100" id="id_capacity">
+										
+									</div>
+								
+								
+									<div class="form-group ">
+										<label class="control-label" >
+											Fac amenities</label>
+										
+										<input type="text" name="fac_amenities"  class="form-control input-text" placeholder="Fac amenities" required="required" maxlength="500" id="id_fac_amenities">
+										
+									</div>
+								
+									<div class="form-group ">
+										<label class="control-label" >
+											Event type</label>
+										
+										<input type="text" name="event_type"  class="form-control input-text" placeholder="Event type" required="required" maxlength="500" id="id_event_type">
+									
+									</div>
+								
+							
+										<div class="form-btns">
+											<!-- <button
+												class="primary-next-button input-spacing-margin address-form-cta ">Next</button> -->
+												<a href="javascript:void(0);" class="button-sm button-theme form-about-back"><i class="fa fa-angle-double-left"></i> Back</a>
+									<button type="button" class="button-sm button-theme form-about">Next <i class="fa fa-angle-double-right"></i></button>
+										</div>
+								
+							
+						</form>
+					</div>
+					
+				</div>
+			</div>
+	</div>
+</div>
+<div class="row"><div class="col-md-offset-2 col-md-8">
+<div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class=" " >
+				<form class="formdata-activities details" action="" style="display:none;">
+				<div class="main-title-2">
+									<h1>
+										<span>Space</span> Activites
+									</h1>
+								</div>
+								<hr/>
+									
+									
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">None refundable fee: </label> 
+												<input type="text" name="none_refundable_fee" placeholder="None refundable fee" required="required" maxlength="100" id="id_none_refundable_fee" class="form-control input-text">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Cost for profit: </label> 
+											<input type="text" name="cost_for_profit" placeholder="Cost for profit" required="required" maxlength="100" id="id_cost_for_profit" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Cost for non profit: </label> 
+												<input type="text" name="cost_for_non_profit" placeholder="Cost for non profit" required="required" maxlength="100" id="id_cost_for_non_profit" class="form-control input-text">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc alc: </label> 
+											<input type="text" name="fac_cost_misc_alc" placeholder="Fac cost misc alc" required="required" maxlength="100" id="id_fac_cost_misc_alc" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+    
+    
+                                     <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc rental clean dep no alc: </label> 
+												<input type="text" name="fac_cost_misc_rental_clean_dep_no_alc" placeholder="Fac cost misc rental clean dep no alc" required="required" maxlength="100" id="id_fac_cost_misc_rental_clean_dep_no_alc" class="form-control input-text">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc rental clean dep alc: </label> 
+											<input type="text" name="fac_cost_misc_rental_clean_dep_alc" placeholder="Fac cost misc rental clean dep alc" required="required" maxlength="100" id="id_fac_cost_misc_rental_clean_dep_alc" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+    
+    
+    
+                                    <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc non ref hr mtn: </label> 
+												<input type="text" name="fac_cost_misc_non_ref_hr_mtn" placeholder="Fac cost misc non ref hr mtn" required="required" maxlength="100" id="id_fac_cost_misc_non_ref_hr_mtn" class="form-control input-text">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc: </label> 
+											<input type="text" name="fac_cost_misc" placeholder="Fac cost misc" required="required" maxlength="100" id="id_fac_cost_misc" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Staff fee: </label> 
+												<input type="text" name="staff_fee" placeholder="Staff fee" required="required" maxlength="100" id="id_staff_fee" class="form-control input-text">
+											</div>
+										</div>
+										
+									</div>
+    
+    
+    
+                                   <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Note 1: </label> 
+												<textarea name="note_1" rows="10" required="required" placeholder="Note 1" cols="40" id="id_note_1" class="form-control input-text"></textarea>
+											</div>
+										</div>
+									</div>
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Note 2: </label> 
+												<textarea name="note_2" rows="10" required="required" placeholder="Note 2" cols="40" id="id_note_2" class="form-control input-text"></textarea>
+											</div>
+										</div>
+									</div>
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Note 3: </label> 
+												<textarea name="note_3" rows="10" required="required" placeholder="Note 3" cols="40" id="id_note_3" class="form-control input-text"></textarea>
+											</div>
+										</div>
+									</div>
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Res 1: </label> 
+												<textarea name="res_1" rows="10" required="required" placeholder="Res 1" cols="40" id="id_res_1" class="form-control input-text"></textarea>
+											</div>
+										</div>
+									</div>
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Res 2: </label> 
+												<textarea name="res_2" rows="10" required="required" placeholder="Res 2" cols="40" id="id_res_2" class="form-control input-text"></textarea>
+											</div>
+										</div>
+									</div>
+    
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Res 3: </label> 
+												<textarea name="res_3" rows="10" required="required" placeholder="Res 3" cols="40" id="id_res_3" class="form-control input-text"></textarea>
+											</div>
+										</div>
+									</div>
+    
+     <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac surf type: </label> 
+												<input type="text" name="fac_surf_type" placeholder="Fac surf type" required="required" maxlength="100" id="id_fac_surf_type" class="form-control input-text">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac feature: </label> 
+											<input type="text" name="fac_feature" placeholder="Fac feature" required="required" maxlength="100" id="id_fac_feature" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+									
+									
+									 <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fee based amenities: </label> 
+												<input type="text" name="fee_based_amenities" placeholder="Fee based amenities" required="required" maxlength="100" id="id_fee_based_amenities" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+    
+    <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Location type:</label> 
+												 
+                                       
+                                        <select name="location_type" placeholder="Location Type" required="required" id="id_location_type" class="selectpicker search-fields" tabindex="-98">
+                                        {% for data in LOCATION_TYPE %}
+  <option value="{{ data.0 }}">{{ data.1 }}</option>
+{% endfor %}
+
+</select>
+                                    
+												
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Location name:</label> 
+<input type="text" name="location_name" placeholder="Enter Location name" required="required" maxlength="500" id="id_location_name" class="form-control input-text">
+											</div>
+										</div>
+									</div>
+    <div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sun open time:</label><input type="text" name="sun_open_time" placeholder="Sun Open Time" required="required" maxlength="100" id="id_sun_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sun close time:</label><input type="text" name="sun_close_time" placeholder="Sun Close Time" required="required" maxlength="100" id="id_sun_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Mon open time:</label><input type="text" name="mon_open_time" placeholder="Mon Open Time" required="required" maxlength="100" id="id_mon_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Mon close time:</label><input type="text" name="mon_close_time" placeholder="Mon Close Time" required="required" maxlength="100" id="id_mon_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Tues open time:</label> <input type="text" name="tue_open_time" placeholder="Tue Open Time" required="required" maxlength="100" id="id_tue_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Tues close time:</label> <input type="text" name="tue_close_time" placeholder="Tue Close Time" required="required" maxlength="100" id="id_tue_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Wed open time:</label> <input type="text" name="wed_open_time" placeholder="Wed Open Time" required="required" maxlength="100" id="id_wed_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Wed close time:</label> <input type="text" name="wed_close_time" placeholder="Wed Close Time" required="required" maxlength="100" id="id_wed_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Thu open time:</label> <input type="text" name="thu_open_time" placeholder="Thu Open Time" required="required" maxlength="100" id="id_thu_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Thu close time:</label> <input type="text" name="thu_close_time" placeholder="Thu Close Time" required="required" maxlength="100" id="id_thu_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Fri open time:</label> <input type="text" name="fri_open_time" placeholder="Fri Open Time" required="required" maxlength="100" id="id_fri_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Fri close time:</label> <input type="text" name="fri_close_time" placeholder="Fri Close Time" required="required" maxlength="100" id="id_fri_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sat open time:</label> <input type="text" name="sat_open_time" placeholder="Sat Open Time" required="required" maxlength="100" id="id_sat_open_time" class="form-control input-text">
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sat close time:</label> <input type="text" name="sat_close_time" placeholder="Sat Close Time" required="required" maxlength="100" id="id_sat_close_time" class="form-control input-text">
+				</div>
+			</div>
+		</div>
+    
+									
+<hr class="cta-break">
+								
+									
+										
+	
+		
+	
+		<a href='javascript:void(0);' class="button-sm button-theme form-activities-back"><i class="fa fa-angle-double-left"></i> Back</a>
+	<button type="button"
+			class="button-sm button-theme form-activities">Next <i class="fa fa-angle-double-right"></i></button>
+
+	
+</form>
+	
+	</div>
+</div>
+	</div>
+</div>
+
+</div>
+<div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="details formdata-confirm-form" style="display:none;">
+				<div class="confirm-update-data">
+				
+				</div>
+									
+	
+	 <div class="row">
+	 <div class="col-md-4 form-group"> 
+	 
+							<form class="details formdata-confirmation" method="post"  action="{% url 'frontend:addspacedetailmessage' %}">
+							{% csrf_token %}
+		          <input id="agree_confirm" name="agreeconfirm" placeholder="Agree terms and condition" class="hidden" type="checkbox">
+		            <label class="remember-label aggreeerrorlabel" for="agree_confirm">
+		              
+		              Agree terms and condition
+		            </label><br>
+		            <p class="help-block aggreeerror hidden error-msg" >Agree terms and condition is required.</p>
+		      </form> 
+		            </div>
+	<div class="col-md-12">
+                    <div class="form-group pull-left">
+	
+				<a href='javascript:void(0);' class="button-sm button-theme form-confirm-back"><i class="fa fa-angle-double-left"></i> Back</a>
+				<button type="button" class="button-sm button-theme buttonsubmit">Submit </button>
+												</div>
+												</div>
+												</div>
+</div>
+</div>
+	</div>
+						</div>
+</div>
+</div>
+
+												</div>
+												<div class="confirm-html-update hidden">
+												<div class="main-title-2">
+									<h1>
+										<span>	Review your</span> Space
+									</h1>
+								</div>
+								<hr/>
+     <ul class="address-list edit-dotted-bx">
+     <li>
+     <span>Country:</span>
+     <span class="id_country"></span>
+      </li>
+      
+      
+      
+       <li>
+     <span>Address:</span>
+     <span class="id_HQAddress"></span>
+		</li>
+      </ul>
+      <ul class="address-list edit-dotted-bx">
+       <li>
+     <span>Space title:</span> <span class="id_facility_name"></span></li>
+      
+      
+      
+       <li>
+     <span>Facility Information:</span><span class="id_facility_information"></span></li>
+      
+      
+      
+      
+       <li>
+     <span>Parking Spaces:</span><span class="id_parking_spaces"></span></li>
+      
+      
+       <li>
+     <span>Capacity:</span><span class="id_capacity"></span></li>
+      
+      
+      
+       <li>
+     <span>Facility Amenities:</span><span class="id_fac_amenities"></span></li>
+      
+       <li>
+     <span>Event Type:</span><span class="id_event_type"></span></li>
+      
+      </ul>
+      <ul class="address-list edit-dotted-bx">
+       <li>
+     <span>None refundable fee:</span><span class="id_none_refundable_fee"></span></li>
+      
+      
+       <li>
+     <span>Cost for profit:</span><span class="id_cost_for_profit"></span></li>
+      
+        <li>
+     <span>Cost for non profit:</span><span class="id_cost_for_non_profit"></span></li>
+      
+      
+      
+        <li>
+     <span>Fac cost misc alc:</span><span class="id_fac_cost_misc_alc"></span></li>
+      
+      
+      
+        <li>
+     <span>Fac cost misc rental clean dep no alc:</span><span class="id_fac_cost_misc_rental_clean_dep_no_alc"></span></li>
+      
+      
+      
+      
+      
+         <li>
+     <span>Fac cost misc rental clean dep alc:</span><span class="id_fac_cost_misc_rental_clean_dep_alc"></span></li>
+      
+         <li>
+     <span>Fac cost misc non ref hr mtn:</span><span class="id_fac_cost_misc_non_ref_hr_mtn "></span></li>
+      
+         <li>
+     <span>Fac cost misc:</span><span class="id_fac_cost_misc "></span></li>
+      
+      
+      
+      
+      
+         <li>
+     <span>Staff fee:</span><span class="id_staff_fee "></span></li>
+  <li>
+												<span>Fac surf type: </span><span class="id_fac_surf_type "></span></li>
+										
+										<li>
+							
+												<span>Fac feature:</span><span class="id_fac_feature "></span></li>
+									
+									
+									<li>
+												<span>Fee based amenities: </span> 
+												<span class="id_fee_based_amenities "></span></li>
+    
+    <li>
+									
+												<span>Location type:</span> <span class="id_location_type"></span></li>
+
+	<li>								
+											<span>Location name:</span><span class="id_location_name"></span></li>
+      <li><span>Note 1:</span><span class="id_note_1"></span></li>
+      <li><span>Note 2:</span><span class="id_note_2"></span></li>
+      <li><span>Note 3:</span><span class="id_note_3"></span></li>
+      <li><span>Res 1:</span><span class="id_res_1"></span></li>
+      <li><span>Res 2:</span><span class="id_res_2"></span></li>
+      <li><span>Res 3:</span><span class="id_res_3"></span></li>
+      
+      <li><span>Sun open time:</span><span class="id_sun_open_time"></span></li>
+      <li><span>Sun close time:</span><span class="id_sun_close_time"></span></li>
+      <li><span>Mon open time:</span><span class="id_mon_open_time"></span></li>
+      <li><span>Mon close time:</span><span class="id_mon_close_time"></span></li>
+      <li><span>Tues open time:</span><span class="id_tue_open_time"></span></li>
+      <li><span>Tues close time:</span><span class="id_tue_close_time"></span></li>
+      
+      <li><span>Wed open time:</span><span class="id_wed_open_time"></span></li>
+      <li><span>Wed close time:</span><span class="id_wed_close_time"></span></li>
+      <li><span>Thu open time:</span><span class="id_thu_open_time"></span></li>
+      <li><span>Thu close time:</span><span class="id_thu_close_time"></span></li>
+      <li><span>Fri open time:</span><span class="id_fri_open_time"></span></li>
+      <li><span>Fri close time:</span><span class="id_fri_close_time"></span></li>
+      
+      <li><span>Sat open time:</span><span class="id_sat_open_time"></span></li>
+      <li><span>Sat close time:</span><span class="id_sat_close_time"></span></li>
+      
+     
+     </ul>
+												
+												
+												</div>
+<script type="text/javascript">
+function clearOverlays(l){for(;l.length;)l.pop().setMap(null);l.length=0}
+function initAutocomplete(){var t=new google.maps.Map(document.getElementById("map"),{center:{lat:47.6363122,lng:-105.7217866},zoom:3,mapTypeId:"roadmap",streetViewControl:!1,mapTypeControl:!1,zoomControlOptions:{position:google.maps.ControlPosition.LEFT_TOP},gestureHandling:"greedy"}),e=document.getElementById("id_HQAddress"),o=new google.maps.places.SearchBox(e,{componentRestrictions:{country:"us"}});t.addListener("bounds_changed",function(){o.setBounds(t.getBounds())});var a=new google.maps.Geocoder,r=new google.maps.LatLngBounds,d=[];t.addListener("click",function(e){var o={hotel:{icon:{url:'{% static "/images/" %}{{ PROJECT_ICON }}',scaledSize:new google.maps.Size(17,19),origin:new google.maps.Point(0,0),anchor:new google.maps.Point(0,0)}}};clearOverlays(d);var n=new google.maps.Marker({map:t,icon:o.hotel.icon,position:e.latLng,draggable:!0});d.push(n),a.geocode({location:e.latLng},function(e,o){"OK"===o?e[0]&&($("#id_HQAddress").parent().find(".error-msg").html(""),document.getElementById("id_HQAddress").value=e[0].formatted_address):$("#id_HQAddress").parent().find(".error-msg").html("Place marker on land.")}),google.maps.event.addListener(n,"dragend",function(e){var o={lat:e.latLng.lat(),lng:e.latLng.lng()};a.geocode({location:o},function(e,o){"OK"===o?e[0]&&($("#id_HQAddress").parent().find(".error-msg").html(""),document.getElementById("id_HQAddress").value=e[0].formatted_address):$("#id_HQAddress").parent().find(".error-msg").html("Place marker on land.")})}),google.maps.event.addListener(n,"dragstart",function(e){$("#id_HQAddress").parent().find(".error-msg").html(""),document.getElementById("id_HQAddress").value=". . . . ."})}),o.addListener("places_changed",function(){var e=o.getPlaces();0!=e.length&&(d.forEach(function(e){e.setMap(null)}),d=[],e.forEach(function(e){if(e.geometry){var o={hotel:{icon:{url:'{% static "/images/" %}{{ PROJECT_ICON }}',scaledSize:new google.maps.Size(17,19),origin:new google.maps.Point(0,0),anchor:new google.maps.Point(0,0)}}};clearOverlays(d);var n=new google.maps.Marker({map:t,icon:o.hotel.icon,position:e.geometry.location,draggable:!0});d.push(n),e.geometry.viewport?r.union(e.geometry.viewport):r.extend(e.geometry.location),google.maps.event.addListener(n,"dragend",function(e){var o={lat:e.latLng.lat(),lng:e.latLng.lng()};a.geocode({location:o},function(e,o){"OK"===o?e[0]&&($("#id_HQAddress").parent().find(".error-msg").html(""),document.getElementById("id_HQAddress").value=e[0].formatted_address):$("#id_HQAddress").parent().find(".error-msg").html("Place marker on land.")})}),google.maps.event.addListener(n,"dragstart",function(e){$("#id_HQAddress").parent().find(".error-msg").html(""),document.getElementById("id_HQAddress").value=". . . . ."})}else console.log("Returned place contains no geometry")}),t.fitBounds(r))})}
+$(".form-about").on("click",function(){$(this).closest("form").valid()&&($(".spinner-absolute").show(),setTimeout('$(function(){$(".form-about").closest("form").hide();$(".formdata-activities").show();$(".progress-custom").find("li:nth-child(2)").addClass("is-complete");$(".spinner-absolute").hide();})',"400"))});
+$(".form-activities").on("click",function(){$(this).closest("form").valid()&&($(".spinner-absolute").show(),setTimeout("$(function(){$('.form-activities').closest('form').hide();$('.confirm-update-data').html($('.confirm-html-update').html());$('.confirm-update-data').find('.id_country').html('United States');$('.confirm-update-data').find('.id_HQAddress').html($('#id_HQAddress').val());$('.formdata-about').find('input,textarea').each(function(){$('.formdata-confirm-form').find('.'+$(this).attr('id')).html($(this).val());});$('.formdata-about').find('select').each(function(){$('.formdata-confirm-form').find('.'+$(this).attr('id')).html($(this).find('option:selected').text());});$('.formdata-activities').find('input,textarea').each(function(){$('.formdata-confirm-form').find('.'+$(this).attr('id')).html($(this).val());});$('.formdata-activities').find('select').each(function(){$('.formdata-confirm-form').find('.'+$(this).attr('id')).html($(this).find('option:selected').text());});$('.gallery-data').html($('.formdata-photos').find('#gallery-image').html());$('.progress-custom').find('li:nth-child(3)').addClass('is-complete');$('.formdata-confirm-form').show();$('.spinner-absolute').hide();})","400"))});
+$(".form-activities-back").on("click",function(){$(".spinner-absolute").show(),setTimeout("$(function(){$('.form-activities-back').closest('form').hide();$('.confirm-update-data').html($('.confirm-html-update').html());$('.form-activities-back').closest('form').find('.form-group').each(function(){$(this).find('input,select').val('');$(this).find('span.help-block').hide();});$('.form-activities-back').closest('form').find('#gallery-image').html('');$('#inputimage').val('');$('.formdata-about').show();$('.progress-custom').find('li:nth-child(3)').removeClass('is-complete');$('.spinner-absolute').hide();})","400")});
+$(".form-confirm-back").on("click",function(){$(".spinner-absolute").show(),setTimeout("$(function(){$('.form-confirm-back').closest('.formdata-confirm-form').hide();$('.form-confirm-back').closest('form').find('.form-group').each(function(){$(this).find('input,select').val('');$(this).find('span.help-block').hide();});$('.formdata-activities').show();$('.progress-custom').find('li:nth-child(3)').removeClass('is-complete');$('.spinner-absolute').hide();})","400")});
+$(".form-about-back").on("click",function(){$(".spinner-absolute").show(),setTimeout("$(function(){$('.adddetailmore').hide();$('.form-about-back').closest('.adddetailmore').find('.form-group').each(function(){$(this).find('input,select').val('');$(this).find('span.help-block').hide();});$('.formdata-about').hide();$('.location-form').show();$('.location-form-detail').each(function(){$(this).show();});$('.spinner-absolute').hide();})","400")});
+function getCookie(e){var o=null;if(document.cookie&&""!=document.cookie)for(var n=document.cookie.split(";"),t=0;t<n.length;t++){var i=jQuery.trim(n[t]);if(i.substring(0,e.length+1)==e+"="){o=decodeURIComponent(i.substring(e.length+1));break}}return o}
+$(".addaboutmore").on("click",function(){var i=$(this);if(0<$("#id_CompanyEmail").val().trim().length){var e=!1,a=getCookie("csrftoken");$.ajax({type:"POST",url:"/valid/email",data:{csrfmiddlewaretoken:a,email:$("#id_CompanyEmail").val()},success:function(a){"valid"==a&&(e=!0),i.closest("form").valid()&&e?($(".spinner-absolute").show(),setTimeout('$(function(){$("#id_CompanyEmail").parent().find(".error.error-msg").html("");$(".adddetailmore").show();$(".location-form").hide();$(".location-form-detail").each(function(){$(this).hide();});$(".formdata-about").show();$(".spinner-absolute").hide();})',"400")):e?$("#id_CompanyEmail").parent().find(".error.error-msg").html(""):$("#id_CompanyEmail").parent().find(".error.error-msg").html("This email is already used.")}})}else i.closest("form").valid()});
+$(".form-confirm").on("click",function(){$(this).closest(".formdata-confirm-form").hide()});
+$(".buttonsubmit").on("click",function(){if(0<$("#agree_confirm:checked").length){$(".spinner-absolute").show(),$(".aggreeerror").addClass("hidden");var a=getCookie("csrftoken");data={},i=0,data[i]={},data[i].csrfmiddlewaretoken=a,$(".formdata-confirm-data").each(function(){$(this).find("input, select").each(function(){data[i][$(this).attr("name")]=$(this).val()})}),$(".formdata-about").each(function(){$(this).find("input, select").each(function(){data[i][$(this).attr("name")]=$(this).val()}),data[i].facility_information=$(this).find('[name="facility_information"]').val()}),$(".formdata-activities").each(function(){$(this).find("input, select").each(function(){data[i][$(this).attr("name")]=$(this).val()}),data[i].note_1=$(this).find('[name="note_1"]').val(),data[i].note_2=$(this).find('[name="note_2"]').val(),data[i].note_3=$(this).find('[name="note_3"]').val(),data[i].res_1=$(this).find('[name="res_1"]').val(),data[i].res_2=$(this).find('[name="res_2"]').val(),data[i].res_3=$(this).find('[name="res_3"]').val()});var t=JSON.stringify(data);$.ajax({type:"POST",url:"/recommend-space",data:{form:t,csrfmiddlewaretoken:a},datatype:"json",success:function(a){$(".formdata-confirmation").submit()}})}else $(".aggreeerror").removeClass("hidden")});
+$(".aggreeerrorlabel").on("click",function(){0<$("#agree_confirm:checked").length?$(".aggreeerror").removeClass("hidden"):$(".aggreeerror").addClass("hidden")});
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places&callback=initAutocomplete" async defer></script>
+{% endblock %}

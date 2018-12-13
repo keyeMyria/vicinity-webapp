@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% load static i18n %}
+{% load core_extras %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Admin') }}{% endblock %}
+
+{% block branding %}
+<a href="{% url 'admin:index' %}" class="logo">
+	<img alt="" class="{% if request.resolver_match.url_name == 'login' %}hidden{% endif %}" src="{% static 'images/' %}{{ PROJECT_ICON }}"> <span>{{ site_header|default:_('Administration') }}</span></a>
+
+
+{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block nav-global %}
+
+
+{% endblock %}

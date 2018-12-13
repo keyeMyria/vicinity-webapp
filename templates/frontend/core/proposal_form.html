@@ -1,0 +1,348 @@
+{% extends 'frontend/base.html' %}
+ {% load static core_extras %}
+  {% block breadcrumb-wrapper %} {% endblock %} {% block content %}
+<section class="apply-form content-area-3">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="contact-view form-content-box apply-form-inner">
+
+					<!-- A form for users to submit partner proposals -->
+					<div class="details">
+						<h2 class="no-gutter">Recommend space at Vicinity</h2>
+							<br/>
+						<form action="" method="post">
+							{% csrf_token %}
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.CompanyName }}
+										<p class="error error-msg">{{ form.CompanyName.errors.0|escape }}</p>
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div class="form-group">
+										{{ form.CompanyEmail }}
+										<p class="error error-msg">{{ form.CompanyEmail.errors.0|escape }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										{{ form.HQAddress }}
+										<p class="error error-msg">{{ form.HQAddress.errors.0|escape }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.city }}
+										<p class="error error-msg">{{ form.city.errors.0|escape }}</p>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.state }}
+										<p class="error error-msg">{{ form.state.errors.0|escape }}</p>
+									</div>
+								</div>
+								<div class="col-md-4">
+
+									<div class="form-group">
+										{{ form.zipcode }}
+										<p class="error error-msg">{{ form.zipcode.errors.0|escape }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<button type="submit" class="btn button-md button-theme">Submit</button>
+									</div>
+								</div>
+							</div>
+
+						</form>
+					</div>
+
+				</div>
+			</div>
+<div id="current"></div>
+			<div class="col-md-6">
+				<div class="img-container" id="map" style="height:500px;">
+				</div>
+
+			</div>
+		</div>
+
+
+
+	</div>
+</section>
+
+
+
+
+<!-- Counters strat -->
+<div class="counters overview-bgi">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 bordered-right">
+				<div class="counter-box">
+					<i class="flaticon-symbol-1"></i>
+					<h1 class="counter">{{ request.user|list_space }}</h1>
+					<p>Listings For Book</p>
+				</div>
+			</div>
+			<div class="col-md-6 bordered-right">
+				<div class="counter-box">
+					<i class="flaticon-people"></i>
+					<h1 class="counter">{{ request.user|user_list_space }}</h1>
+					<p>Agents</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Counters end -->
+
+
+<div class="mb-60 mt-60 our-service mt-80">
+	<div class="container">
+		<!-- Main title -->
+		<div class="main-title">
+			<h1>
+				<span>How it</span> works
+			</h1>
+		</div>
+
+		<div class="row mgn-btm wow">
+			<div
+				class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInLeft delay-04s">
+				<div class="content">
+					<i class="flaticon-apartment"></i>
+					<p>Browse homes, lofts, galleries, and more</p>
+				</div>
+			</div>
+			<div
+				class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInLeft delay-04s">
+				<div class="content">
+					<i class="flaticon-internet"></i>
+					<p>Compare prices and connect with hosts</p>
+				</div>
+			</div>
+			<div
+				class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInRight delay-04s">
+				<div class="content">
+					<i class="flaticon-vehicle"></i>
+					<p>Book in just a few clicks</p>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<div class="recently-properties chevron-icon space-section">
+	<div class="container">
+		<!-- Main title -->
+		<div class="main-title">
+			<h1><span>
+FEATURED 
+</span>  PLACES</h1>
+		</div>
+		<div class="row">
+			<div class="carousel our-partners slide">
+
+				<div class="">
+{% for event in EVENT_LIST %}
+                {% if forloop.counter0 < 12 %}
+
+					<div class="item">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="property-2">
+                                <div class="property-img">
+                                    <img style="height: 198px;" src="{{ event.0|gettypepic }}" alt="{{ event.1 }}" class="img-responsive">
+                                    <div class="property-overlay">
+                                        <a href="/search?location=United+States&plantype={{ event.1 }}" class="overlay-link">
+                                            <i class="fa fa-link"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4 class="title">
+                                     <a href="/search?location=United+States&plantype={{ event.1 }}">{{ event.1 }}</a>
+                                    </h4>
+                                   
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+
+  {% endif %}
+				
+			{% endfor %}
+                    
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+function clearOverlays(markers) {
+ while(markers.length) { markers.pop().setMap(null); }
+  markers.length = 0;
+}
+      function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 47.6363122, lng: -105.7217866},
+          zoom: 3,
+          mapTypeId: 'roadmap',streetViewControl: false,
+          mapTypeControl: false,
+          zoomControlOptions: {
+              position: google.maps.ControlPosition.LEFT_TOP
+          },
+    gestureHandling: 'greedy'
+        });
+
+        var input = document.getElementById('id_HQAddress');
+        var searchBox = new google.maps.places.SearchBox(input);
+
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+        var geocoder = new google.maps.Geocoder;
+        var bounds = new google.maps.LatLngBounds();
+
+        var markers = [];
+        map.addListener('click', function(event) {
+        	var icons = {
+				    hotel: {
+				      icon: {url:'{% static "/images/" %}{{ PROJECT_ICON }}',
+		      		    
+				    	  scaledSize: new google.maps.Size(17, 19),
+			                origin: new google.maps.Point(0, 0),
+			                anchor: new google.maps.Point(0, 0)}
+				    },
+				  }
+        	clearOverlays(markers)
+         	    var marker = new google.maps.Marker({ 
+                    map: map,
+                    icon: icons['hotel'].icon,
+                    position: event.latLng,
+                    draggable: true
+         	    });
+            markers.push(marker);
+         	  geocoder.geocode({'location': event.latLng}, function(results, status) {
+                 if (status === 'OK') {
+                   if (results[0]) {
+                 	  document.getElementById('id_HQAddress').value = results[0].formatted_address;
+                   }
+                 }
+               });
+         	 google.maps.event.addListener(marker, 'dragend', function (evt) {
+
+                 var latlng = {lat: evt.latLng.lat(), lng: evt.latLng.lng()};
+                 geocoder.geocode({'location': latlng}, function(results, status) {
+                     if (status === 'OK') {
+                       if (results[0]) {
+                     	  document.getElementById('id_HQAddress').value = results[0].formatted_address;
+                       }
+                     }
+                   });
+
+             });
+
+             google.maps.event.addListener(marker, 'dragstart', function (evt) {
+           	  document.getElementById('id_HQAddress').value = '.....';
+             });
+
+             
+        	});
+
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icons = {
+				    hotel: {
+				      icon: {url:'{% static "/images/" %}{{ PROJECT_ICON }}',
+		      		    
+				    	  scaledSize: new google.maps.Size(17, 19),
+			                origin: new google.maps.Point(0, 0),
+			                anchor: new google.maps.Point(0, 0)}
+				    },
+				  }
+
+            clearOverlays(markers)
+            var myMarker = new google.maps.Marker({
+                map: map,
+                icon: icons['hotel'].icon,
+                position: place.geometry.location,
+                draggable: true
+              })
+            markers.push(myMarker);
+
+            if (place.geometry.viewport) {
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+
+            
+            google.maps.event.addListener(myMarker, 'dragend', function (evt) {
+
+                var latlng = {lat: evt.latLng.lat(), lng: evt.latLng.lng()};
+                geocoder.geocode({'location': latlng}, function(results, status) {
+                    if (status === 'OK') {
+                      if (results[0]) {
+                    	  document.getElementById('id_HQAddress').value = results[0].formatted_address;
+                      }
+                    }
+                  });
+
+            });
+
+            google.maps.event.addListener(myMarker, 'dragstart', function (evt) {
+          	  document.getElementById('id_HQAddress').value = '.....';
+            });
+
+            
+          });
+          map.fitBounds(bounds);
+        });
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places&callback=initAutocomplete"
+         async defer></script>
+
+{% endblock %}

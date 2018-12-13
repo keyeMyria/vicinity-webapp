@@ -1,0 +1,38 @@
+{% extends 'admin/base_site.html' %}
+
+{% block title %}Calendar | {{ site_title|default:_('Admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+		&nbsp; &rsaquo; &nbsp;<a class="breadcrumb-item active">Calendar</a>
+{% endblock %}
+
+{% block content %}
+
+  <div id='calendar'></div>
+  
+  <script>
+
+  $(document).ready(function() {
+
+    $('#calendar').fullCalendar({
+      defaultDate: new Date(),
+      editable: false,
+      eventLimit: true,
+      events: [
+    	  {% for subscribe in subscribe %}
+          {
+              title: 'Booked {{ subscribe.room_book.title }}',
+              url: window.location.protocol + '//' + window.location.host + '/admin/booking/view/{{ subscribe.id }}',
+              start: '{{ subscribe.start_date|date:"Y-m-d H:i:s" }}',
+              end: '{{ subscribe.end_date|date:"Y-m-d H:i:s" }}'
+            },
+        {% endfor %}
+      ]
+    });
+
+  });
+
+</script>
+
+{% endblock %}

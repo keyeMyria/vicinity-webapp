@@ -1,0 +1,83 @@
+{% extends 'frontend/base.html' %}
+{% load static core_extras %}
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+      <div class="wrapper">
+         <div class="dashboard-background-grey">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-6">
+                     <h3>Reservations  : {{ theroom.facility_name }} </h3>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12">
+                  
+        {% for reservation in booking_list_array %}
+                     <div class="panel panel-default">
+                        <div class="panel-body">
+                           <div class="row">
+                              <div class="col-md-9">
+                                 <p><strong>Guest Name</strong> 
+                                    <span> : {{reservation.userfullname}}</span>
+                                 </p>
+                                 <p><strong>Booking dates </strong> 
+                                    <span> : 
+                                    {% for dates in reservation.dates %}
+                                    {{ dates }}<br>
+                                    {% endfor %}
+                                    </span>
+                                 </p>
+                                 <p><strong>Total Price </strong> 
+                                    <span> : ${{reservation.price}} </span>
+                                 </p>
+                              </div>
+                              <div class="col-md-3 list-call text-right">
+                                 <div class="mg-tlp list-call">
+                                    <ul class="">
+                                    
+{% if reservation.status == 2 %}
+
+        <a class="btn btn-sm btn-info text-white pull-right" href="">Approved</a>
+       
+{% elif reservation.status == 3 %}
+
+        <a class="btn btn-sm btn-warning pull-right" href="">Cancelled</a>
+  
+{% else %}
+
+        <a class="btn btn-sm btn-danger pull-right" href="{% url 'managerooms:approvebooking' reservation.booking_key %}">
+        <i class="fa fa-check"></i> Approve</a>
+    
+{% endif %}
+{% if reservation.status != 3 %}
+        <a class="btn btn-sm btn-danger pull-right" 
+        href="{% url 'core:cancel_booking' reservation.booking_key %}?next=/managerooms/yourrooms/{{ theroom.pk }}/bookings">
+        <i class="fa fa-close"></i> Cancel</a>
+{% endif %}
+                                    </ul>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+        {% endfor %}
+        {% if not booking_list_array %}
+        <div class="panel panel-default">
+                        <div class="panel-body">
+                           <div class="row">
+                              
+                              <div class="col-md-12 text-center">
+                                 <h3>No reservations yet</h3>
+                              </div>
+                           </div>
+                        </div>
+                     </div>   
+                     {% endif %}                  
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+<div class="wrapper">
+<div class="container">
+		<div class="row"><div class=" col-md-12"><div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="details">
+				<div class="main-title-2 nomargin">
+									<h1>
+										<span>{{ request.user.get_full_name }}, tell us about space.</span>
+										
+									</h1>
+								</div>
+								<hr/>
+
+		
+<ol class="progress progress--medium progress-custom">
+<li class="is-complete" data-step="S">
+   Start
+   <p>Click on next to start adding.</p>
+  </li>
+  <li data-step="1">
+   1. Location
+   <p>Address</p>
+  </li>
+  <li data-step="2">
+    2. About your space
+   <p >Title, Information, Parking Spaces, Capacity, Facility Amenities, Event Type</p>
+  </li>
+  <li data-step="3" >
+    3. Photos
+    <p >Upload photos for space</p>
+  </li>
+  
+  <li data-step="4">
+   4. Activities
+   <p >Hourly rate, Minimim hours, Discount, Cleaning, etc.</p>
+  </li>
+  <li data-step="F" class="progress__last">
+   Finish
+   <p >Review your space and click on agree to confirm</p>
+  </li>
+</ol>
+
+
+	
+	<form method="post" action="">
+				{% csrf_token %}
+					<button type="submit" class="button-sm button-theme">Next <i class="fa fa-angle-double-right"></i></button>
+					</form>
+</div>
+</div>
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}

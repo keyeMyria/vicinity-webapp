@@ -1,0 +1,16 @@
+{% load static i18n core_extras %}
+{% if request.user.profile_file %}
+										<img src="/media/{{ request.user.profile_file }}" class="img-responsive">
+										{% else %}
+										<img src="{% static "images/avatars/admin.png" %}" class="img-responsive">
+										{% endif %}
+
+								<script>
+								
+									$('[data-toggle="popover"]').popover();</script>
+									
+									
+									
+
+
+

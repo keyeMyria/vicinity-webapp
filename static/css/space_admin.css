@@ -1,0 +1,204 @@
+.dashboard-background-grey {
+	width: 100%;
+	min-height: 600px;
+	padding-top: 1%;
+	padding-bottom: 3%;
+}
+.list-calendar {
+	list-style: none;
+	padding: 0px;
+	
+}
+.list-calendar li{
+	display:inline-block;
+	border: 1px solid #999;
+	padding: 6px;
+}
+.list-calendar i {
+	margin-right: 5px;
+}
+.table-dashboard tr{
+border: none;
+text-align:center;
+}
+.table-dashboard td{
+font-size:13px;
+}
+.table-reservation th {
+	border-bottom:none !important;
+	border-top: 1px solid #fff !important;
+	
+}
+
+
+.table-no-border.table-reservation th{
+	border-right:none;
+	text-align:center;
+}
+.table-reservation td {
+	font-size:13px;
+}
+.table-reservation tr {
+	border:none;
+	
+}
+.table-dashboard tr th,.table-dashboard tr td{
+border:none;
+}
+.table-dashboard tr th {
+	border: none;
+	text-align: center;
+	color: #444;
+	font-weight: 600;
+}
+.mb-40 {
+	margin-bottom: 40px !important;
+}
+/*.table-dashboard th.sorting::after {
+	content: "\f0dc";
+	padding-top: 0.12em;
+}*/
+.show-all {
+	border: 1px solid #257D7D;
+	color: #257D7D;
+}
+.mb-20{
+	margin-bottom:20px;
+}
+
+/*Start | On-Off Button Design*/
+.btn-onoff{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.btn-onoff input{
+  display: block;
+  position: absolute;
+  opacity:0
+}
+.btn-onoff span{
+	position: relative;
+	display: block;
+	width: 80px;
+	height: 34px;
+	border-radius: 40px;
+	background: #ccc;
+	border: 1px solid #ccc;
+	-webkit-transition: 400ms;
+	-moz-transition: 400ms;
+	-ms-transition: 400ms;
+	transition: 400ms
+}
+.btn-onoff input:checked ~ span{
+  border: 1px solid #257d7d;
+  background: #257d7d
+}
+.btn-onoff input ~ span:before{
+	content: 'Off';
+	display: block;
+	width: 34px;
+	height: 34px;
+	position: absolute;
+	right: 12px;
+	font-size: 10px;
+	
+	line-height: 34px;
+	color: #444;
+	padding: 0px 8px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	-webkit-transition: 500ms;
+	-moz-transition: 500ms;
+	-ms-transition: 500ms;
+	transition: 500ms
+}
+.btn-onoff input:checked ~ span:before{
+	content: 'On';
+	right: 28px;
+	color: #fff
+}
+.btn-onoff input ~ span:after{
+	content: '';
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	top: 4px;
+	left: 4px;
+	background: #fff;
+	border-radius: 50%;
+	-webkit-transition: 400ms;
+	-moz-transition: 400ms;
+	-ms-transition: 400ms;
+	transition: 400ms
+}
+.btn-onoff:hover input ~ span:after{
+	-webkit-transform:scale(0.9);
+	-moz-transform:scale(0.9);
+	-ms-transform:scale(0.9);
+	transform:scale(0.9)
+}
+.btn-onoff input:checked ~ span:after{
+	content: '';
+	left: 51px;
+}
+/*End | On-Off Button Design*/
+.table.table-reservation.padding-top td {
+	padding: 23px 0;
+}
+
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+	padding: 8px;
+	line-height: 1.42857143;
+	vertical-align: top;
+	border-top: none;
+}
+.table.table-location.padding-top td {
+    padding: 4px 0 !important;
+}
+
+
+.location-icon i{top: 18px;
+position: absolute;
+right: 61px;}
+
+.btn-accept{background: #66D0F7;
+padding: 10px;
+color: #fff;
+border-radius: 6px;
+margin-right: 5px;}
+
+.btn-accept:hover{text-decoration: none;color:#fff;}
+.btn-reject:hover{text-decoration: none;color:#fff;}
+
+
+.list-call ul{list-style-type: none !important;}
+.list-call ul li{display: inline-block !important; }
+
+.btn-reject{background: #E4534F;
+padding: 10px;
+color: #fff;
+border-radius: 6px;
+margin-right: 5px;}
+
+.mg-tlp{margin-top: 53px;}
+.View-reservations {
+    background: #257D7D;
+    padding: 7px;
+    color: #fff;
+    border-radius: 6px;
+    margin-right: 5px;
+}
+
+.mg-t1 {
+    margin-top: 20px;
+}
+
+.dashboard-background-grey .panel-default {
+	border-radius:10px;
+	background: #fff;
+}
+.displaycontent{
+	display: contents !important;
+}

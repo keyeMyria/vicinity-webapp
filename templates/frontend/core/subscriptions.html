@@ -1,0 +1,62 @@
+{% extends 'frontend/base.html' %}
+
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+
+<div class="pricing-tables-1 content-area">
+    <div class="container">
+         <form action="{% url 'core:subscriptions' %}" method="POST">
+{% csrf_token %}
+<input id="skipnow" name="skipnow" type="hidden" value="0">
+             <button class="btn btn-outline skipping-btn pull-right" onclick="skipnowfunction()" type="submit"> Skip !</button>
+             </form>
+        <div class="main-title">
+            <h1>Subscription Pricing</h1>
+            
+        </div>
+        <div class="row">
+       
+          {% for subscription in subscriptions %}
+          <form id="{{ subscription.price }}" action="{% url 'core:subscribecheckout' %}" method="post" >
+         {% csrf_token %}
+         <input type="hidden" value='{{ subscription.price }}' name='pricevalue'>
+         
+         <input type="hidden" value='{{ subscription.title }}' name='pricetitle'>
+            <div class="col-lg-4 col-md-4">
+                <div class="pricing-2">
+                    <div class="title">{{ subscription.title }}</div>
+                    <div class="price-for-user">
+                        <div class="price"><sup>$</sup><span class="dolar">{{ subscription.price }}</span><small class="month">per month</small></div>
+                    </div>
+                    <div class="content">
+                        <ul>
+                            <li>Personal use</li>
+                            <li> Unlimited projects</li>
+                            <li>24/7 support</li>
+                            
+                        </ul>
+                    </div>
+                    
+                     <div class="button"><a class="btn btn-outline pricing-btn" href="javascript:;" onclick="document.getElementById('{{ subscription.price }}').submit();">BUY NOW!</a>
+                    </div>
+                </div>
+            </div>
+            
+             </form>
+            {% endfor %}   
+           
+           
+
+        </div>
+    </div>
+</div>
+
+
+            <script>
+            function skipnowfunction() {
+                document.getElementById("skipnow").value = 1;
+            }
+            </script>
+{% endblock %}
+            

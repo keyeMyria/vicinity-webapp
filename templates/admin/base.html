@@ -1,0 +1,278 @@
+{% load i18n static core_extras %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% endblock %}" />
+<link rel="shortcut icon" href="{% static 'images/' %}{{ PROJECT_ICON }}">
+{% block extrastyle %}
+<link href="{% static 'plugins/switchery/switchery.min.css' %}" rel="stylesheet" />
+<link href="{% static 'css/bootstrap.minold.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/custom_css.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "notification/css/amaran.min.css" %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<link href='{% static "css/fullcalendar.min.css" %}' rel='stylesheet' />
+<link href='{% static "css/fullcalendar.print.min.css" %}' rel='stylesheet' media='print' />
+<script src="/static/js/jquery-2.2.0.min.js"></script>
+
+{% endblock %}
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+{% block extrahead %}{% endblock %}
+{% block responsive %}
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive_rtl.css" %}" />{% endif %}
+{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="adminbody {% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+  data-admin-utc-offset="{% now "Z" %}">
+
+<!-- Container -->
+<div id="main">
+
+    {% if not is_popup %}
+    <!-- Header -->
+    <div id="header" class="headerbar">
+        <div id="branding" class="headerbar-left">
+        {% block branding %}{% endblock %}
+        </div>
+        <nav class="navbar-custom {% if request.resolver_match.url_name == 'login' %}hidden{% endif %}">
+        <ul class="list-inline float-right mb-0">
+                        
+						<li class="list-inline-item dropdown notif">
+                            <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <i class="fa fa-fw fa-bell-o"></i><span class="notifybullet {% if request.user|notification_count > 0 %}notif-bullet{% endif %}"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-lg">
+								<!-- item-->
+								{% if request.user.is_authenticated %}
+                                <div class="dropdown-item noti-title">
+                                    <h5><small><span id="Notification__Count" class="label label-danger pull-xs-right">{{ request.user|notification_count }}</span>Alerts</small></h5>
+                                </div>
+                                {% endif %}
+								
+                                <div id="Notification__Container">
+                                <div class="text-center link-block">
+                                <a class="dropdown-item notify-item notify-all">
+                    No Notifications
+                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li class="list-inline-item dropdown notif">
+                            <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="{% static 'images/avatars/admin.png' %}" alt="Profile image" class="avatar-rounded">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                <!-- item-->
+                                {% block welcome-msg %}
+                                <div class="dropdown-item noti-title">
+                                    <h5 class="text-overflow"><small>
+					                {% trans 'Welcome,' %}
+					                <strong>{% firstof request.user.get_short_name request.user.get_username %}</strong>.</small> </h5>
+                                </div>
+					<input type="hidden" id="userdata" data-id="{{ request.user.pk }}">
+					<input type="hidden" id="usernamedata" data-id="{{ request.user.username }}">
+					<input type="hidden" id="userfullnamedata" data-id="{{ request.user.get_full_name }}">
+					            {% endblock %}
+					            {% block userlinks %}
+                                <a href="/" class="dropdown-item notify-item">
+                                <i class="fa fa-desktop"></i>{% trans 'View site' %}</a>
+
+                                {% if user.has_usable_password %}
+                                <a href="{% url 'admin:password_change' %}" class="dropdown-item notify-item">
+                                <i class="fa fa-user"></i>{% trans 'Change password' %}</a>
+                                 {% endif %}
+                                 
+                                <a href="{% url 'admin:logout' %}" class="dropdown-item notify-item"> 
+                                <i class="fa fa-power-off"></i>  {% trans 'Log out' %}</a>
+                                 
+        						{% endblock %}
+                            </div>
+                        </li>
+
+                    </ul>
+
+                    <ul class="list-inline menu-left mb-0">
+                        <li class="float-left">
+                            <button class="button-menu-mobile open-left">
+								<i class="fa fa-fw fa-bars"></i>
+                            </button>
+                        </li>                        
+                    </ul>
+        </nav>
+        {% block nav-global %}{% endblock %}
+    </div>
+    {% if APP_LIST %}
+    <div class="left main-sidebar">
+        <div class="sidebar-inner leftscroll">
+        
+        <div id="sidebar-menu" class="module">
+        <ul class="app-dashboard">
+        <li class="submenu">
+        <a href="{% url 'admin:index' %}" class="{% if request.path == '/admin/' %}subdrop{% endif %}">
+            <i class="fa fa-dashboard"></i><span>Dashboard</span></a>
+        </li>
+        </ul>
+    {% for app in APP_LIST %}
+        <ul class="app-{{ app.app_label }}">
+        {% for model in app.models %}
+            {% if model.admin_url %}
+                <li class="{% if model.admin_url in request.path %}subdrop{% endif %} submenu"><a href="{{ model.admin_url }}">
+                <i class="{{ model.object_name|lower }}_icon fa fa-{% if model.object_name|lower == 'user' %}user{% else %}circle-o{% endif %}"></i><span>{{ model.name }}</span></a></li>
+            {% else %}
+                <li class="submenu"><i class="{{ model.object_name|lower }}_icon fa fa-{% if model.object_name|lower == 'user' %}user{% else %}circle-o{% endif %}"></i><span>{{ model.name }}</span></li>
+            {% endif %}
+
+        {% endfor %}
+        </ul>
+    {% endfor %}
+<ul class="app-setting">
+        <li class="submenu">
+        <a href="{% url 'backend:setting_index' %}" class="{% if 'settings' in request.path %}subdrop{% endif %}">
+            <i class="fa fa-gears"></i><span>Settings</span></a>
+        </li>
+        </ul>
+        
+        <ul class="app-partners-view">
+        <li class="submenu">
+        <a href="{% url 'backend:showpartners' %}" class="{% if request.resolver_match.url_name == 'showpartners' %}subdrop{% endif %}">
+            <i class="fa fa-list"></i><span>Partners</span></a>
+        </li>
+        </ul>
+        
+        <ul class="app-calendar-view">
+        <li class="submenu">
+        <a href="{% url 'backend:calendar_view' %}" class="{% if 'calendar' in request.path %}subdrop{% endif %}">
+            <i class="fa fa-calendar"></i><span>Calendar</span></a>
+        </li>
+        </ul>
+        <ul class="app-chat-view">
+        <li class="submenu">
+        <a href="{% url 'backend:chat_index' %}" class="{% if 'chat' in request.path %}subdrop{% endif %}">
+            <i class="fa fa-comments"></i><span>Chats</span></a>
+        </li>
+        </ul>
+        <ul class="app-booking-view">
+        <li class="submenu">
+        <a href="{% url 'backend:booking_index' %}" class="{% if 'booking' in request.path %}subdrop{% endif %}">
+            <i class="fa fa-book"></i><span>Bookings</span></a>
+        </li>
+        </ul>
+        <ul class="app-booking-view">
+        <li class="submenu">
+        <a href="{% url 'backend:spaceproposals' %}" class="{% if request.resolver_match.url_name == 'spaceproposals' or request.resolver_match.url_name == 'spacereviewproposal' %}subdrop{% endif %}">
+            <i class="fa fa-book"></i><span>Space proposal</span></a>
+        </li>
+        </ul>
+
+        </div>
+        </div>
+
+</div>
+{% endif %}
+    <!-- END Header -->
+    
+
+    <!-- Content -->
+    <div class="content-page">
+    {% if request.resolver_match.url_name != 'login' %}
+    <div class="breadcrumb-holder">
+													
+<ol class="breadcrumb float-right">
+    {% block breadcrumbs %}    
+		<a href="{% url 'admin:index' %}">Dashboard</a>
+    {% endblock %}
+    </ol>
+    <div class="clearfix"></div>
+	</div>
+	 {% endif %}
+	
+    {% endif %}
+
+    {% block messages %}
+        {% if messages %}
+        <ul class="messagelist marginleft">{% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+        {% endfor %}</ul>
+        {% endif %}
+    {% endblock messages %}
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+    <div class="container-fluid">
+        {% block pretitle %}{% endblock %}
+        {% block content_title %}{% if title %}{% endif %}{% endblock %}
+        {% block content %}
+        {% block object-tools %}{% endblock %}
+        {{ content }}
+        {% endblock %}
+        
+        <br class="clear" />
+        </div>
+    </div>
+    </div>
+    <!-- END Content -->
+    
+
+    {% block footer %}<div id="footer"></div>{% endblock %}
+</div>
+	{% if request.user.is_authenticated %}
+		<input id="request_user" value="{{ request.user.pk }}"  type="hidden">
+  	<input id="request-email" type="hidden" value="{{ request.user.email }}">
+	<script>sessionStorage.setItem('userID', true);</script>
+	
+	{% else %}
+	<script>sessionStorage.setItem('userID', false);</script>
+	{% endif %}
+<!-- END Container -->
+
+<script src="{% static 'js/feedback.js' %}"></script>
+	<script src="{% static 'js/html2canvas.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'css/feedback.min.css' %}" />
+	<script type="text/javascript">
+        document.addEventListener('DOMContentLoaded',
+                                  function () {
+        $.feedback({
+            ajaxURL: '/feedback-form',
+            html2canvasURL: '{% static "js/html2canvas.js" %}',
+            onClose: function() {  }
+        });
+        }, false);
+    </script>
+    
+	<script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+<script src="{% static 'js/modernizr.min.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+		
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.minold.js' %}"></script>
+
+<script src="{% static 'js/detect.js' %}"></script>
+<script src="{% static 'js/fastclick.js' %}"></script>
+<script src="{% static 'js/jquery.blockUI.js' %}"></script>
+<script src="{% static 'js/jquery.nicescroll.js' %}"></script>
+<script src="{% static 'js/jquery.scrollTo.min.js' %}"></script>
+<script src="{% static 'plugins/switchery/switchery.min.js' %}"></script>
+
+<script src="{% static 'js/pikeadmin.js' %}"></script>
+	<script src="{% static 'notification/js/jquery.amaran.min.js' %}"></script>
+
+  <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+     
+<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+
+
+<script src="{% static 'js/datetimepicker.min.js' %}"></script>
+<script src="{% static 'js/custom_rental.js' %}"></script>
+<script src="{% static 'js/fullcalendar.min.js' %}"></script>
+
+</body>
+
+</html>

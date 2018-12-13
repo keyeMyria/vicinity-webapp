@@ -1,0 +1,470 @@
+{% load static i18n core_extras %} 
+	<header class="main-header">
+    <div class="container-fluid">
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navigation" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="{% url 'core:home' %}" class="logos">
+                    <img src="/static/images/group.png" alt="{{ PROJECT_NAME }}"><span class="top green-text">
+								Vicinity
+							</span>
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" role="navigation" aria-expanded="true" id="app-navigation">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown  {% if request.resolver_match.url_name == 'home' and 'core' in request.resolver_match.namespaces %}active{% endif %}">
+                        <a href="{% url 'core:home' %}" >
+                            Home
+                        </a>
+                        
+                    </li>
+                    <li class="dropdown {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                        <a href="{% url 'about:about' %}">
+                           About Us
+                        </a>
+                       
+                    </li>
+                    <li class="dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                        <a href="{% url 'contact:contact' %}">
+                            Contact Us
+                        </a>
+                       
+                    </li>
+                 
+                </ul>
+            <div class="left-notification">    <ul class="nav navbar-nav navbar-right rightside-navbar notification-menu">
+                {% if request.user.is_authenticated %}
+                
+      
+                <li class="list-inline-item dropdown notif">
+                            <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                <i class="fa fa-fw fa-bell-o"></i><span id="Notification__Count" class="notifybullet">{{ request.user|notification_count }}</span>
+                            </a>
+
+
+                          <div class="dropdown-menu dropdown-title ">
+
+                        <div class="title-row">
+                            <h5 id="Notification__Count__alert" class="title yellow">
+                                You have {{ request.user|notification_count }} New Notification
+                            </h5>
+                            <a href="javascript:void(0);" class="btn-warning btn-view-all dropdown-item notify-item notify-all readstate">Clear all</a>
+                        </div>
+                        <div class="notification-list-scroll sidebar hidden">
+                            <div id="Notification__Container" class="notification-list mail-list not-list">
+                                
+                            </div>
+                        </div>
+                        </div>
+
+                        </li>
+                        {% endif %}
+                {% if not request.user.is_authenticated %}
+                
+                <li {% if request.resolver_match.url_name == 'login' %}
+					class="active"
+					{% endif %}><a {% if request.resolver_match.url_name == 'login' %}href="{% url 'accounts:login' %}"{% else %}class="login-modal"{% endif %} ><i class="fa fa-sign-in"></i> Login</a></li>
+                
+                
+                 <li {% if request.resolver_match.url_name == 'register' %}
+					class="active"
+					{% endif %}><a {% if request.resolver_match.url_name == 'register' or request.resolver_match.url_name == 'register_business' %}href="{% url 'accounts:register' %}"{% else %}class="register-modal"{% endif %}><i class="fa fa-user"></i> Register</a></li>
+                
+                    
+                    <li class="list-space">
+                        <a href="{% url 'frontend:addspacedetail' %}" class="button">
+                            Recommend a Space
+                        </a>
+                    </li>
+                    {% else %}
+                    
+                    <li class="dropdown active">
+                        <a tabindex="0" data-toggle="dropdown" data-submenu="" aria-expanded="false">
+                            Dashboard<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <input type="hidden" id="userdata" data-id="{{ request.user.pk }}">
+						<input type="hidden" id="usernamedata" data-id="{{ request.user.username }}">   
+	                     <li><a href="javascript:void(0);">Welcome {{ request.user.get_full_name }}</a></li>
+	                    {% if request.user.is_authenticated and request.user.is_superuser %}
+						<li><a href="{% url 'admin:index' %}">Administrative Activities</a></li>
+						
+						{% endif %} 
+						{% if request.user.type_id == 4 or request.user.type_id == 3 or request.user.is_superuser %} 
+						<li {% if request.resolver_match.url_name == 'mywishlist' %} 
+					class="green-text"
+					{% endif %}><a href="{% url 'core:mywishlist' %}">My Boards</a></li>
+						{% endif %} 	
+								
+                        <li {% if request.resolver_match.url_name == 'userprofile' %} 
+					class="green-text"
+					{% endif %}><a  href="{% url 'core:userprofile' %}">Profile</a></li>
+					
+                        {% if request.user.type_id != 0 and request.user.type_id != 1 %}
+                        {% if request.user.type_id == 2 %}
+                        <li {% if request.resolver_match.url_name == 'dashboard' %} 
+					class="green-text"
+					{% endif %}><a href="{% url 'spaceadmin:dashboard' %}">Dashboard</a></li>   
+                        <li {% if request.resolver_match.url_name == 'location_view' %} 
+					class="green-text"
+					{% endif %}><a href="{% url 'spaceadmin:location_view' %}">My Locations</a></li>                       
+                        {% endif %}
+                        
+                        {% if request.user.type_id == 5 %}
+                        <li {% if request.resolver_match.url_name == 'home' and 'managerooms' in request.resolver_match.namespaces %} 
+					class="green-text"
+					{% endif %}><a href="{% url 'managerooms:home' %}">My Rooms</a></li>
+                        {% endif %}
+                        {% if request.user.type_id == 4 or request.user.type_id == 3 %} 
+					<li {% if request.resolver_match.url_name == 'bookinguser' %} 
+					class="green-text"
+					{% endif %}><a href="{% url 'frontend:bookinguser' %}">Bookings</a></li>
+					{% endif %}
+					{% endif %}
+                             <li><a class="sign-in" href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                           
+                        </ul>
+                    </li>
+                    
+                    {% endif %}
+                    {% if request.user.type_id == 5 or request.user.type_id == 2 %}
+                    <li class="list-space">
+                        <a href="{% url 'frontend:addspace' %}" class="button">
+                            Add space
+                        </a>
+                    </li> 
+                    {% else %}
+                     {% if request.user.type_id == 4 or request.user.type_id == 3 %}
+                    <li class="list-space">
+                        <a href="{% url 'frontend:addspacedetail' %}" class="button">
+                            Recommend a Space
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<div class="modal fade" id="update-modal" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+		<div class="modal-dialog board-modal" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body content-form">
+				
+
+			</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="modal-wrapper modal-width-auto">
+	<div class="modal fade" id="update-email-modal" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Verification</h4>
+
+				</div>
+				<div class="modal-body content-email-form">
+					
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade m-login full-signup" id="myModalsignup" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      
+      </div>
+      <div class="main-title">
+                            <h1><span>{{ PROJECT_NAME }}</span></h1>
+                        </div>
+      <div class="modal-body register-form">
+      <ul class="nav nav-tabs nav-justified" role="tablist">
+    <div class="slider"></div>
+    
+    
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" class="signupuser" data-toggle="tab">Signup as a user</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" class="businessuser" data-toggle="tab">Signup as a business user</a></li>
+    
+  </ul>
+       <div class="tab-content">
+    <div class="tab-pane active userpanel" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="form-content-box register-user-update">
+                   <div class="details">
+			{% regisform as userform %}
+			<form method='POST' action="{% url 'accounts:register_auth' %}">
+				{% csrf_token %}
+				<input name="type_id" type="hidden" value="4" id="type_id">
+				{% for fields in userform %}
+				<div class="form-group {% if fields.errors %}has-error{% endif %}
+				{% if 'Password' in fields.label and userform.non_field_errors %}
+				has-error{% endif %}">
+				{{ fields }}
+				
+				{% if 'again' in fields.label and userform.non_field_errors %}
+				<p class="error error-msg">{{ userform.non_field_errors.0 }}</p>
+				{% endif %}
+				
+					{% if fields.errors %}<p class="error error-msg">{{ fields.errors.0|escape }}</p>{% endif %}
+				</div>
+					{% endfor %}
+					
+			<div class="">
+				<button type="submit" class="search-button" onclick="signupsubmit($(this));">Register</button>
+			</div>
+			</form> 
+		
+		</div>
+		
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+				</div>
+				<div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link" onclick="loginmodal();" href="javascript:void(0);">Have account?</a>
+			</div>
+			</div>
+			</div>
+                </div>
+      </div>
+      
+      <div class="tab-pane businessuserpanel" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+<div class="form-content-box register-buisness-update">
+                     <div class="details">
+		
+			
+			{% businessregisform as businessform %}
+			
+			<form method='POST' action="{% url 'accounts:register_auth' %}">
+				{% csrf_token %}
+				<input name="type_id" type="hidden" value="3" id="type_id_business">
+				{% for fields in businessform %}
+				<div class="form-group {% if fields.errors %}has-error{% endif %}
+				{% if 'Password' in fields.label and businessform.non_field_errors %}
+				has-error{% endif %}">
+				{{ fields }}
+				
+				{% if 'again' in fields.label and businessform.non_field_errors %}
+				<p class="error error-msg">{{ businessform.non_field_errors.0 }}</p>
+				{% endif %}
+				
+					{% if fields.errors %}<p class="error error-msg">{{ fields.errors.0|escape }}</p>{% endif %}
+				</div>
+					{% endfor %}
+					<div class="form-group buisness_form">
+					<select required="required" name="orgtype" placeholder="Organisation Type" class="form-control input-text"  id="id_orgtype">
+					<option {% if orgtype == '' %}selected="selected"{% endif %}  value="">Select Organisation Type</option>
+					<option {% if orgtype == 'for_profit' %}selected="selected"{% endif %} value="for_profit">Profit</option>
+					<option {% if orgtype == 'non_profit' %}selected="selected"{% endif %} value="non_profit">Non Profit</option>
+					</select>
+					</div>
+					<div class="form-group buisness_form">
+					<input required="required" name="orgname" placeholder="Organisation Name" value="{{ orgname }}" class="form-control input-text"  id="id_orgname">
+					</div>
+					<div class="form-group buisness_form">
+					<input required="required" name="orgcount" placeholder="Organisation Count" value="{{ orgcount }}" class="form-control input-text"  id="id_orgcount">
+					</div>
+					
+			<div class="">
+				<button type="submit" class="search-button" onclick="signupsubmit($(this));">Register</button>
+			</div>
+			</form> 
+		
+		</div>
+		
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+				</div>
+				<div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link" onclick="loginmodal();" href="javascript:void(0);">Have account?</a>
+			</div>
+			</div>
+			</div>
+                </div>
+
+</div>
+      
+      
+      
+      </div>
+      <script>
+      
+      $('.signupuser').on('click',function(){
+    		$('.businessuserpanel').find('.form-group').each(function(){
+    			$(this).find('input,select').val('')
+    			$(this).find('span.help-block').hide()
+    		})
+    	})	 
+    		 $('.businessuser').on('click',function(){
+    		$('.userpanel').find('.form-group').each(function(){
+    			$(this).find('input,select').val('')
+    			$(this).find('span.help-block').hide()
+    		})
+    	}) 
+      </script>
+       
+      </div>
+      </div>
+      </div>
+      </div>
+     
+<div class="modal fade m-login" id="myModallogin" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close closelogin" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      
+      </div>
+      <div class="main-title">
+                            <h1><span>{{ PROJECT_NAME }}</span></h1>
+                        </div>
+      <div class="modal-body">
+       <div class="form-content-box">
+                    <div class="form-content-box no-border-radius login-update">
+                    <div class="details">
+                        
+{% if response.context_data.form.errors and not response.context_data.form.non_field_errors %}
+<p class="danger-text error-msg error-view">
+{% if response.context_data.form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if response.context_data.form.non_field_errors %}
+{% for error in response.context_data.form.non_field_errors %}
+<p class="danger-text error-msg error-view">
+{{ error }}<br>
+  
+</p>
+{% endfor %}
+{% endif %}
+
+		
+			
+           
+			
+			<form action="{% url 'accounts:signin' %}" class="login-form" method="POST">
+			{% csrf_token %}
+			  <div class="form-group">
+				<input class="form-control input-text" type="text" required name="username" placeholder="Email / Username">
+				</div>
+				<div class="form-group">
+				<input class="form-control input-text" type="password" required name="password" placeholder="Password">
+				 </div>
+				 <div class="form-group pull-left">
+					<input type="checkbox" class="hidden" id="css" name="remember_me">
+                    <label for="css" class="remember-label">Remember me for next time</label>
+                    </div>
+			
+			<div class="">
+				<button type="submit" class="search-button" onclick="loginsubmit($(this));">Log In</button>
+			</div>
+			</form> 
+			<div class="or-section margin-b-15 margin-t-10" style="text-align: center;"><h4>or</h4></div>
+		<div class="social-links">
+			<div class="row">
+				<div class="col-md-12 margin-b-15">
+				<a class="login-link facebook-link social btn btn-primary btn-block" href="{% url 'social:begin' 'facebook' %}?next=/">
+					<i class="fa fa-facebook-official"></i>&nbsp;Login with facebook
+				</a>
+				</div>
+				
+			</div>
+			<div class="row">
+		<div class="col-md-12 margin-b-15">
+				<a class="login-link twitter-link social btn btn-info btn-block" href="{% url 'social:begin' 'twitter' %}?next=/">
+					<i class="fa fa-twitter"></i>&nbsp;Login with twitter
+				</a>
+				</div>
+				</div>
+			<div class="row">
+				<div class="col-md-12 margin-b-15">
+				<a class="login-link google-link social btn btn-danger btn-block" href="{% url 'social:begin' 'google-oauth2' %}?next=/">
+					<i class="fa fa-google"></i>&nbsp;Login with google
+				</a>
+			</div>
+			</div>
+				<div class="clearfix"></div>
+				
+			</div>
+			</div>
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+			</div>
+			 <div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link signup-modal" onclick="signupmodal();" href="javascript:void(0);">Need account?</a>
+			</div>
+			</div>
+			
+
+			</div>
+		</div>
+                </div>
+      </div>
+     
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="spinner-absolute"><i class="fa fa-spinner fa-spin"></i></div>
+
+
+{% if request.user.is_authenticated %}
+{% if not request.user.email_verified and not request.resolver_match.url_name == 'activate' and 'accounts' not in request.resolver_match.namespaces %}
+ <div class="clearfix"><div class="col-md-offset-2 col-md-8"><div class="alert alert-warning alert-dismissible" role="alert">
+    
+    <i class="fa fa-question-circle question-circle"></i> <strong>Email not verified</strong> Please click on <strong><span onclick="verifyUserEmail('emailverify')"><span>&nbsp;verify email</span></span></strong> to verify your email
+  </div></div></div>
+  {% endif %}
+  
+  	<input id="request_user" type="hidden" value="{{ request.user.pk }}">
+  	<input id="request-email" type="hidden" value="{{ request.user.email }}">
+  {% endif %}
+	<script>
+	{% if request.user.is_authenticated %}
+	sessionStorage.setItem('userID', true);
+	
+	
+	{% if request.user.type_id == 0 or request.user.type_id == 1 %}
+	
+	sessionStorage.setItem('usernotitifID', true);
+	
+	{% else %}
+	
+	sessionStorage.setItem('usernotitifID', false);
+	{% endif %}
+	{% else %}
+	sessionStorage.setItem('userID', false);
+	{% endif %}
+	</script>

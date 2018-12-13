@@ -1,0 +1,199 @@
+{% autoescape off %}
+{% load i18n static %}
+{% endautoescape %}
+
+{% block html %}
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+<style type="text/css">
+	body
+	{
+		margin: 0;
+		padding: 0;
+		min-width: 100%;
+		background-color: #f3f3f3;
+		font-family: 'Helvetica Neue', Roboto, sans-serif;
+		color:#666666;
+	}
+	table 
+	{
+		border-spacing: 0;
+		font-family: sans-serif;
+		color: #333333;
+	}
+	td 
+	{
+		padding: 0;
+	}
+	img 
+	{
+		border: 0;
+	}
+	.wrapper 
+	{
+		width: 100%;
+		table-layout: fixed;
+		-webkit-text-size-adjust: 100%;
+		-ms-text-size-adjust: 100%;
+		background: #f5f5f5;
+	}
+	.webkit 
+	{
+		max-width: 600px;
+		padding: 30px 10px;
+	}
+	.outer 
+	{
+		margin: 0 auto;
+		width: 100%;
+		max-width: 600px;
+		background: #fff;
+		border-top: 5px solid #0299E1;
+	}
+	.contents 
+	{
+		width: 100%;
+	}
+	a 
+	{
+		color: #ee6a56;
+		text-decoration: underline;
+	}
+	.h1
+	{
+		color: #1d2227 !important;
+		line-height: 28px;
+		font-size: 18px !important;
+		margin: 12px 10px 16px 10px;
+		font-weight: 400;
+	}
+	.h2 
+	{
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 12px;
+	}
+		/* One column layout */
+	.one-column .contents 
+	{
+    	text-align: center;
+    	padding: 30px 0;
+	}
+	.one-column p 
+	{
+		font-size: 12px;
+		margin-bottom: 10px;
+		color: rgb(79, 86, 93);
+		line-height: 20px;
+	}
+	.body-text 
+	{
+		padding: 15px 0 15px 40px;
+		border-top: 1px solid #f3f3f3;
+	}
+</style>
+</head>
+<body>
+	<center class="wrapper">
+		<div class="webkit">
+			<table class="outer" align="center">
+				
+				<tr>
+					<td class="one-column">
+						<table width="100%">
+							<tr>
+								<td class="inner contents">
+									<img src="http://{{ domain }}static/images/group.png" width="100px">
+									<p>Hi {{ roomdetail.partner.UserId.first_name }} {{ roomdetail.partner.UserId.last_name }},</p>	
+								</td>
+							</tr>
+							<tr style="border-bottom: 1px solid #DADFE2;">
+                                <td class="body-text " style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; " align="center">
+                                     <div>
+                          				<h4 style="font-size: 14px; font-weight: bold; line-height: 20px; margin: 0 0 10px; padding: 0 0 4px;float:left; border-bottom: 3px solid #0299E1; display: inline-block;" align="left">Query :</h4>
+<a style="padding: 10px 20px; border: 1px solid #F50000; -webkit-border-radius: 999em; -moz-border-radius: 999em; border-radius: 999em; line-height: 24px; font-size: 11pt; background-color: #F50000; color: white; text-decoration: none;" href="http://{{ domain }}{{url}}{{ room.pk }}">View Room</a>
+                          				<table class="departure-details" style=" position: relative" width="100%" cellspacing="0" cellpadding="0" border="0">
+                           					<tbody>
+                           						<tr>
+                              						<td>
+                              						<p style="color: #464646;  font-size: 14px;margin: 6px 0;font-weight: 600; " align="left">Booking Dates:
+                              						<span style=" color: #6a6a6a; font-size: 14px;  white-space: pre;margin: 6px 0; font-weight: normal;" align="left">{{ messagedata.booking_dates }}</span>
+                              						</p> 
+                              						</td>
+                             					</tr>
+                             					<tr>
+                              						<td>
+                              						<p style="color: #464646;  font-size: 14px;margin: 6px 0;font-weight: 600; " align="left">Time Flexible:
+                              						<span style=" color: #6a6a6a; font-size: 14px;  white-space: pre;margin: 6px 0; font-weight: normal;" align="left">{{ messagedata.timeflexible }}</span>
+                              						</p> 
+                              						</td>
+                             					</tr>
+                             					<tr>
+                              						<td>
+                              						<p style="color: #464646;  font-size: 14px;margin: 6px 0;font-weight: 600; " align="left">No.of attendees:
+                              						<span style=" color: #6a6a6a; font-size: 14px;  white-space: pre;margin: 6px 0; font-weight: normal;" align="left">{{ messagedata.attendees }}</span>
+                              						</p> 
+                              						</td>
+                             					</tr>
+                             					<tr>
+                              						<td>
+                              						<p style="color: #464646;  font-size: 14px;margin: 6px 0;font-weight: 600; " align="left">Message:
+                              						<span style=" color: #6a6a6a; font-size: 14px;  white-space: pre;margin: 6px 0; font-weight: normal;" align="left">{{ messagedata.message_request }}</span>
+                              						</p> 
+                              						</td>
+                             					</tr>
+                  					            <tr>
+                              						<td>
+                              						<p style="color: #464646;  font-size: 14px;margin: 6px 0;font-weight: 600; " align="left"> Visit Schedule:
+                              						<span style=" color: #6a6a6a; font-size: 14px;  white-space: pre;margin: 6px 0; font-weight: normal;" align="left">{{ messagedata.visitschedule }}</span>
+                              						</p> 
+                              						</td>
+                             					</tr>
+                             					
+                             				</tbody>
+                            			</table>
+                          			</div>
+                                </td>
+                              </tr>
+                              <tr>
+								<td class="inner contents">
+									<p>Regards,</p>
+									<p>{{ user.first_name }} {{ user.last_name }}</p>	
+									<p>{{ user.contact_no }}</p>
+									<p>{{ user.email }}</p>
+								</td>
+							</tr>
+                              
+						</table>
+					</td>
+				</tr>
+
+				
+				<tr>
+          	 		<td style="padding:15px 0 ;border-top:1px solid #e9edee;color:#9b9fa5;">
+                   		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+                      		<tbody>
+			          			<tr>
+                        			
+                        			<td>
+                          				<div class="text-footer2" style="color:#605f5d; font-family:Arial; font-size:12px; line-height:19px; text-align:center">You have received this email as you are host for room {{ room.facility_name }} at
+                            				<a href="#" class="link-footer" style="color:#605f5d; text-decoration:none"><strong class="link-footer" style="color:#666; text-decoration:none">Vicinity</strong></a>
+                        				</div>
+				                        <div style="font-size:0pt; line-height:0pt; height:13px"></div>
+                        			</td>
+                        			
+                      			</tr>
+                    		</tbody>
+                    	</table> 
+  					</td>
+  				</tr>
+			</table>
+		</div>
+	</center>
+</body>
+</html>
+{% endblock %}

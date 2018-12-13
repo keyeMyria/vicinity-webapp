@@ -1,0 +1,63 @@
+{% extends 'frontend/base.html' %}
+{% load static core_extras %}
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+
+
+
+      <div class="wrapper">
+         <div class="dashboard-background-grey">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-12">
+                  <div class="main-title-2">
+									<h1>
+										<span>Location</span> list
+									</h1>
+								</div>
+								<hr/>
+                    <div class="panel panel-default">
+                     <div class="panel-body">
+
+
+                     
+
+                     <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Location Name</th>
+        <th>Location Type</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zipcode</th>
+        <th>Action</th>
+
+   
+
+      </tr>
+    </thead>
+    <tbody>
+    {% for loc in location %}
+      <tr>
+        <td>{{ loc.location_name }}</td>
+        <td>{{ loc.location_type }}</td>
+        <td>{{ loc.city }}</td>
+        <td>{{ loc.state }}</td>
+         <td>{{ loc.zipcode }}</td>
+         <td> <a href="{% url 'spaceadmin:location_detail' loc.pk  %}" class="change-view-btn active-view-btn"><i class="fa fa-eye"></i></a>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+                  </div>
+                    </div>
+
+
+            </div>
+         </div>
+      </div>
+     </div>
+     </div>
+
+{% endblock %}

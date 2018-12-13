@@ -1,0 +1,322 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n core_extras %}
+
+{% block breadcrumb-wrapper %}{% endblock %}
+{% block content %}
+
+<section id="home" class="welcome-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<div class="hero-text">
+						<!-- <h2>User Profile</h2> -->
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    <section class="bg-dark-cloud t7 b7 user-profile">
+      <div class="container">
+        <div class="rider-dashbord">
+          <div class="row">
+          <div class="col-md-3">
+                    <div class="side-tabs bg-dark">
+                      <!-- required for floating -->
+                      <!-- Nav tabs -->
+                      <div class="pic-grid text-center userprofileupdate">
+                        {% if request.user.profile_file %}
+										<img src="/media/{{ request.user.profile_file }}" class="img-responsive">
+										{% else %}
+										<img src="{% static "images/avatars/admin.png" %}" class="img-responsive">
+										{% endif %}
+										
+                      </div>
+                      
+                      <br>
+                      <div class="text-center">
+                      <span class="list-space"><a class="update-profile" onclick="getdetail('profilepicupdate','','user')">Update Profile Photo</a></span></div><br>
+                      <h4 class="text-center text-white">{{ request.user.username }}</h4><br>
+                      <ul class="nav nav-tabs tabs-left">
+                          <li class="active"><a href="#profile" data-toggle="tab"><i class="fa fa-user"></i> Profile</a></li>
+                          <li><a href="#change" data-toggle="tab"><i class="fa fa-lock"></i> Change Password</a></li>
+                          <li><a href="#updateprofile" data-toggle="tab"><i class="fa fa-edit"></i>Update Profile </a></li>
+                          <li><a href="#updatechats" data-toggle="tab"><i class="fa fa-commenting"></i>Chats </a></li>
+                          <li class="readstate"><a href="#updatenotification" data-toggle="tab"><i class="fa fa-bell"></i> Notifications </a></li>
+                          
+                          <li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Sign out</a></li>
+                         
+                      </ul>
+                    </div>
+                 </div>
+                 <div class="col-md-9">
+                     <!-- Tab panes -->
+                     <div class="tab-content bg-dark">
+                       <div id="profile" class="profile-edit tab-pane active">
+                        
+                              <h3>Profile </h3>
+                                
+                                <p>Below are the name and email addresses on file for your account.</p>
+                                <br>
+                                <dl class="dl-horizontal">
+                                    <dt><strong>Your name </strong></dt>
+                                    <dd>
+                                      {{ request.user.first_name }} {{ request.user.last_name }}
+                                        <span>
+                                            <a class="pull-right" href="#">
+                                              
+                                            </a>
+                                        </span>
+                                    </dd>
+                               
+                                   
+                                    <hr>
+                                    <dt><strong>Email Address </strong></dt>
+                                    <dd>
+                                        {{ request.user.email }}
+                                        {% if not request.user.email_verified %}
+                                        <span>&nbsp;
+                                            <a href="javascript:void(0);" onclick="verifyUserEmail('emailverify')">
+                                             <i class="fa fa-question-circle question-circle"></i><span>&nbsp;Verify email</span>
+                                            </a>
+                                        </span>
+                                        {% else %}
+                                        <span>&nbsp;
+                                            <a href="javascript:void(0);">
+                                             <i class="fa fa-check-circle question-circle"></i><span>&nbsp;Email Verified</span>
+                                            </a>
+                                        </span>
+                                        {% endif %}
+                                    </dd>
+                                    <hr>
+                                    <dt><strong>Contact No </strong></dt>
+                                    <dd>
+                                        {{ request.user.contact_no|default_if_none:'' }}
+                                        <span>
+                                            <a class="pull-right" href="#">
+                                             
+                                            </a>
+                                        </span>
+                                    </dd>
+                                    <hr>
+                                
+                                    <dt><strong>Address </strong></dt>
+                                    <dd>
+                                    {{ request.user.address|default_if_none:'' }} {{ request.user.city|default_if_none:'' }} {{ request.user.state|default_if_none:'' }} {{ request.user.country|default_if_none:'' }} {{ request.user.zipcode|default_if_none:'' }}
+                                        
+                                        <span>
+                                            <a class="pull-right" href="#">
+                                             
+                                            </a>
+                                        </span>
+                                    </dd>
+                                    <hr>
+                                </dl>
+                              
+                            </div>
+                         <div class="profile-edit tab-pane margin-top-10 " id="change">
+                          
+                              <h3>Change Password </h3>
+                             
+                              
+						<div class="contactForm">
+						     <form id="contactForm1" method="post" url="{% url 'frontend:passwordreset' %}">
+						     {% csrf_token %}
+						      <div class="row">
+						       <div class="col-md-12">
+						        <div class="form-group">
+							    <label class="control-label">New Password</label>
+							    <input class="form-control" type="password" name="password_sign" placeholder="Password">
+							  </div>
+						      
+						      </div>
+						     <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">Confirm Password</label>
+						    <input type="password" class="form-control" name="password_confirm" placeholder="Confirm Password">
+						  </div>
+						  </div>
+						 </div>
+						  
+						 
+						 
+						<div class="text-center"> <button  type="submit" class="btn button-md button-theme button-border ">Change Password</button></div> 
+						</form>
+						</div>
+						   
+                         </div>
+                         
+                       <div class="profile-edit tab-pane margin-top-10 " id="updateprofile">
+                          
+                           <h3>Update Profile </h3>
+                           <p>Manage Your Name, Email, Phone Number and others..</p>
+                           
+                              
+						 <div class="contactForm">
+						     <form id="contactForm2" method="post" url="{% url 'core:userprofile' %}">
+						     {% csrf_token %}
+						      <div class="row">
+						      <div class="col-md-12 padding-zero">
+						       <div class="col-md-6">
+						        <div class="form-group">
+							    <label class="control-label">First Name</label>
+							    <input type="text" class="form-control" required name="first_name" value="{{ request.user.first_name }}" placeholder="First Name">
+							  </div>
+						      
+						      </div>
+						      
+						       <div class="col-md-6">
+						        <div class="form-group">
+							    <label class="control-label">Last Name</label>
+							    <input type="text" class="form-control" required name="last_name" value="{{ request.user.last_name }}" placeholder="Last Name">
+							  </div>
+						      
+						      </div>
+						      </div>
+						     <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">Gender</label>
+						    {{ form.gender }}
+						  </div>
+						  </div>
+						     <div class="col-md-12">
+						   <div class="form-group datePicker">
+						    <label class="control-label">Date of Birth</label>
+						    {{ form.date_of_birth }}
+						  </div>
+						  </div>
+						   <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">Contact No</label>
+						    <input type="text" class="form-control" required name="contact_no" value="{{ request.user.contact_no|default_if_none:'' }}" placeholder="Contact No">
+						  </div>
+						  </div>
+						  <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">Address</label>
+						    <input type="text" class="form-control" required name="address" value="{{ request.user.address|default_if_none:'' }}" placeholder="Address">
+						  </div>
+						  </div>
+						  <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">City</label>
+						    <input type="text" class="form-control" required name="city" value="{{ request.user.city|default_if_none:'' }}" placeholder="City">
+						  </div>
+						  </div>
+						  <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">State</label>
+						    <input type="text" class="form-control" required name="state" placeholder="State"  value="{{ request.user.state|default_if_none:'' }}">
+						  </div>
+						  </div>
+						  <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">Country</label>
+						    <input type="text" class="form-control" required name="country" placeholder="Country" value="{{ request.user.country|default_if_none:'' }}">
+						  </div>
+						  </div>
+						  <div class="col-md-12">
+						   <div class="form-group">
+						    <label class="control-label">Zipcode</label>
+						    <input type="text" class="form-control" required name="zipcode" placeholder="Zipcode" value="{{ request.user.zipcode|default_if_none:'' }}">
+						  </div>
+						  </div>
+						 </div>
+						  
+						 
+						 
+						<div class="text-center"> <button type="submit" class="btn button-md button-theme button-border ">Update Profile</button></div> 
+						</form>
+						</div>
+						   
+                         </div>
+                         <div id="updatechats" class="profile-edit tab-pane">
+                        <div class="row">
+					            <div class="messages-container">
+					                <div id="messages" class="messages msg_container">
+					                </div>
+					
+					                <ul id="user-list" class="user-list chat-dashbord">
+                 <ul class="nav nav-tabs chat-tab nav-justified">
+                          <li class="active"><a href="#chatlist" data-toggle="tab">Chat List</a></li>
+                          <li><a href="#selectlist" data-toggle="tab">Select list</a></li>
+                         
+                      </ul>
+                <div class="tab-content">
+                <div id="selectlist" class="tab-pane">
+                
+                {% for user in request.user|user_list_get %}
+                <li class="getmsglogs pointer" data-room-id="{{ user.pk|get_room_id_user:request.user }}" data-id="{{ user.pk }}">
+                <label>{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</label>
+                {% if user.pk|get_chat_list:request.user %}
+                <span class="bullet-icon"></span>
+                {% endif %}
+                </li>
+                {% endfor %}
+                </div>
+                <div id="chatlist" class="tab-pane active">
+                {% for user in request.user|chat_list_get %}
+                
+                <li class="getmsglogs pointer" data-room-id="{{ user.pk|get_room_id_user:request.user }}" data-id="{{ user.pk }}">
+                <label>{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</label>
+                {% if user.pk|get_chat_list:request.user %}
+                <span class="bullet-icon"></span>
+                {% endif %}
+                </li>
+                {% endfor %}
+                </div>
+                </div>
+                </ul>
+					            </div>
+					        </div>
+					
+					        <div class="row">
+					            <div class="add-message hidden">
+					                <div class="form-group">
+					                    <textarea id="chat-message" class="form-control message messagechat" placeholder="Write a message"></textarea>
+					                </div>
+					
+					                <div class="form-group clearfix">
+					                    <input id="btn-send-message" type="button" class="btn btn-primary pull-right send-message" style="margin-left: 10px;" value="Send message" />
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+                               <div id="updatenotification" class="profile-edit tab-pane">
+                               <div class="sidebar">
+                            <div id="" class="notification-list mail-list not-list col-md-12">
+                            {% for notify in request.user|notification_list %}
+	                            <a href="javascript:void(0);" class="single-mail" style="padding: 10px 0px;">
+	                                    <span class="icon bg-primary">
+	                                        <i class="fa fa-envelope-o"></i>
+	                                    </span>
+	                                    <strong>{{ notify.message }}</strong>
+	
+	                                    <p>
+	                                        <small>{{ notify.time }}</small>
+	                                    </p>
+	                                    
+                                </a>
+                                <hr style="margin: 0px;">
+                                {% endfor %}
+                                </div>
+                        </div>
+
+					</div>
+                              
+                            </div>
+                        
+                         
+                     </div>
+                 </div>
+        </div>
+
+        </div>
+      </div>
+    </section>
+  
+  
+
+
+
+{% endblock %}

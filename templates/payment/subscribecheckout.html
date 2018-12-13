@@ -1,0 +1,156 @@
+{% extends "frontend/base.html" %}
+{% load static i18n %}
+{% block header %}
+{% endblock %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<section class="subscription-section content-area">
+ <div class="container">
+ <div class="row">
+    <div class="col-md-6 pull-left">
+     <div class="maintitle">
+            <h3>Checkout</h3>
+            
+        </div>
+    
+    </div>
+    
+     <div class="col-md-6 text-right">
+     <div class="maintitle">
+            <h3>Secure transaction</h3>
+            
+        </div>
+    <ul class="list-inline secure-logo">
+     <li><a href="#"><img src="/static/images/Braintree-Logo12.png"></a></li>
+    </ul>
+    </div>
+    </div>
+  <br/>
+  
+<input type='hidden' id='client_token' value='{{client_token}}'>
+<form id="checkout" method="post" action="/subscribe/payment">
+  <div class="row">
+    <div class="col-md-7">
+     <div class="main-header text-left">
+            <h4>Payment Information</h4>
+            
+        </div>
+        
+        <div class="panel panel-bg">
+        <div class="panel-body">
+        
+		<input type='hidden' name='amount' value='{{amount}}'>
+		<input type="hidden" id="nonce" name="payment_method_nonce"></input>
+    <div id="payment-form">
+     
+    </div>
+    <p class="help-block aggreeerror hidden error-msg" ></p>
+ 
+</div>
+</div>
+</div>
+<div class="col-md-5">
+<div class="order-summary">
+  <div class="main-header">
+            <h4>Order Summary</h4>
+        </div>
+         <div class="panel panel-bg">
+        <div class="panel-body">
+       <table class="table table-condensed">
+                            
+                                <tbody>
+                                    <tr>
+                                        <td>{{ pricetitle }}</td>
+                                        <td  class="text-right">${{amount}}</td>
+                                    </tr>
+                                  
+                                </tbody>
+                            </table>
+                            <hr/>
+                            <table class="table table-total">
+                             <tr>
+                              <td class="text-right"> <h4>Subtotal </h4> </td>
+                              <td class="text-right"> <h4>${{amount}} </h4></td>
+                             </tr>
+                             
+                             
+                             
+                              <tr>
+                              <td class="text-right"> <h4>Total</h4></td>
+                              <td class="text-right"><h4>${{amount}} </h4></td>
+                             </tr>
+                             </table>
+                            
+                            
+                            
+      </div>
+      </div>                     
+</div>
+</div>
+  </div>
+   <div class="row">
+    <div class="col-md-12 text-center"><button class="button-sm border-button-theme sendsubscriberequest" type="button"> Subscribe </button>
+    <a href="{% url 'core:home' %}" class="button-sm button-theme" type="button"> Cancel </a> </div>
+    </div>
+    
+  
+</form>
+ </div>
+</section>
+
+
+<script src="{% static 'js/dropin.min.js' %}" ></script>
+<script>
+   var clientToken = document.getElementById('client_token').value;
+
+   var form = document.querySelector('#checkout');
+   var nonceInput = document.querySelector('#nonce');
+ braintree.dropin.create({
+	  authorization: clientToken,
+	  selector: '#payment-form',
+	  locale: 'en_US',
+	  paypal: {
+		    flow: 'checkout',
+		  },
+		 paypalCredit: {
+		   flow: 'checkout',
+		  }
+	}, function (err, dropinInstance) {
+        if (err) {
+            console.error(err)
+    return;
+          }
+        
+        $('.sendsubscriberequest').attr('type','submit')
+        form.addEventListener('submit', function (event) {
+        	$('.error-msg').addClass('hidden')
+          event.preventDefault();
+
+          dropinInstance.requestPaymentMethod(function (err, payload) {
+            if (err) {
+
+                $('.error-msg').html(err);
+                $('.error-msg').html( $('.error-msg').html().replace('available','selected').replace('Error: ',''))
+                $('.error-msg').removeClass('hidden')
+              return;
+            }
+
+            nonceInput.value = payload.nonce;
+          	if(nonceInput.value){
+            	$('#checkout').submit();
+          	}
+          	
+          	
+          });
+        }); 
+            	
+            });
+
+</script>
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
+

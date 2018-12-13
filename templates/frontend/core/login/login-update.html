@@ -1,0 +1,80 @@
+
+{% load static i18n %}
+<div class="details">
+                        
+{% if response.context_data.form.errors and not response.context_data.form.non_field_errors %}
+<p class="danger-text error-msg error-view">
+{% if response.context_data.form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if response.context_data.form.non_field_errors %}
+{% for error in response.context_data.form.non_field_errors %}
+<p class="danger-text error-msg error-view">
+{{ error }}<br>
+  
+</p>
+{% endfor %}
+{% endif %}
+
+		
+			
+           
+			
+			<form action="{% url 'accounts:signin' %}" class="login-form" method="POST">
+			{% csrf_token %}
+			  <div class="form-group">
+				<input class="form-control input-text" type="text" required name="username" placeholder="Email / Username">
+				</div>
+				<div class="form-group">
+				<input class="form-control input-text" type="password" required name="password" placeholder="Password">
+				 </div>
+				 <div class="form-group pull-left">
+					<input type="checkbox" class="hidden" id="css" name="remember_me">
+                    <label for="css" class="remember-label">Remember me for next time</label>
+                    </div>
+			
+			<div class="">
+				<button type="submit" class="search-button" onclick="loginsubmit($(this));">Log In</button>
+			</div>
+			</form> 
+			<div class="or-section margin-b-15 margin-t-10" style="text-align: center;"><h4>or</h4></div>
+		<div class="social-links">
+			<div class="row">
+				<div class="col-md-12 margin-b-15">
+				<a class="login-link facebook-link social btn btn-primary btn-block" href="{% url 'social:begin' 'facebook' %}?next=/">
+					<i class="fa fa-facebook-official"></i>&nbsp;Login with facebook
+				</a>
+				</div>
+				
+			</div>
+			<div class="row">
+		<div class="col-md-12 margin-b-15">
+				<a class="login-link twitter-link social btn btn-info btn-block" href="{% url 'social:begin' 'twitter' %}?next=/">
+					<i class="fa fa-twitter"></i>&nbsp;Login with twitter
+				</a>
+				</div>
+				</div>
+			<div class="row">
+				<div class="col-md-12 margin-b-15">
+				<a class="login-link google-link social btn btn-danger btn-block" href="{% url 'social:begin' 'google-oauth2' %}?next=/">
+					<i class="fa fa-google"></i>&nbsp;Login with google
+				</a>
+			</div>
+			</div>
+				<div class="clearfix"></div>
+				
+			</div>
+			</div>
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+			</div>
+			 <div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link signup-modal" onclick="signupmodal();" href="javascript:void(0);">Need account?</a>
+			</div>
+			</div>
+			
+
+			</div>

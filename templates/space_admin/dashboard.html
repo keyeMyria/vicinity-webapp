@@ -1,0 +1,279 @@
+{% extends 'frontend/base.html' %}
+{% load static core_extras %}
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+
+	<div class="wrapper">
+		<div class="dashboard-background-grey">
+			<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+				   <div class="main-title-2">
+									<h1>
+										<span>Dashboard</span> 
+									</h1>
+								</div>
+					
+				</div>
+			</div>
+				
+				<div class="row">
+				<div class="col-md-12">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Confirmed Reservation</h4>
+<hr>
+							</div>
+							
+						</div>
+					
+							{% if booking_list_array %}
+								<table id="accordionOne" class="table table-dashboard">
+									<thead>
+										<tr style="border: none;">
+											<th class="sorting">Name <i class="fa fa-sort" aria-hidden="true"></i></th>
+											<th class="sorting">Room Name <i class="fa fa-sort" aria-hidden="true"></i></th>
+											<th class="sorting">Booking Dates  <i class="fa fa-sort" aria-hidden="true"></i></th>
+											<th>Special Request</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+						{% for data in booking_list_array %}
+						{% if data.status == 2 %}
+						{% if forloop.counter < 4 %}
+										<tr>
+										<td>{{ data.userfullname }}</td>
+											<td>{{ data.room_book.facility_name }}</td>
+											<td>{% for date in data.dates %}{{ date }}<br>{% endfor %}</td>
+											<td>{{ data.special_request }}</td>
+											<td><a href="{% url 'spaceadmin:reservation_detail' data.booking_key %}" class="change-view-btn  active-view-btn"><i class="fa fa-eye"></i></a></td>
+										</tr>
+										{% endif %}
+										{% endif %}
+						{% endfor %}
+
+									</tbody>
+									<tfoot id="collapseOne" class="panel-collapse collapse" >
+									{% for data in booking_list_array %}
+									{% if data.status == 2 %}
+									{% if forloop.counter > 3 %}
+										<tr>
+											
+										<td>{{ data.userfullname }}</td>
+										<td>{{ data.room_book.facility_name }}</td>
+											<td>{% for date in data.dates %}{{ date }}<br>{% endfor %}</td>
+											<td>{{ data.special_request }}</td>
+											<td><a href="{% url 'spaceadmin:reservation_detail' data.booking_key %}" class="change-view-btn  active-view-btn"><i class="fa fa-eye"></i></a></td>
+										</tr>
+										{% endif %}
+											{% endif %}
+						{% endfor %}
+									</tfoot>
+								</table>
+								
+						{% else %}
+						
+						<h4 class="text-center text-green">No Booking yet</h4>
+
+					{% endif %}
+							</div>
+
+						</div>
+						{% if booking_list_array.count > 3 %}
+						<div class="row mb-40">
+							<div class="col-md-12">
+								<button type="button" class="btn btn-default btn-block show-all" onclick="$(this).hide();$('#collapseOne').addClass('displaycontent')" data-toggle="collapse" data-parent="#accordionOne" href="#collapseOne">Show
+									All</button>
+							</div>
+
+						</div>
+						{% endif %}
+
+
+
+					</div>
+				</div>
+				
+			
+					<div class="row">
+				<div class="col-md-6">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Pending</h4>
+<hr>
+							</div>
+							
+						</div>
+						<div class="row mb-20">
+							<div class="col-md-12">
+							{% if booking_list_array %}
+								<table id="accordionOne" class="table table-dashboard">
+									<thead>
+										<tr style="border: none;">
+											<th class="sorting">Name <i class="fa fa-sort" aria-hidden="true"></i></th>
+											<th class="sorting">Room Name <i class="fa fa-sort" aria-hidden="true"></i></th>
+											<th class="sorting">Booking Dates  <i class="fa fa-sort" aria-hidden="true"></i></th>
+											<th>Special Request</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+						{% for data in booking_list_array %}
+						{% if data.status == 1 %}
+						{% if forloop.counter < 4 %}
+										<tr>
+												
+										<td>{{ data.userfullname }}</td>
+										<td>{{ data.room_book.facility_name }}</td>
+											<td>{% for date in data.dates %}{{ date }}<br>{% endfor %}</td>
+											<td>{{ data.special_request }}</td>
+											<td><a href="{% url 'spaceadmin:reservation_detail' data.booking_key %}" class="change-view-btn  active-view-btn"><i class="fa fa-eye"></i></a></td>
+										</tr>
+										{% endif %}
+										{% endif %}
+						{% endfor %}
+
+									</tbody>
+									<tfoot id="collapseOne" class="panel-collapse collapse" >
+									{% for data in booking_list_array %}
+									{% if data.status == 1 %}
+									{% if forloop.counter > 3 %}
+										<tr >
+												
+										<td>{{ data.userfullname }}</td>
+										<td>{{ data.room_book.facility_name }}</td>
+											<td>{% for date in data.dates %}{{ date }}<br>{% endfor %}</td>
+											<td>{{ data.special_request }}</td>
+											<td><a href="{% url 'spaceadmin:reservation_detail' data.booking_key %}" class="change-view-btn  active-view-btn"><i class="fa fa-eye"></i></a></td>
+										</tr>
+										{% endif %}
+											{% endif %}
+						{% endfor %}
+									</tfoot>
+								</table>
+								
+						{% else %}
+						
+						<h4 class="text-center text-green">No Booking yet</h4>
+
+					{% endif %}
+							</div>
+							
+
+						</div>
+				
+						{% if booking_list_array.count > 3 %}
+						<div class="row mb-40">
+							<div class="col-md-12">
+								<button type="button" class="btn btn-default btn-block show-all" onclick="$(this).hide();$('#collapseTwo').addClass('displaycontent')" data-toggle="collapse" data-parent="#accordionTwo" href="#collapseTwo">Show
+									All</button>
+							</div>
+
+						</div>
+						{% endif %}
+
+
+
+					</div>
+				</div>
+				
+				</div>
+				<div class="col-md-6">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Rooms</h4>
+								<hr>
+							</div>
+							
+						</div>
+						<div class="row mb-20">
+							<div class="col-md-12">
+							{% if room_list %}
+								<table  id="accordionThree" class="table table-dashboard">
+									<thead>
+										<tr style="border: none;">
+											<th>Name</th>
+											<th>This Week</th>
+											<th>Availability</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+									{% for data in room_list %}
+									{% if forloop.counter < 4 %}
+										<tr>
+											<td>{{ data.facility_name }}</td>
+											<td onclick="window.location='{% url 'spaceadmin:room_detail' data.pk %}'">{{ data|getreservation }} reservations</td>
+											
+											<td>	<label class="btn-onoff availability">
+		<input type="checkbox"  data-id="{{ data.pk }}" name="name" {% if data.availability %} checked="checked" {% endif %} data-onoff="toggle"><span></span>	
+	</label></td>	<td><a href="{% url 'spaceadmin:room_detail' data.pk %}" class="change-view-btn  active-view-btn"><i class="fa fa-eye"></i></a></td>
+										</tr>
+										{% endif %}
+										{% endfor %}
+
+									</tbody>
+									
+										<tfoot id="collapseThree" class="panel-collapse collapse">
+									{% for data in room_list %}
+									{% if forloop.counter > 3 %}
+										<tr>
+											<td onclick="window.location='{% url 'spaceadmin:room_detail' data.pk %}'">{{ data.facility_name }}</td>
+											<td onclick="window.location='{% url 'spaceadmin:room_detail' data.pk %}'">{{ data|getreservation }} reservations</td>
+											
+											<td>	<label class="btn-onoff availability">
+		<input type="checkbox"  data-id="{{ data.pk }}" name="name" {% if data.availability %} checked="checked" {% endif %} data-onoff="toggle"><span></span>	
+	</label></td>
+
+										</tr>
+										
+										{% endif %}
+										
+										{% endfor %}
+										</tfoot>
+
+								</table>
+								{% else %}
+								<h4 class="text-center text-green">No Rooms Yet</h4>
+								{% endif %}
+							</div>
+
+						</div>
+					{% if room_list.count > 3 %}
+						<div class="row mb-40">
+							<div class="col-md-12">
+								<button type="button" class="btn btn-default btn-block show-all" onclick="$(this).hide();$('#collapseThree').addClass('displaycontent')" data-toggle="collapse" data-parent="#accordionThree" href="#collapseThree">Show
+									All</button>
+							</div>
+
+						</div>
+					{% endif %}
+
+
+					</div>
+				</div>
+				
+				</div>
+				
+				</div>
+			
+				
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

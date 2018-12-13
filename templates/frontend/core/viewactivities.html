@@ -1,0 +1,52 @@
+{% extends 'frontend/base.html' %}
+
+{% block breadcrumb-wrapper %}{% endblock %}
+{% load static %}
+{% block content %}
+<section class="content-area-3 activities-main">
+ <div class="container">
+  <div class="row">
+   <div class="col-md-12">
+     <div class="main-title-2">
+            <h1><span>All</span> Activities</h1>
+        </div>
+  
+   </div>
+  </div>
+  
+  
+    <div class="activites-section margin-bt-25">
+      
+      <!--    <div class="act-header">
+          <h4>Meeting</h4>
+         </div>  -->
+       <div class="act-wrap">
+        <div class="row">
+        {% for event in EVENT_LIST %}
+        <div class="col-md-3">
+          <div class="act-inner">
+           <a href="/search?location=United+States&plantype={{ event.1 }}">{{ event.1 }}</a>
+          </div>
+         </div>
+         {% if forloop.counter|divisibleby:'4' %}
+        </div>
+      </div>
+         <div class="act-wrap">
+        <div class="row">
+         {% endif %}
+         {% endfor %}
+      
+      
+    </div>
+    
+    </div>
+
+</section>
+
+
+
+
+
+
+
+{% endblock %}

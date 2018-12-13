@@ -1,0 +1,60 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<div class="background-grey">
+<div class="login-box col-md-12 width-100">
+	<div class="col-md-12 login-content form-text">
+ <h3>Partner Requests:</h3>
+  <ul>
+
+
+    <table class="table">
+
+      <thead>
+        <tr>
+        <th>Company Name</th>
+        <th>Email</th>
+        <th>HQ Address</th>
+        <th>Vision</th>
+        <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+            <!-- Displays a list of all the partner Proposals sent to Check-In.com and an Accept/Refuse Button -->
+          {% for proposal in proposals%}
+
+            <tr>
+              <td><a class="" href="#">{{proposal.CompanyName}}</a></td>
+              <td>{{proposal.CompanyEmail}}</td>
+              <td>{{proposal.HQAddress}}</td>
+              <td>{{proposal.Vision}}</td>
+				{% if proposal.state_id == 0 %}
+				                  <td><a class="btn btn-warning pull-right">Pending</a></td>
+				{% else %}
+				{% if proposal.state_id == 1 %}
+				        <td><a class="btn btn-info text-white pull-right">Accepted</a></td>
+				{% elif proposal.state_id == 2 %}
+				        <td><a class="btn btn-danger pull-right">Rejected</a></td>
+				{% endif %}
+				{% endif %}
+
+
+            </tr>
+
+          {% endfor%}
+     </tbody>
+ </table>
+ </ul>
+        </div>
+        </div>
+        </div>
+<div>
+ 
+</div>
+
+{% endblock %}

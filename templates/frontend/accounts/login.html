@@ -1,0 +1,116 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n %}
+{% block headerstyle %}
+{% endblock %}
+{% block sidebarstyle %}
+{% endblock %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+    
+    <div class="content-area padding-small">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Form content box start -->
+                <div class="form-content-box no-border-radius">
+                    <!-- details -->
+                    <div class="details">
+                        <!-- Main title -->
+                        <div class="main-title">
+                            <h1><span>{{ PROJECT_NAME }}</span></h1>
+                        </div>
+
+	
+
+
+{% if form.errors and not form.non_field_errors %}
+<p class="danger-text error-msg error-view">
+{% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="danger-text error-msg error-view">
+{{ error }}<br>
+  
+</p>
+{% endfor %}
+{% endif %}
+
+		
+			
+           
+			
+			<form action="{% url 'accounts:login' %}" class="login-form" method="POST">
+			{% csrf_token %}
+			  <div class="form-group">
+				<input class="username" type="hidden" name="username">
+				<input class="form-control input-text emailusername" type="text" required name="emailusername" placeholder="Email / Username">
+				</div>
+				<div class="form-group">
+				<input class="form-control input-text" type="password" required name="password" placeholder="Password">
+				 </div>
+				 <div class="form-group pull-left">
+					<input type="checkbox" class="hidden" id="css" name="remember_me">
+                    <label for="css" class="remember-label">Remember me for next time</label>
+                    </div>
+			
+			<div class="">
+				<button type="submit" class="search-button">Log In</button>
+			</div>
+			</form> 
+			<div class="or-section margin-b-15 margin-t-10" style="text-align: center;"><h4>or</h4></div>
+		<div class="social-links">
+			<div class="row">
+				<div class="col-md-12 margin-b-15">
+				<a class="login-link facebook-link social btn btn-primary btn-block" href="{% url 'social:begin' 'facebook' %}?next=/">
+					<i class="fa fa-facebook-official"></i>&nbsp;Login with facebook
+				</a>
+				</div>
+				
+			</div>
+			<div class="row">
+		<div class="col-md-12 margin-b-15">
+				<a class="login-link twitter-link social btn btn-info btn-block" href="{% url 'social:begin' 'twitter' %}?next=/">
+					<i class="fa fa-twitter"></i>&nbsp;Login with twitter
+				</a>
+				</div>
+				</div>
+			<div class="row">
+				<div class="col-md-12 margin-b-15">
+				<a class="login-link google-link social btn btn-danger btn-block" href="{% url 'social:begin' 'google-oauth2' %}?next=/">
+					<i class="fa fa-google"></i>&nbsp;Login with google
+				</a>
+			</div>
+			</div>
+				<div class="clearfix"></div>
+				
+			</div>
+			</div>
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+			</div>
+			 <div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link" href="{% url 'accounts:register' %}">Need account?</a>
+			</div>
+			</div>
+			
+
+			</div>
+		</div>
+	</div>	
+	
+</div>
+</div>
+</div>
+
+
+
+						
+{% endblock %}
+{% block footerstyle %}
+{% endblock %}

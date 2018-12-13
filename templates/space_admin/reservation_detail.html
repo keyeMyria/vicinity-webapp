@@ -1,0 +1,239 @@
+{% extends 'frontend/base.html' %}
+{% load core_extras %}
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+
+
+	<div class="wrapper">
+		<div class="dashboard-background-grey">
+			<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<h2>Reservation Detail</h2>
+				</div>
+				<div class="col-md-6 text-right">
+					<div class="list-call ">
+                     <div class="mg-t1  ">
+                        <ul class="">
+                          {% if booking_list_array.0.status == 2 %}
+							        <a class="btn btn-info text-white pull-right" href=""><i class="fa fa-check-square-o"></i> Approved</a>
+							
+							{% elif booking_list_array.0.status == 3 %}
+							        <a class="btn btn-warning pull-right" href=""><i class="fa fa-window-close-o"></i> Cancelled</a>
+							    
+							{% else %}
+							        <a class="btn btn-danger pull-right" href="{% url 'managerooms:approvebooking' booking_list_array.0.booking_key %}?next={{ request.path }}">
+							        <i class="fa fa-square-o"></i> Approve</a>
+							       
+							{% endif %}
+							{% if booking_list_array.0.status != 3 %}
+							        <a class="btn btn-danger pull-right" 
+							        href="{% url 'core:cancel_booking' booking_list_array.0.booking_key %}?next={{ request.path }}">
+							        <i class="fa fa-square-o"></i> Cancel</a>
+							{% endif %}
+                        </ul>
+                     </div>
+                     </div>
+                     </div>
+			</div>
+				
+				<div class="row">
+				<div class="col-md-12">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Event</h4>
+
+							</div>
+							
+						</div>
+						<div class="row mb-20">
+							<div class="col-md-12">
+								<table class="table table-reservation">
+									<thead>
+										<tr style="border: none;">
+											<th>Room</th>
+											<th>Booking Date</th>
+											<th>Guests</th>
+											<th>Special Request</th>
+										</tr>
+									</thead>
+									<tbody>
+									{% for data in booking_list_array %}
+										<tr>
+											<td>{{ data.room_book.facility_name }}</td>
+											<td>{% for date in data.dates %}{{ date }}<br>{% endfor %}</td>
+											<td>{{ data.attendees }}</td>
+											<td>{{ data.special_request }}</td>
+										</tr>
+										{% endfor %}
+
+
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+					
+
+
+					</div>
+				</div>
+				
+				</div>
+				
+				</div>
+					<div class="row">
+				<div class="col-md-6">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Booker</h4>
+
+							</div>
+							
+						</div>
+						<div class="row mb-20">
+							<div class="col-md-12">
+								<table class="table table-reservation">
+									<thead>
+										<tr style="border: none;">
+											<th>Name</th>
+											<th>Address</th>
+											
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{ user_data.get_full_name }}</td>
+											<td>{{ user_data.address }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+							<div class="row mb-20">
+							<div class="col-md-12">
+								<table class="table table-reservation text-left">
+									<thead>
+										<tr style="border: none;">
+											<th>Contact</th>
+											<th>Email</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{ user_data.contact_no }}</td>
+											<td>{{ user_data.email }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+				
+						
+
+
+					</div>
+				</div>
+				
+				</div>
+				<div class="col-md-6">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Payment</h4>
+
+							</div>
+							
+						</div>
+						<div class="row mb-20">
+							<div class="col-md-12">
+								<table class="table table-reservation padding-top">
+									
+									<tbody>
+										<tr class="mb-20">
+											<td>Non-Refunding Report Deposit</td>
+											<td>Paid</td>
+											
+											
+										</tr>
+										<tr>
+											<td>Safety Deposit</td>
+											<td>Pending</td>
+											
+										</tr>
+										<tr>
+											<td>Total Pending</td>
+											<td>3 days remaining</td>
+											
+										</tr>
+
+
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+					
+						<div class="row mb-40">
+							<div class="col-md-12">
+								<button type="button" class="btn btn-default btn-block show-all">Send Reminder</button>
+							</div>
+
+						</div>
+
+
+
+					</div>
+				</div>
+				
+				</div>
+				
+				</div>
+				<div class="row">
+				<div class="col-md-12">
+				
+					<div class="panel panel-default">
+
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Message</h4>
+								<p>...
+								</p>
+							</div>
+							
+						</div>
+					
+					
+						
+						
+
+
+					</div>
+				</div>
+				
+				</div>
+		
+				</div>
+			
+				
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

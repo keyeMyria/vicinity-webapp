@@ -1,0 +1,127 @@
+{% load static i18n core_extras %}
+
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <div class="slider"></div>
+    
+    
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" class="signupuser" data-toggle="tab">Signup as a user</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" class="businessuser" data-toggle="tab">Signup as a business user</a></li>
+    
+  </ul>
+       <div class="tab-content">
+    <div class="tab-pane active userpanel" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="form-content-box register-user-update">
+                   <div class="details">
+			
+			<form method='POST' action="{% url 'accounts:register_auth' %}">
+				{% csrf_token %}
+				<input name="type_id" type="hidden" value="4" id="type_id">
+				{% for fields in form %}
+				<div class="form-group {% if fields.errors %}has-error{% endif %}
+				{% if 'Password' in fields.label and form.non_field_errors %}
+				has-error{% endif %}">
+				{{ fields }}
+				
+				{% if 'again' in fields.label and form.non_field_errors %}
+				<p class="error error-msg">{{ form.non_field_errors.0 }}</p>
+				{% endif %}
+				
+					{% if fields.errors %}<p class="error error-msg">{{ fields.errors.0|escape }}</p>{% endif %}
+				</div>
+					{% endfor %}
+					
+			<div class="">
+				<button type="submit" class="search-button" onclick="signupsubmit($(this));">Register</button>
+			</div>
+			</form> 
+		
+		</div>
+		
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+				</div>
+				<div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link" onclick="loginmodal();" href="javascript:void(0);">Have account?</a>
+			</div>
+			</div>
+			</div>
+                </div>
+      </div>
+      
+      <div class="tab-pane businessuserpanel" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+<div class="form-content-box register-buisness-update">
+                     <div class="details">
+		
+			
+			<form method='POST' action="{% url 'accounts:register_auth' %}">
+				{% csrf_token %}
+				<input name="type_id" type="hidden" value="3" id="type_id_business">
+				{% for fields in registerform %}
+				<div class="form-group {% if fields.errors %}has-error{% endif %}
+				{% if 'Password' in fields.label and registerform.non_field_errors %}
+				has-error{% endif %}">
+				{{ fields }}
+				
+				{% if 'again' in fields.label and registerform.non_field_errors %}
+				<p class="error error-msg">{{ registerform.non_field_errors.0 }}</p>
+				{% endif %}
+				
+					{% if fields.errors %}<p class="error error-msg">{{ fields.errors.0|escape }}</p>{% endif %}
+				</div>
+					{% endfor %}
+					<div class="form-group buisness_form">
+					<select required="required" name="orgtype" placeholder="Organisation Type" class="form-control input-text"  id="id_orgtype">
+					<option {% if orgtype == '' %}selected="selected"{% endif %}  value="">Select Organisation Type</option>
+					<option {% if orgtype == 'for_profit' %}selected="selected"{% endif %} value="for_profit">Profit</option>
+					<option {% if orgtype == 'non_profit' %}selected="selected"{% endif %} value="non_profit">Non Profit</option>
+					</select>
+					</div>
+					<div class="form-group buisness_form">
+					<input required="required" name="orgname" placeholder="Organisation Name" value="{{ orgname }}" class="form-control input-text"  id="id_orgname">
+					</div>
+					<div class="form-group buisness_form">
+					<input required="required" name="orgcount" placeholder="Organisation Count" value="{{ orgcount }}" class="form-control input-text"  id="id_orgcount">
+					</div>
+					
+			<div class="">
+				<button type="submit" class="search-button" onclick="signupsubmit($(this));">Register</button>
+			</div>
+			</form> 
+		
+		</div>
+		
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+				</div>
+				<div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link" onclick="loginmodal();" href="javascript:void(0);">Have account?</a>
+			</div>
+			</div>
+			</div>
+                </div>
+
+</div>
+      
+      
+      
+      </div>
+      <script>
+      
+      $('.signupuser').on('click',function(){
+    		$('.businessuserpanel').find('.form-group').each(function(){
+    			$(this).find('input,select').val('')
+    			$(this).find('span.help-block').hide()
+    		})
+    	})	 
+    		 $('.businessuser').on('click',function(){
+    		$('.userpanel').find('.form-group').each(function(){
+    			$(this).find('input,select').val('')
+    			$(this).find('span.help-block').hide()
+    		})
+    	}) 
+      </script>

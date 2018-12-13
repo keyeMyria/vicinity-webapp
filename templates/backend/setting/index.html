@@ -1,0 +1,209 @@
+{% extends 'admin/base_site.html' %}
+
+{% block title %}Settings | {{ site_title|default:_('Admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+		&nbsp; &rsaquo; &nbsp;<a class="breadcrumb-item active">Settings</a>
+{% endblock %}
+
+{% block content %}
+<style>
+.content-test-email{
+color:#16813d;
+}
+.divarea div{
+min-height:40px;}
+</style>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">						
+
+									<form action="{% url 'backend:setting_index' %}" method="post" enctype="multipart/form-data">
+												{% csrf_token %}
+									<div class="card mb-3">
+										
+										<div class="card-header">
+										<h3><i class="fa fa-file-text-o"></i> General settings</h3>								
+										</div>
+										<!-- end card-header -->	
+										
+										<div class="card-body">
+												
+												
+												<div class="row">
+													<div class="form-group col-md-6">
+													<label>SEO meta title</label>
+													<input type="text" class="form-control" name="meta_title" required value="{{ settings_page.meta_title }}">    
+													</div>
+
+													<div class="form-group col-md-6">
+													<label>SEO meta description</label>
+													<input type="text" class="form-control" name="meta_description" required value="{{ settings_page.meta_description }}">    
+													</div>
+												</div>
+												
+												<div class="row">
+													<div class="form-group col-md-6">
+													<label>SEO meta keywords</label>
+													<input type="text" class="form-control" name="meta_keywords" required value="{{ settings_page.meta_keywords }}">    
+													</div>
+												
+													<div class="form-group col-md-6">
+													<label>SEO meta author</label>
+													<input type="text" class="form-control" name="meta_author" required value="{{ settings_page.meta_author }}">    
+													</div>
+												</div>
+												
+												<div class="form-group divarea">
+												<label>Analytics code</label>
+												<textarea rows="4" class="form-control" name="analytics_code">{{ settings_page.analytics_code }}</textarea>
+												</div>
+												
+												<div class="form-row">					
+													<div class="form-group col-md-2">
+														<label>Facebook page</label>
+														<input type="text" class="form-control" required name="facebook_page" value="{{ settings_page.facebook_page }}">
+													</div>
+													
+													<div class="form-group col-md-2">
+														<label>Twitter page</label>
+														<input type="text" class="form-control" required name="twitter_page" value="{{ settings_page.twitter_page }}">
+													</div>
+													
+													<div class="form-group col-md-2">
+														<label>Instagram page</label>
+														<input type="text" class="form-control" required name="instagram_page" value="{{ settings_page.instagram_page }}">
+													</div>
+													
+													<div class="form-group col-md-2">
+														<label>Google page</label>
+														<input type="text" class="form-control" required name="google_page" value="{{ settings_page.google_page }}">
+													</div>
+													
+													
+												</div>
+												
+												<div class="form-row">
+													<div class="form-group col-md-6">
+														<label>Google Maps API KEY</label>
+														<input type="text" class="form-control" name="google_maps_api_key" value="{{ google_maps_api_key }}">
+													</div>
+													<div class="form-group col-md-6">
+														<label>Google Maps Front API KEY</label>
+														<input type="text" class="form-control" name="google_maps_api_key_front" value="{{ google_maps_api_key_front }}">
+													</div>
+												</div>
+												
+												<div class="form-group">
+												<label>Change site logo image</label><br />
+												<input type="file" name="site_logo" value="{{ settings_page.site_logo }}">
+												</div>
+											
+												<div class="form-row">
+												
+												
+													<div class="form-group col-md-3">
+														<label>Mail server host:</label>
+														<select name="mail_server" class="form-control">
+														<option value="smtp.gmail.com">Gmail</option>
+														</select>
+													</div>
+													
+													<div class="form-group col-md-4">
+														<label>Site email address (From: email)</label>
+														<input type="text" class="form-control" required name="email_user" value="{{ email_user }}">
+													</div>
+													
+													<div class="form-group col-md-4">
+														<label>Site password (From: email)</label>
+														<input type="password" class="form-control" required name="email_pwd" value="{{ email_pwd }}">
+													</div>
+													
+													
+												</div>
+												
+												<div class="form-row">
+												
+												
+													<div class="form-group col-md-3">
+													
+														<label>Debug mode:</label><br>
+														<label class="btn-onoff">
+												<input type="checkbox" name="debug_mode" {% if DEBUG %}checked="checked"{% endif %} data-onoff="toggle"><span></span>	
+											    </label>
+													
+													</div>
+													
+												</div>
+												
+												<div class="form-group">
+												<button type="button" class="btn btn-primary changesetting">Change settings</button>
+												</div>
+																
+										</div>	
+										<!-- end card-body -->								
+											
+									</div>
+									<!-- end card -->		
+									
+									
+									
+									</form>
+									
+									
+									
+									
+									<div class="card mb-3">
+										<div class="card-header">
+										<h3><i class="fa fa-envelope-o"></i> Test email settings</h3>	
+										Send a test email using your settings			
+										</div>
+										<!-- end card-header -->	
+										
+										<div class="card-body">
+												<form id="test-email" action="#" method="post">
+												<div class="form-group form-inline">						
+												<input type="email" required class="form-control" name="test_email" placeholder="Input email">
+												<button type="submit" class="btn btn-primary">Send test email</button>
+												<span class="content-test-email hidden">&nbsp;<i class="fa fa-check"></i> Email sent</span>
+												</div>			
+												</form>		
+										</div>	
+										<!-- end card-body -->								
+									</div>
+									<!-- end card -->	
+
+									
+								</div>
+<script>
+
+$(".changesetting").on('click',function(event) {
+	var self = $(this)
+$.ajax({
+        type: 'POST',
+        url: '/admin/settings',
+        data: self.closest('form').serialize(),
+        datatype: "json",
+        success: function(data){      	
+        }
+    });
+	window.location.reload()
+});
+
+$("#test-email").submit(function(event) {
+	event.preventDefault();
+$.ajax({
+        type: 'GET',
+        url: '/admin/test_email/',
+        data: {
+            "test_email": $('.test_email').val(),
+        },
+        datatype: "json",
+        success: function(data){
+        	$('.content-test-email').removeClass('hidden');
+        	      	
+        }
+    });
+});
+
+</script>
+{% endblock %}

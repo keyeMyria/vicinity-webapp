@@ -1,0 +1,29 @@
+{% extends 'frontend/base.html' %}
+
+{% block breadcrumb-wrapper %}{% endblock %}
+{% load static %}
+{% block content %}
+<div class="">
+<div class="container" >
+  <div class="row">
+  <div class="col-md-8 col-md-offset-3  ">
+<div class="contact-view">
+<form class="form-horizontal" action="" method="post">
+{% csrf_token %}
+{% include 'frontend/core/includes/form-template.html'%}
+<div class="form-group">
+  <div class="col-sm-12 text-center">
+    <button type="submit" class="btn btn-success">submit</button>
+  </div>
+</div>
+
+
+</form>
+  </div>
+  </div>
+</div>
+  </div>
+</div>
+
+
+{% endblock %}

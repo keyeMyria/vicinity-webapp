@@ -1,0 +1,28 @@
+{% extends "frontend/base.html" %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+	    <section class="contact-3 contact-form-section content-area">
+
+<div class="container">
+  <div class="row">
+  <div class="col-md-offset-3 col-md-6 ">
+<div class="contact-form text-center thnx-section">
+    <h2> Thank you !!</h2>
+
+    <p>{{message}}</p>
+    
+
+	<a href="{% url 'core:home' %}" class="btn button-md button-theme">Home</a>
+
+<br>
+    
+
+   </div>
+   </div>
+   </div>
+   </div>
+   </section>
+
+{% endblock %}

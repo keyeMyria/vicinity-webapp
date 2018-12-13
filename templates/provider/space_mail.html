@@ -1,0 +1,149 @@
+{% autoescape off %}
+{% load i18n static %}
+{% endautoescape %}
+
+{% block html %}
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+<style type="text/css">
+	body
+	{
+		margin: 0;
+		padding: 0;
+		min-width: 100%;
+		background-color: #f3f3f3;
+		font-family: 'Helvetica Neue', Roboto, sans-serif;
+		color:#666666;
+	}
+	table 
+	{
+		border-spacing: 0;
+		font-family: sans-serif;
+		color: #333333;
+	}
+	td 
+	{
+		padding: 0;
+	}
+	img 
+	{
+		border: 0;
+	}
+	.wrapper 
+	{
+		width: 100%;
+		table-layout: fixed;
+		-webkit-text-size-adjust: 100%;
+		-ms-text-size-adjust: 100%;
+		background: #f5f5f5;
+	}
+	.webkit 
+	{
+		max-width: 600px;
+		padding: 30px 10px;
+	}
+	.outer 
+	{
+		margin: 0 auto;
+		width: 100%;
+		max-width: 600px;
+		background: #fff;
+		border-top: 5px solid #0299E1;
+	}
+	.contents 
+	{
+		width: 100%;
+	}
+	a 
+	{
+		color: #ee6a56;
+		text-decoration: underline;
+	}
+	.h1
+	{
+		color: #1d2227 !important;
+		line-height: 28px;
+		font-size: 18px !important;
+		margin: 12px 10px 16px 10px;
+		font-weight: 400;
+	}
+	.h2 
+	{
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 12px;
+	}
+		/* One column layout */
+	.one-column .contents 
+	{
+    	text-align: center;
+    	padding: 30px 0;
+	}
+	.one-column p 
+	{
+		font-size: 12px;
+		margin-bottom: 10px;
+		color: rgb(79, 86, 93);
+		line-height: 20px;
+	}
+	.body-text 
+	{
+		padding: 15px 0 15px 40px;
+		border-top: 1px solid #f3f3f3;
+	}
+</style>
+</head>
+<body>
+	<center class="wrapper">
+		<div class="webkit">
+			<table class="outer" align="center">
+				
+				<tr>
+					<td class="one-column">
+						<table width="100%">
+							<tr>
+								<td class="inner contents">
+									<img src="http://{{ domain }}static/images/group.png" width="100px">
+									<p>Hi {{ provider.first_name }} {{ provider.last_name }},</p>	
+								</td>
+							</tr>
+							<tr style="border-bottom: 1px solid #DADFE2;">
+                                <td class="body-text " style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; " align="center">
+                                     <div>
+
+                          				<table class="departure-details" style=" position: relative" width="100%" cellspacing="0" cellpadding="0" border="0">
+                           					<tbody>
+                           						<tr>
+                              						<td>
+                              						<span style=" color: #6a6a6a; font-size: 14px;  white-space: pre;margin: 6px 0; font-weight: normal;" align="left">{{ message }}</span>
+                              						</p> 
+                              						</td>
+                             					</tr>
+                             					
+                             					
+                             				</tbody>
+                            			</table>
+                          			</div>
+                                </td>
+                              </tr>
+                              <tr>
+								<td class="inner contents">
+									<p>Regards,</p>
+									<p>Vicinity Team</p>
+								</td>
+							</tr>
+                              
+						</table>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+	</center>
+</body>
+</html>
+{% endblock %}

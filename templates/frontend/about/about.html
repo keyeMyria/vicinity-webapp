@@ -1,0 +1,44 @@
+{% extends "frontend/base.html" %}
+
+{% block title %}About &middot; {{ block.super }}{% endblock %}
+
+{% block breadcrumb-wrapper %}
+{% endblock %}
+
+{% block content %}
+<div class="content-area about-area text-center">
+<div class="container">
+<div class="main-title">
+            <h1>About {{ PROJECT_NAME }}</h1>
+        </div>
+<div class="about-text">    
+        
+                   
+  
+
+   <div class="content">
+      
+<p>
+{{ PROJECT_NAME }} is the largest booking engine and also one of the leading air aggregator. <br><br>
+{{ PROJECT_NAME }} is also the number one ranked mobile app under the travel category. <br><br>
+{{ PROJECT_NAME }}'s core value differentiator is delivery of the fastest and the most trusted user experiences, be it in terms of quickest search and booking, fastest payments, settlement and refund processes.</p>
+<br><br>
+
+<p class="font14 lh1-5"><a class="button-md button-theme" href="{% url 'contact:contact' %}">Click here to contact management</a></p>
+</div>
+
+
+      
+  
+  </div>
+  </div>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+{% endblock %}

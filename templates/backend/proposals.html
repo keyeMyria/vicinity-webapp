@@ -1,0 +1,62 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+{% block title %}Proposals | {{ site_title|default:_('Admin') }}{% endblock %}
+
+{% block content %}
+
+
+  <h3>Partner Requests from Users:</h3>
+  <ul>
+
+
+    <table class="table">
+
+      <thead>
+        <tr>
+        <th>Company Name</th>
+        <th>Email</th>
+        <th>HQ Address</th>
+        <th>Vision</th>
+        <th>Proposal name</th>
+        <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+            <!-- Displays a list of all the partner Proposals sent to Check-In.com and an Accept/Refuse Button -->
+          {% for proposal in proposals%}
+
+            <tr>
+              <td><a class="" href="#">{{proposal.CompanyName}}</a></td>
+              <td>{{proposal.CompanyEmail}}</td>
+              <td>{{proposal.HQAddress}}</td>
+              <td>{{proposal.Vision}}</td>
+              <td>{{ proposal.user.first_name }} {{ proposal.user.last_name }}</td>
+{% if proposal.state_id == 0 %}
+                  <td><a class="btn btn-success pull-right" href="{% url 'backend:acceptproposal' proposal.id  %}">Accept</a></td>
+
+                  <td><a class="btn btn-danger pull-right" href="{% url 'backend:declineproposal' proposal.id  %}">Refuse</a></td>
+{% else %}
+{% if proposal.state_id == 1 %}
+        <td><a class="btn btn-info text-white pull-right">Accepted</a></td>
+{% elif proposal.state_id != 1 %}
+        <td><a class="btn btn-warning pull-right">Rejected</a></td>
+{% endif %}
+{% endif %}
+
+
+            </tr>
+
+          {% endfor%}
+     </tbody>
+ </table>
+ </ul>
+
+
+
+
+
+
+
+
+{% endblock %}

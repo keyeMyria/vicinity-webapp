@@ -1,0 +1,21 @@
+{% extends "frontend/base.html" %}
+
+{% block title %}{{ flatpage.title }} &middot; {{ block.super }}{% endblock %}
+
+{% block breadcrumb-wrapper %}
+{% endblock %}
+
+{% block content-wrapper %}
+
+<div class="container">
+  <div class="flatpages">
+    
+    <h1>About</h1><br>
+
+   <div class="content">
+     {{ flatpage.content }}
+       </div>
+  
+  </div>
+  </div>
+{% endblock %}

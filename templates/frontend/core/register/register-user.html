@@ -1,0 +1,38 @@
+{% load static i18n core_extras %}
+  <div class="details">
+			
+			<form method='POST' action="{% url 'accounts:register_auth' %}">
+				{% csrf_token %}
+				<input name="type_id" type="hidden" value="4" id="type_id">
+				{% for fields in registerform %}
+				<div class="form-group {% if fields.errors %}has-error{% endif %}
+				{% if 'Password' in fields.label and registerform.non_field_errors %}
+				has-error{% endif %}">
+				{{ fields }}
+				
+				{% if 'again' in fields.label and registerform.non_field_errors %}
+				<p class="error error-msg">{{ registerform.non_field_errors.0 }}</p>
+				{% endif %}
+				
+					{% if fields.errors %}<p class="error error-msg">{{ fields.errors.0|escape }}</p>{% endif %}
+				</div>
+					{% endfor %}
+					
+			<div class="">
+				<button type="submit" class="search-button" onclick="signupsubmit($(this));">Register</button>
+			</div>
+			</form> 
+		
+		</div>
+		
+			<div class="footer">
+		    <div class="button-row form-button clearfix">
+		    <div class="col-md-6 col-sm-6">
+				<a class="login-link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+				</div>
+				<div class="col-md-6 col-sm-6 text-right">
+				<a class="login-link login-modal" onclick="loginmodal();" href="javascript:void(0);">Have account?</a>
+			</div>
+			</div>
+			</div>
+			

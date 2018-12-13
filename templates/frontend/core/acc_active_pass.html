@@ -1,0 +1,59 @@
+{% extends "frontend/base.html" %}
+{% load i18n static %}
+
+{% block bodyclass %}gray-bg{% endblock %}
+
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block loginview %}
+{% endblock %}
+{% block content %}
+    <div class="content-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Form content box start -->
+                <div class="form-content-box verify-content">
+                    <!-- details -->
+                    <div class="details">
+
+                <h1 class="logo-name text-center">
+				<img src="{% static 'images/' %}{{ PROJECT_ICON }}">
+				</h1>
+           
+          <div class="bg-white p-md">
+          {% if validlink %}
+          
+               <p> Please enter the 4-digit code below send on your email to make sure your account is verified.</p>
+           
+            <form class="m-t" action="{% url 'accounts:activate' uidb64=uidb64 token=token %}" method="post" id="login-form">{% csrf_token %}
+               
+            <div class="form-group"> <input name="verify_input" class="form-control" required id="email_verify"
+				placeholder="Verfication code" type="text"></div>
+               
+                <button type="submit" class="btn button-md button-theme text-center">Activate account</button>
+            
+
+              
+               
+            </form>
+ {% else %}
+
+<h3>{% trans "The activation link is invalid, possibly because it has already been used." %}</h3>
+
+{% endif %}
+        
+    </div>
+</div>
+</div>  </div>
+</div>
+</div>  </div>
+{% endblock %}
+{% block loginview2 %}
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends 'frontend/base.html' %}
+{% load static i18n core_extras %}
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places"></script>
+<div class="banner">
+    <div id="carousel-example-generic" class="carousel slide" >
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" >
+            <div class="item banner-max-height active">
+                <img src="/static/images/banner/banner-slider-1.jpg" alt="">
+                
+                <div class="carousel-caption banner-slider-inner">
+                <h2>What is your plan?</h2>
+                <div class="clearfix"></div>
+                    <div class="banner-content banner-style">
+                    
+                 
+                         
+        <div class="search-area-inner">
+            <div class="search-contents ">
+                <form class="" method="GET" action="{% url 'frontend:search_filter' %}">
+                  
+                    <div class="row col-lg-12">
+                    <div class="col-lg-10 col-md-10 padding-zr">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <input type="text" required="required" value="{{ location|default:"" }}" name="location" placeholder="Destination, landmark, address, zipcode" 
+								class="form-control search-fields location-autocomplete" id="locationautocomplete">
+								<i class="fa fa-map-marker form-control-feed"> </i>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <div class="form-group">
+                                <input type="text" name="start_date" placeholder="Start Date" class="form-control search-fields start_date">
+                                <i class="fa fa-calendar form-control-feed"> </i>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <div class="form-group">
+                                 
+                                  <input type="text" name="attendees" placeholder="No. of attendees"  class="form-control search-fields attendees-dialog">
+                                  <i class="fa fa-users form-control-feed"> </i>
+                            </div>
+                            <div class="popup-overlay">
+									<div class="popup-content col-md-12">&nbsp;
+									    <a class="closepopup pull-right"><i class="fa fa-close"></i></a> 
+									   <div class="col-md-12">
+                        </div>
+                        <div class="col-md-12 padding-zr">
+                        <div class="range-slider">  
+                       <div id="advance_slide2">
+                       </div>
+                         <span class="minValue" style="margin: 8px -30px;">0</span>
+                         <span class="maxValue">5000</span>
+                       </div>
+                       </div>   
+									</div>
+									</div>
+                        </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group">
+                                <button type="submit" class="search-button">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+
+    </div>
+<div class="recently-properties chevron-icon space-section">
+    <div class="container">
+        <!-- Main title -->
+        <div class="main-title">
+            <h1><span>
+FEATURED 
+</span>  PLACES</h1>
+        </div>
+        <div class="row">
+            <div class="carousel our-partners slide">
+                
+                <div class="">
+                {% for event in EVENT_LIST %}
+                {% if forloop.counter0 < 12 %}
+                    <div class="item">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="property-2">
+                                <div class="property-img">
+                                    <img style="height: 198px;" src="{{ event.0|gettypepic }}" alt="{{ event.1 }}" class="img-responsive">
+                                    <div class="property-overlay">
+                                        <a href="/search?location=United+States&plantype={{ event.1 }}" class="overlay-link">
+                                            <i class="fa fa-link"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h4 class="title">
+                                     <a href="/search?location=United+States&plantype={{ event.1 }}">{{ event.1 }}</a>
+                                    </h4>
+                                   
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+				
+			{% endfor %}
+                    
+                    <div class="clearfix"></div>
+                    <div class="text-center">
+                    <a href="{% url 'frontend:viewactivities' %}" class="btn button-md button-theme">See All Activities</a>
+                    </div>
+                  
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="mb-60 mt-60 our-service mt-80">
+    <div class="container">
+        <!-- Main title -->
+        <div class="main-title">
+            <h1><span>How it</span>  works</h1>
+        </div>
+
+        <div class="row mgn-btm wow">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInLeft delay-04s">
+                <div class="content">
+                    <i class="flaticon-apartment"></i>
+                    <p>Browse homes, lofts, galleries, and more</P>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInLeft delay-04s">
+                <div class="content">
+                    <i class="flaticon-internet"></i>
+                    <p>Compare prices and connect with hosts</P>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 wow fadeInRight delay-04s">
+                <div class="content">
+                    <i class="flaticon-vehicle"></i>
+                    <p>Book in just a few clicks</P>
+                </div>
+            </div>
+            
+        </div>
+      
+    </div>
+</div>
+ 
+<!-- Modal -->
+
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+
+  var getSlider1 = $("#advance_slide2");
+
+  getSlider1.slider({
+      value: 0,
+      max: 1000,
+      animate:"slow",
+      orientation: "horizontal",
+    slide:function(event, ui){
+    	$('.attendees-dialog').val(ui.value)
+      $("#attendees").val(ui.value);
+    }
+  });
+
+});
+	
+	
+	function initialize() {
+		  var input = document.getElementById('locationautocomplete');
+		  var autocomplete = new google.maps.places.Autocomplete(input);
+		  autocomplete.setComponentRestrictions(
+		            {'country': ['us']});
+
+		}
+
+		 $(window).on("load", function() {
+			 initialize();
+ 	    	
+ 	
+ 	    	
+ 	    	
+ 	});
+
+</script>
+    {% endblock %}

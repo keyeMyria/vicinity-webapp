@@ -1,0 +1,1665 @@
+{% extends 'frontend/base.html' %}
+{% load static core_extras %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY_FRONT }}&libraries=places&size=600x300"></script>
+
+<!-- Map content start -->
+<div class="map-content container-fluid">
+   
+  
+  <form class="search-form" method="GET" action="{% url 'frontend:search_filter' %}">
+<div class="clearfix">
+                             <div class="col-lg-3 col-md-3 padding-zr">
+                        <div class="form-group">
+                        <i class="fa fa-map-marker form-control-feed"> </i>
+                            <input id="locationautocomplete" class="form-control search-fields" required value="{{ location|default:'' }}" name="location" placeholder="destination, landmark, address, zipcode">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 padding-zr">
+                        <div class="form-group">
+                          <input type="text" id="search_start_date"  name="start_date" value="{{ start_date|date:'d/m/Y'|default:'' }}" placeholder="Start Date" class="form-control search-fields">
+                    <i class="fa fa-calendar form-control-feed"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 padding-zr">
+                        <div class="form-group">
+                             <input type="text" id="search_end_date" name="end_date" value="{{ end_date|date:'d/m/Y'|default:'' }}" placeholder="End Date" class="form-control search-fields">
+                            <i class="fa fa-calendar form-control-feed"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 serachattendees padding-zr">
+                        <div class="attendees-box">                           
+                            <div class="form-group">
+                                 
+                                  <input id="maxattendees" type="text" name="attendees" placeholder="Attendees" value="{{ attendees|default:'0' }}" class="form-control search-fields attendees-dialog">
+                                  <i class="fa fa-users form-control-feed"> </i>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="popup-overlay">
+									<div class="popup-content col-md-12">&nbsp;
+									    <a class="closepopup pull-right"><i class="fa fa-close"></i></a> 
+									   <div class="col-md-12">
+                          
+                        </div>
+                        <div class="col-md-12">
+                        <div class="range-slider">
+                         <div id="advance_slide1"></div>  
+                         <span class="minValue">0</span>
+                         <span class="maxValue">1000</span>
+                       </div>
+                       </div>   
+									</div>
+									</div>
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="col-lg-2 col-md-2  padding-zr">
+                        <div class="range-slider costsearch">
+                        <div class="form-group cost-dialog">
+                            <label><i class="fa fa-usd form-control-feed"></i>&nbsp;&nbsp;Cost
+                             <span style="float:right;">)</span>  
+                            <span class="max-value">{{ maxValue|default:'0' }} USD</span>
+                            <span style="float:right;">&nbsp;-&nbsp;</span>    
+                            <span class="min-value">{{ minValue|default:'0' }} USD</span>
+                             <span style="float:right;">(</span>   
+                            </label>
+                            </div>
+                                                 <div class="popup-overlay">
+									<div class="popup-content col-md-12">&nbsp;
+									    <a class="closepopup pull-right"><i class="fa fa-close"></i></a> 
+									   <div class="col-md-12">
+                          
+                        </div>
+                        <div class="col-md-12">
+                        <div class="range-slider">
+                         <div id="advance_slide">
+                         </div>  
+                         <span class="minValue">0</span>
+                         <span class="maxValue">5000</span>
+                       </div>
+                       </div>  
+									</div>
+									</div> 
+                            
+                        </div>
+                    </div>
+                                   <div class="col-md-1 col-sm-12 col-xs-12 pull-right padding-zr">
+                                   <a  class="show-more-options hide-overflow pull-right more-dialog">
+                <i class="fa fa-plus-circle"></i> More
+            </a>
+                                 
+                                  </div>
+                                  
+                                  
+                                  
+                                  </div>
+            </form>
+       <div class="map-view-section clearfix" style="display:none;">
+        <ul class="list-inline clearfix">
+        
+          <li class="pull-right"><a href="#" class="btn button-md button-theme map-view hidden pull-right"> <i class="fa fa-map-marker"></i> Show Map</a> </li>
+          <li class="pull-right"><a href="#" class="btn button-md button-theme button-border l-view"> <i class="fa fa-map-marker"></i> Hide Map</a> </li>
+        </ul>
+       </div>
+   
+   
+   </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="row map-sidebar">
+            <div id="map" class="leaflet-container leaflet-fade-anim"></div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 map-content-sidebar">
+        <div class="properties-map-search">
+            <div class="properties-map-search-content">
+                <div class="row">
+                
+                
+            
+             <input name="sorttype" id="sorttype" type="hidden" value="{{ sorttype|default:'' }}">
+           <input name="plantype" id="plantype" type="hidden" value="{{ plantype|default:'' }}">
+           <input name="amenities" id="amenities" type="hidden" value="{{ amenities|default:'' }}">
+           <input name="getrating" id="getrating" type="hidden" value="{{ getrating|default:'' }}">
+           <input name="lat" id="lat" type="hidden" value="{{ lat|default:'' }}">
+           <input name="long" id="long" type="hidden" value="{{ long|default:'' }}">
+           <input name="zoom" id="getzoom" type="hidden" value="{{ zoom|default:'' }}">
+           <input name="page" id="page" type="hidden" value="{{ page|default:'1' }}">
+           
+           <input name="ne_lat" id="ne_lat" type="hidden" value="{{ ne_lat|default:'' }}">
+           <input name="sw_lng" id="sw_lng" type="hidden" value="{{ sw_lng|default:'' }}">
+           <input name="sw_lat" id="sw_lat" type="hidden" value="{{ sw_lat|default:'' }}">
+           <input name="ne_lng" id="ne_lng" type="hidden" value="{{ ne_lng|default:'' }}">
+           
+            <input type="hidden" id="minValue" value="{{ minValue|default:'' }}" name="minValue" class="form-control">
+            <input type="hidden" id="maxValue" value="{{ maxValue|default:'' }}" name="maxValue" class="form-control">
+     
+               
+                    
+                    
+                    
+                    
+              
+                </div>
+
+                <div id="options-content" class="hidden">
+                
+                  <div class="overflow-scroll" style="background: #fff;">
+                                      
+                         <div style="width:100%;" class="dropdown">
+						
+  <label class="margin-t-10">Event Type</label>
+		  <hr/>
+		      <div class="row" id="#eventtypelist">
+		        {% for event in EVENT_LIST %}
+		          <div class="col-md-4"> 
+		          <input id="eventtype_{{ forloop.counter }}" class="hidden" {% if event.1 == plantype %}checked="checked"{% endif %} type="checkbox" value="{{ event.1 }}" />
+		            <label class="remember-label eventinput get-result-page" for="eventtype_{{ forloop.counter }}">
+		              
+		              {{ event.1 }}
+		            </label>
+		            </div>
+		        {% endfor %}
+		        
+</div>
+                        </div>
+                        
+                        <div class="col-lg-12 col-md-12">
+                          <div style="width:100%;" class="dropdown">
+                           <hr/>
+  <label class="margin-t-10">Amenity Type </label>
+		  <hr/>
+		 <div class="row">
+		     {% for amenity in AMENITY_LIST %}
+		           <div class="col-md-4">   <input id="amenitytype_{{ forloop.counter }}" type="checkbox" class="hidden" value="{{ amenity.1 }}" />
+		             <label class="remember-label amenityinput get-result-page" for="amenitytype_{{ forloop.counter }}">
+		              {{ amenity.1 }}
+		            </label>
+		            </div>
+		            {% if forloop.counter|divisibleby:'3'  %}
+		            <div class="clearfix"></div>
+		            {% endif %}
+		        {% endfor %}
+		</div>
+         </div>
+                        </div>
+                    
+            
+<hr/>
+ <div class="row"><div class="col-md-12"> <label class="margin-t-10">Rating</label>
+		  <hr/>
+                     
+                        <ul class="filters filters--shape rating-set">
+			      
+				   {% for c in 0|filterrangerev:5 %}
+			        <li class="filter">
+			          <input id="starsinput_{{ forloop.counter }}" class=" hidden" type="checkbox" value="{{ c }}" />
+			           <label style="width:230px;" class="remember-label getrating get-result-page" for="starsinput_{{ forloop.counter }}">
+		             {% for len in 0|filterrangerev:c %}     
+			           <span class="fa fa-star checked"></span>
+			           {% endfor %}
+		            </label>
+			          
+				   </li>
+				   
+			               {% endfor %}
+				   
+			               
+			      </ul>
+                          
+                      
+                        </div>
+                    </div>
+                   </div>
+                    
+                    
+                    <div class="bg-gray-section text-right"  style="background: #fff;"> 
+                    
+                    <ul class="list-inline">
+                     <li> <a class="show-more-options moredialog btn button-sm border-button-theme show-overflow">  Close </a></li>
+                     <li> <button type="button" class="search-button clearfilter"> Clearfilter </button> </li>
+                    </ul>
+                                
+                   
+                    </div>
+                  
+            
+                 
+            </div>
+      
+
+        <div class="clearfix"></div>
+
+        <div class="title-area">
+            <h2 class="pull-left">Properties</h2>
+            <div class="pull-right btns-area">
+            <label>Sort By:</label>
+               <div style="display: inline-block;" class="form-group">
+                                <select class="selectpicker sort-type-value">
+                                    <option value="price_asc">Cost ascending order</option>
+                                    <option value="price_des">Cost descending order</option>
+                                    <option value="rating"> Rating </option>
+                                    <option value="availability">Availability</option>
+                                    <option value="capacity_asc"> Occupancy ascending order </option>
+                                    <option value="capacity_des"> Occupancy descending order </option>
+                                    
+                                         
+                                </select>
+                            </div>
+                <a href="#" class="change-view-btn list-view"><i class="fa fa-th-list"></i></a>
+                <a href="#" class="change-view-btn active-view-btn col-view"><i class="fa fa-th-large"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        {% if not url_contains and place_length  %}
+        <div class="fetching-properties">
+        <div class="get-result">
+        
+              
+      Showing spaces near {{ location }} and vicinity
+
+
+
+         <div class="product-view">
+            <div class="row update_serach_result">
+            
+   {% if facilities %}
+   {% for f in facilities %}
+					
+						<div class="col-md-6">
+						<div class="property">
+                  <div class="product-item">
+                     <div id="slideshow" class="pi-img-wrapper">
+                     {% if f|roompics %}
+                       <div class="property-img">
+                       <div class="carousel">
+           						<div
+           							class="carousel-control carousel-control-prev scroll-image-left">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           						<div>
+           							<div class="carousel-item" style="display: block;">
+           								
+           								<div id="picsCarousel_{{ f.pk }}" class="carousel slide" onclick='window.location.href="{% url 'frontend:roomview' f.id %}"'>
+           								<div class="carousel-inner product-item">
+           								{% for data in f|roompics %}
+			<div class="item {% if forloop.first %}active{% endif %}">
+			<img src="/media/{{ data.image_file }}" class="cld-responsive cld-hidpi img-responsive thumb-preview height-image lazyload" alt="vicinity">
+			</div>
+			{% endfor %}
+                                   		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel_{{ f.pk }}" data-slide="prev">
+                                     <span class="glyphicon glyphicon-chevron-left"></span>
+                                     <span class="sr-only">Previous</span>
+                                   </a>
+                                   <a class="right carousel-control" href="#picsCarousel_{{ f.pk }}" role="button" data-slide="next">
+                                     <span class="glyphicon glyphicon-chevron-right"></span>
+                                     <span class="sr-only">Next</span>
+                                   </a>
+           							</div>
+           						</div>
+           						<div
+           							class="carousel-control carousel-control-next scroll-image-right">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           					</div>
+                       
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ f|get_price }}/hr</span></div>
+                       
+                       
+                       </div>
+                        {% else %}
+                         <div class="property-img">
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ f|get_price }}/hr</span></div>
+                         <div class="property-tag button alt featured"></div><img src="/static/images/Detail0.jpg" class="img-responsive thumb-preview height-image" alt="...">
+                          
+                         </div>
+                        {% endif %}
+                       
+                     </div>
+                     
+                     <div class="property-content">
+                    <h3 class="title clearfix"><span class="pull-left"><a href="{% url 'frontend:roomview' f.id %}">{{ f.facility_name }}</a></span>  
+                     <span class="pull-right">
+						{% if request.user.is_authenticated %}
+									<a data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="{% if f|getwish:request.user %}Remove{% else %}Save{% endif %} space" onclick="getdetail('board','{{ f.pk }}')">
+										{% if f|getwish:request.user %}
+											<i class="fa fa-heart text-red"></i>&nbsp;Save
+										{% else %}
+											<i class="fa fa-heart-o"></i>&nbsp;Save
+										{% endif %}
+									</a>
+									{% else %}
+									<a class="show_login_auth" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Save space" onclick="signupmodal();" href="javascript:void(0);" >
+										
+											<i class="fa fa-heart-o"></i>&nbsp;Save
+										
+									</a>
+									<a class="hidden hidden_login_auth" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Save space" onclick="getdetail('board','{{ f.pk }}')">
+										
+											<i class="fa fa-heart-o"></i>&nbsp;Save
+										
+									</a>
+									{% endif %}
+					</span></h3>
+                     <h3 class="property-address">{{ f.location_id.street_address_1 }} {{ f.location_id.city }} {{ f.location_id.state }} {{ f.location_id.zipcode }}</h3>
+                    <div class="property-footer"> <span class="left"><i class="fa fa-users"></i> Occupancy - {{ f.capacity }}</span>
+                    
+                    
+                     <div class="row">
+                      <div class="p-bottom-section">
+                    
+                        <div class="col-md-6">
+                           <div class="rating">
+                        {% if f|getrating %}
+                        {% with f|getrating as endvalue %}
+                        {% for c in 0|filterrange:endvalue %}
+                           <label class="f-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% for c in endvalue|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endwith %}
+                           {% else %}
+                           {% for c in 1|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endif %}
+                        </div>
+                        </div>
+                        
+                         
+                      </div>
+                       
+                    </div>
+                    
+                    
+                     </div>
+                      <a href="{% url 'frontend:roomview' f.id %}" class="search-button btn-sm btn-block text-center add2cart">More Details</a>
+                  </div>
+                  </div>
+                  </div>
+               </div>
+                {% if forloop.counter|divisibleby:'2' %}
+               <div class="clearfix"></div>
+               {% endif %}
+               
+   {% endfor %}
+   {% if count > 13 %}
+   <div class="updating-results text-center col-md-12"><img src="{% static 'images/loading.gif' %}"></div>
+   {% endif %}
+   {% else %}
+   <div class="shop-tab col-md-12">
+               <h6>No result found</h6>
+            </div>
+   {% endif %}
+            </div>
+         </div>
+      </div>
+        
+        
+        
+        </div>
+       {% endif %}
+    </div>
+</div>
+</div>
+
+<div class="modal-wrapper modal-width-auto">
+	<div class="modal fade" id="messageModal" role="dialog"
+		aria-labelledby="messageModal">
+
+		<div class="modal-dialog" role="document">
+			<div class="modal-content pinside20">
+				<div class="modal-body message-update">
+					
+
+				</div>
+				<div class="modal-body">
+				<form class="" method="GET" action="{% url 'frontend:search_filter' %}">
+				 <div class="form-content-box form-edit-detail">
+				<div class="form-group">
+				<label>Location:</label>
+					 <input id="locationautocomplete_update" class="form-control input-text" required value="{{ location|default:'' }}" name="location" placeholder="Destination, landmark, address or zipcode">
+					 </div>
+					 <input type="hidden" name="start_date" placeholder="Start Date" class="form-control search-fields start_date">
+                                
+                                  <input type="hidden" name="attendees" placeholder="No. of attendees"  class="form-control search-fields attendees-dialog">
+   </div>                               <div class="modal-footer"><a href="{% url 'core:home' %}" class="button-sm button-theme pull-left">Home</a> <button type="submit" class="button-sm button-theme">Update</button></div>
+</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if not url_contains and place_length  %}
+<script>
+
+
+	
+  var markers = [];
+     var map;
+ 	var min = .9999998;
+	var max = 1.0000002;
+	var marker;
+	
+	function getBoundsZoomLevel(bounds, mapDim) {
+	    var WORLD_DIM = { height: 256, width: 256 };
+	    var ZOOM_MAX = 24;
+
+	    function latRad(lat) {
+	        var sin = Math.sin(lat * Math.PI / 180);
+	        var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+	        return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+	    }
+
+	    function zoom(mapPx, worldPx, fraction) {
+	        return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
+	    }
+
+	    var ne = bounds.getNorthEast();
+	    var sw = bounds.getSouthWest();
+
+	    var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+	    
+	    var lngDiff = ne.lng() - sw.lng();
+	    var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+	    
+	    var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+	    var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+
+	    return Math.min(latZoom, lngZoom, ZOOM_MAX);
+	}
+
+	
+	
+     function initMap() {
+       var latlng = {lat: {{ res_latitude }}, lng: {{ res_longitude }}};
+      var map = new google.maps.Map(
+          document.getElementById('map'), {zoom: 11, center: latlng,
+	            streetViewControl: false,
+	            mapTypeControl: false,
+	            zoomControlOptions: {
+	                position: google.maps.ControlPosition.LEFT_TOP
+	            },
+          gestureHandling: 'greedy'});
+      
+      
+      var infowindow = new google.maps.InfoWindow({});
+      google.maps.event.addListener(infowindow, 'domready', function() {
+      	  var iwOuter = $('.gm-style-iw');
+
+            var iwBackground = iwOuter.prev();            
+
+            iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+            iwBackground.children(':nth-child(4)').css({'top' : '-200px','display':'none','max-height':'275px'});
+
+            var iwCloseBtn = iwOuter.next();
+            iwOuter.css({'top' : '15px', 'width':'250px;'});
+
+            iwCloseBtn.css({'right':'40px', 'top':'15px','display' : 'none'});
+            $('.closebuttn').on('click',function(){
+          	  iwCloseBtn.trigger('click')  
+            })
+            iwCloseBtn.mouseout(function(){
+              $(this).css({opacity: '1'});
+            });
+      	});
+        var addressesArray = [];
+        
+
+        function createBoundsForMarkers(markers) {
+            var bounds = new google.maps.LatLngBounds();
+            $.each(markers, function() {
+                bounds.extend(this.getPosition());
+            });
+            return bounds;
+        }
+        var bounds = (markers.length > 0) ? createBoundsForMarkers(markers) : new google.maps.LatLngBounds();
+        
+    	bounds.extend(new google.maps.LatLng({{ res_latitude }}, {{ res_longitude }}))
+
+		var $mapDiv = $('#map');
+		
+		var mapDim = {
+		    height: $mapDiv.height(),
+		    width: $mapDiv.width()
+		}
+        
+        
+      map.setZoom((bounds) ? (getBoundsZoomLevel(bounds, mapDim) + 2) : 0)
+
+        
+
+        {% for f in map_facility %}
+        addressesArray.push({
+        	  "facility":{
+	          "address": "{{ f.location_id.street_address_1 }} {{ f.location_id.city|cut:" " }} {{ f.location_id.state|cut:" " }} {{ f.location_id.zipcode }}",
+	          "name":"{{ f.facility_name }}",
+	          "location_id":"{{ f.location_id.pk }}",
+	          "location_lat":"{{ f.latitude }}",
+	          "location_long":"{{ f.longitude }}",
+	          "price":"{{ f|get_price }}",
+	          "rating":"{{ f|getrating }}",
+	          "capacity":"{{ f.capacity }}",
+	        	  "id":"{{ f.pk }}",
+	        	  "imagesrc":{
+	        	  {% if f.pk|roompicsall %}
+	        	  {% for data in f.pk|roompicsall %}
+	        	  "{{ forloop.counter }}":"/media/{{ data.image_file.name }}",
+	        	  {% endfor %}
+                  {% else %}
+	        	  "1":"/static/images/Detail0.jpg",
+                  {% endif %}
+	        	  }
+	          }
+        });
+        {% endfor %}
+
+    	var icons = {
+				    hotel: {
+				      icon: {url:'{% static "/images/" %}{{ PROJECT_ICON }}',
+		      		    
+				    	  scaledSize: new google.maps.Size(17, 19),
+			                origin: new google.maps.Point(0, 0),
+			                anchor: new google.maps.Point(0, 0)}
+				    },
+				  }
+    	
+	
+	
+	
+        function geocodeAddress(addressesArray, geocoder, resultsMap) {
+        	$.each(addressesArray, function(i, field){
+        		var myLatLng = new google.maps.LatLng(addressesArray[i]['facility']['location_lat'], addressesArray[i]['facility']['location_long']);
+        		
+                  marker = new google.maps.Marker({
+				        icon: icons['hotel'].icon,
+                    map: resultsMap,
+                    position: myLatLng
+                  });
+                  bounds.extend(myLatLng)
+
+                	  markers.push(marker);  
+                  google.maps.event.addListener(marker, 'mouseover', function() {
+                	  var html = ''
+                	  var ratinghtml = '';
+                	  var imagehtml = '';
+                	  $.each(field.facility.imagesrc, function(i, fielddata){
+                		  var cls = ''
+                		  if(i==1){
+                			  cls = 'active'
+                		  }
+                		  imagehtml += '<div class="item '+ cls +'"><img src="'+ fielddata +'" class="cld-responsive cld-hidpi img-responsive thumb-preview height-image lazyload" alt="vicinity"></div>'
+                	  })
+                	  for(i=1;i<=5;i++){
+        		  
+        		  if(i<=field.facility.rating){
+        			  ratinghtml += `
+                          <label class="f-stars">
+                          <input name="rating" value="`+ i +`" title="0 stars" type="radio"> 0
+                          </label>`
+        		  }
+        		  else{
+        			  ratinghtml += `
+                          <label class="e-stars">
+                          <input name="rating" value="`+ i +`" title="0 stars" type="radio"> 0
+                          </label>`
+        		  }
+        	  }
+                	  html = `
+                		  
+                		  <div class="Listing-Thumbnail">
+                			<div class="carousel-wrapper">
+                			<a href="/room/view/`+ field.facility.id +`">
+                					<div class="carousel">
+                						<div
+                							class="carousel-control carousel-control-prev scroll-image-left">
+                							<i class="icon-image-arrows"></i>
+                						</div>
+                						<div>
+                							<div class="carousel-item" style="display: block;">
+                								
+                								<div id="picsCarousel" class="carousel slide">
+                								<div class="carousel-inner product-item">`+imagehtml+`\
+                                        		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel" data-slide="prev">\
+                                          <span class="glyphicon glyphicon-chevron-left"></span>\
+                                          <span class="sr-only">Previous</span>\
+                                        </a>\
+                                        <a class="right carousel-control" href="#picsCarousel" role="button" data-slide="next">\
+                                          <span class="glyphicon glyphicon-chevron-right"></span>\
+                                          <span class="sr-only">Next</span>\
+                                        </a>
+                							</div>
+                						</div>
+                						<div
+                							class="carousel-control carousel-control-next scroll-image-right">
+                							<i class="icon-image-arrows"></i>
+                						</div>
+                					</div>
+                					<div class="price-box-wrapper">
+                						<span style="font-weight: bold;">$`+ field.facility.price +`</span><span
+                							style="font-size: 10px;"> / hr</span>
+                					</div>
+                				</div></a>
+                				<div class="info-container container-fluid">
+                					<div class="row">
+                						<div class="col-xs-12">
+                							<h6 class="listing-title">`+ field.facility.name +`</h6>
+                						</div>
+                					</div>
+                					<div class="row info-row">
+                						<div class="col-xs-12">
+                							<div class="details-wrapper">
+                								<div class="attendee-wrapper">
+                									<i class="fa fa-users"></i>`+ field.facility.capacity +`
+                                					<div class="rating">`+ ratinghtml +`</div>
+                								</div>
+                							</div>
+                							
+                		  <a href="/room/view/`+ field.facility.id +`" style="margin-top: 14px;padding: 10px;" class="search-button btn-sm btn-block text-center add2cart">More Details</a>
+                		  
+                						</div>
+                					</div>
+                				</div>
+                				<a class="closebuttn" style="position: absolute;top: -8px;right: -8px;border: 1px solid #257D7D;padding: 0px 5px 2px 5px;background: #257D7D !important;color: white !important;font-size: 15px;font-weight: 600;border-radius: 5px;">x</a>
+                		</div>
+                	  `
+                	  infowindow.setContent(html)
+                	  infowindow.open(map, this);
+              	  
+                    
+
+                	  var iwOuter = $('.gm-style-iw');
+
+                      var iwBackground = iwOuter.prev();
+
+                      iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+                      iwBackground.children(':nth-child(4)').css({'top' : '-200px','display':'none','max-height':'275px'});
+
+                      var iwCloseBtn = iwOuter.next();
+                      iwOuter.css({'top' : '15px', 'width':'250px;'});
+
+                      iwCloseBtn.css({'right':'40px', 'top':'15px','display' : 'none'});
+                      $('.closebuttn').on('click',function(){
+                    	  iwCloseBtn.trigger('click')  
+                      })
+                      iwCloseBtn.mouseout(function(){
+                        $(this).css({opacity: '1'});
+                      });
+                    });
+
+            })
+          	map.fitBounds(bounds);
+            
+        }
+        
+        var listener = google.maps.event.addListener(map, "idle", function() { 
+        	
+        	var getSlider1 = $("#advance_slide1");
+			  getSlider1.slider({
+			      value: $("#maxattendees").val(),
+			      max: 1000,
+			      step:5,
+				    min:0,
+			    slide:function(event, ui){
+			      $("#maxattendees").val(ui.value);
+			      $("#maxattendees1").val(ui.value);
+			        getSlider1.find(".maxvalue").html(ui.value);
+			        var valuedata = getSlider1.find(".ui-slider-handle").css('left')
+			        getSlider1.find(".maxvalue").css('left', valuedata)
+			        
+			    },
+			    stop:function( event, ui ) {
+			    	$("#maxattendees").val(ui.value);
+			        getSlider1.find(".maxvalue").html(ui.value);
+			    	updatefilter(1);
+			    }
+			  });
+        	
+        	var getSlider = $("#advance_slide");
+
+			  getSlider.slider({
+			    range:true,
+			    min:0,
+			    max:5000,
+			    values:[$("#minValue").val(), $("#maxValue").val()],
+			    step:5,
+			      animate:"slow",
+			      orientation: "horizontal",
+			    slide:function(event, ui){
+			      $("#minValue").val(ui.values[0]);
+			      $("#maxValue").val(ui.values[1]);
+			      $("#minValue1").val(ui.values[0]);
+			      $("#maxValue1").val(ui.values[1]);
+			      $('.cost-dialog').find(".min-value").html(ui.values[0] + ' USD');
+			      $('.cost-dialog').find(".max-value").html(ui.values[1] + ' USD');
+			    },
+			    stop:function( event, ui ) {
+			    	$('.cost-dialog').find(".min-value").html(ui.values[0] + ' USD');
+				      $('.cost-dialog').find(".max-value").html(ui.values[1] + ' USD');
+			
+			    	updatefilter(1);
+			    }
+			  });
+			  
+        	  if (map.getZoom() > 21) {
+        		  {% if country %}
+        		  map.setZoom({{ zoom }});
+        		  {% else %}
+        		  map.setZoom((bounds) ? (getBoundsZoomLevel(bounds, mapDim) + 2) : 10)
+        		  {% endif %} 
+
+        		  google.maps.event.removeListener(listener); 
+
+            	  map.addListener('zoom_changed', function(e) {
+
+                    		updatefilter(1,true)
+
+                    		
+                	 });
+        	  }
+        	  else{
+        		  google.maps.event.removeListener(listener); 
+
+            	  map.addListener('zoom_changed', function(e) {
+
+                    		updatefilter(1,true)
+
+                    		
+                	 });
+        	  }
+
+        	  
+        	}); 
+        
+
+        
+        var geocoder = new google.maps.Geocoder();
+       	
+        function updatefilter(page,type){
+        	if (get_result_page_map($('#ne_lat').val(),$('#sw_lng').val(), $('#sw_lat').val(), $('#ne_lng').val(),page))
+        		{
+        	
+        		$.ajax({
+                    type: "GET",
+                    url: "search/filter",
+                    data: {
+                    	"plantype": $('#plantype').val(),
+                    	"amenities": $('#amenities').val(),
+                    	"start_date": $('#search_start_date').val(),
+                    	"end_date": $('#search_end_date').val(),
+                    	"attendees": $('#maxattendees').val(),
+                    	"maxValue": $('#maxValue').val(),
+                    	"minValue": $('#minValue').val(),
+                    	"location": $('#locationautocomplete').val(),
+                    	"sorttype": $('#sorttype').val(),
+                    	"view":$('#mapview').val(),
+                    	"getrating":$('#getrating').val(),
+                    	"lat":$('#lat').val(),
+                    	"long":$('#long').val(),
+                    	"radius":1000,
+                    	"ne_lat":$('#ne_lat').val(),
+                    	"sw_lng":$('#sw_lng').val(),
+                    	"sw_lat":$('#sw_lat').val(),
+                    	"ne_lng":$('#ne_lng').val(),
+                    	"marker":true,
+                    	
+                    }
+                }).done(function(response) {
+                	 for (var i = 0; i < markers.length; i++ ) {
+                		 if(type != true){
+                      	    markers[i].setMap(null);
+                      		 }
+                 	  }
+                	 
+ 
+
+                	   if(response.length > 0){
+                	$.each(response, function(i, field){
+                		var myLatLng = new google.maps.LatLng(response[i]['facility']['location_lat'], response[i]['facility']['location_long']);
+                		
+                          if(map.getBounds().contains(myLatLng)){
+                        	  marker = new google.maps.Marker({
+          				        icon: icons['hotel'].icon,
+                              map: map,
+                              position: myLatLng
+                            });
+                        	  marker.setVisible(false);
+                        	  	markers.push(marker);
+                          }                          
+                        	   
+                          google.maps.event.addListener(marker, 'mouseover', function() {
+                        	  var html = ''
+                        	  var ratinghtml = '';
+
+                        	  var imagehtml = '';
+                        		  for(j=1;j<=response['0']['facility']['imagesrc'].length;j++){
+                        		  var cls = ''
+                        		  if(j==1){
+                        			  cls = 'active'
+                        		  }
+                        		  imagehtml += '<div class="item '+ cls +'"><img src="'+ response['0']['facility']['imagesrc'][j-1][j] +'" class="cld-responsive cld-hidpi img-responsive thumb-preview height-image lazyload" alt="vicinity"></div>'
+                        	  }
+                        	  for(j=1;j<=5;j++){
+                		  
+                		  if(j<=field.facility.rating){
+                			  ratinghtml += `
+                                  <label class="f-stars">
+                                  <input name="rating" value="`+ j +`" title="0 stars" type="radio"> 0
+                                  </label>`
+                		  }
+                		  else{
+                			  ratinghtml += `
+                                  <label class="e-stars">
+                                  <input name="rating" value="`+ j +`" title="0 stars" type="radio"> 0
+                                  </label>`
+                		  }
+                	  }
+                        	  html = `
+                        		  
+                        		  <div class="Listing-Thumbnail">
+                        			<div class="carousel-wrapper">
+                        			<a href="/room/view/`+ field.facility.id +`">
+                        					<div class="carousel">
+                        						<div
+                        							class="carousel-control carousel-control-prev scroll-image-left">
+                        							<i class="icon-image-arrows"></i>
+                        						</div>
+                        						<div>
+                        							<div class="carousel-item" style="display: block;">
+                        								
+                        								<div id="picsCarousel" class="carousel slide">
+                        								<div class="carousel-inner product-item">`+imagehtml+`\
+                                                		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel" data-slide="prev">\
+                                                  <span class="glyphicon glyphicon-chevron-left"></span>\
+                                                  <span class="sr-only">Previous</span>\
+                                                </a>\
+                                                <a class="right carousel-control" href="#picsCarousel" role="button" data-slide="next">\
+                                                  <span class="glyphicon glyphicon-chevron-right"></span>\
+                                                  <span class="sr-only">Next</span>\
+                                                </a>
+                        							</div>
+                        						</div>
+                        						<div
+                        							class="carousel-control carousel-control-next scroll-image-right">
+                        							<i class="icon-image-arrows"></i>
+                        						</div>
+                        					</div>
+                        					<div class="price-box-wrapper">
+                        						<span style="font-weight: bold;">$`+ field.facility.price +`</span><span
+                        							style="font-size: 10px;"> / hr</span>
+                        					</div>
+                        				</div></a>
+                        				<div class="info-container container-fluid">
+                        					<div class="row">
+                        						<div class="col-xs-12">
+                        							<h6 class="listing-title">`+ field.facility.name +`</h6>
+                        						</div>
+                        					</div>
+                        					<div class="row info-row">
+                        						<div class="col-xs-12">
+                        							<div class="details-wrapper">
+                        								<div class="attendee-wrapper">
+                        									<i class="fa fa-users"></i>`+ field.facility.capacity +`
+
+                                        					<div class="rating">`+ ratinghtml +`</div>
+                        								</div>
+                        							</div>
+                        							
+                        		  <a href="/room/view/`+ field.facility.id +`" style="margin-top: 14px;padding: 10px;" class="search-button btn-sm btn-block text-center add2cart">More Details</a>
+                        		  
+                        						</div>
+                        					</div>
+                        				</div>
+                        				<a  class="closebuttn" style="position: absolute;top: -8px;right: -8px;border: 1px solid #257D7D;padding: 0px 5px 2px 5px;background: #257D7D !important;color: white !important;font-size: 15px;font-weight: 600;border-radius: 5px;">x</a>
+                        		</div>
+                        	  `
+                        	  infowindow.setContent(html)
+                        	  infowindow.open(map, this);
+                            
+
+                        	  var iwOuter = $('.gm-style-iw');
+
+                              var iwBackground = iwOuter.prev();
+
+                              iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+                              iwBackground.children(':nth-child(4)').css({'top' : '-200px','display':'none','max-height':'275px'});
+
+                              var iwCloseBtn = iwOuter.next();
+                              iwOuter.css({'top' : '15px', 'width':'250px;'});
+
+                              iwCloseBtn.css({'right':'40px', 'top':'15px','display' : 'none'});
+                              
+                              $('.closebuttn').on('click',function(){
+                            	  iwCloseBtn.trigger('click')  
+                              })
+
+                              iwCloseBtn.mouseout(function(){
+                                $(this).css({opacity: '1'});
+                              });
+                            });
+                          
+
+                    })
+        }
+                    for (i = 0; i < markers.length; i++)
+             {   
+                    	 if(map.getBounds().contains(markers[i].getPosition())){
+
+                             markers[i].setVisible(true);
+                         } else {
+                             markers[i].setMap(null);    
+                         }
+                 }
+
+                });
+        	
+        	 
+        		}
+        }
+        
+
+        
+    	var bounds_new = map.getBounds();            
+
+            map.addListener('dragend', function(e) {
+          		 updatedLat = map.getCenter().lat();
+          		 updatedLng = map.getCenter().lng();
+           		$('#lat').val(updatedLat);
+              		$('#long').val(updatedLng);
+              		$('#getzoom').val(map.getZoom());
+              		var bounds_new = map.getBounds();
+
+               		$('#ne_lat').val(map.getBounds().getNorthEast().lat())
+               		$('#sw_lng').val(map.getBounds().getSouthWest().lng())
+               		$('#sw_lat').val(map.getBounds().getSouthWest().lat())
+               		$('#ne_lng').val(map.getBounds().getNorthEast().lng())
+              		updatefilter(1,true)
+              		
+              		
+          	 });
+
+            
+            
+       	 map.addListener('zoom_changed', function(e) {
+       		 updatedLat = map.getCenter().lat();
+       		 updatedLng = map.getCenter().lng();
+        		$('#lat').val(updatedLat);
+           		$('#long').val(updatedLng);
+           		$('#getzoom').val(map.getZoom());
+
+           		var bounds_new = map.getBounds();
+
+           		$('#ne_lat').val(map.getBounds().getNorthEast().lat())
+           		$('#sw_lng').val(map.getBounds().getSouthWest().lng())
+           		$('#sw_lat').val(map.getBounds().getSouthWest().lat())
+           		$('#ne_lng').val(map.getBounds().getNorthEast().lng())
+
+          	  var iwOuter = $('.gm-style-iw');
+
+                var iwBackground = iwOuter.prev();
+
+                iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+                iwBackground.children(':nth-child(4)').css({'top' : '-200px','display':'none','max-height':'275px'});
+                iwBackground.css({'top' : '0px', 'width':'250px;'});
+                iwOuter.css({'top' : '18px'});
+
+                var iwCloseBtn = iwOuter.next();
+
+                iwCloseBtn.css({'right':'40px', 'top':'18px','display' : 'none'});
+
+                $('.closebuttn').on('click',function(){
+              	  iwCloseBtn.trigger('click')  
+                })
+
+                iwCloseBtn.mouseout(function(){
+                  $(this).css({opacity: '1'});
+                });
+
+           		
+       	 });
+        
+        geocodeAddress(addressesArray, geocoder, map,infowindow);
+       
+        $('.clearfilter').unbind();
+        $('.clearfilter').on('click', function(){
+	    	
+	    	
+	    	$('#sorttype').attr('value','');
+	    	  $('#plantype').attr('value','');
+	    	  $('#amenities').attr('value','');
+	    	  $('#getrating').attr('value','');
+	    	  $('#lat').attr('value','');
+	    	  $('#long').attr('value','');
+        	  $('#page').attr('value','');
+        	$('#maxattendees').attr('value','0');
+          	$('#minValue').attr('value','');
+        	$('#maxValue').attr('value','');
+        	$('.maxValue').html('0');
+        	$('.max-value').html('0 USD');
+        	$('.min-value').html('0 USD');
+        	$('#eventtypelist').find('input').each(function(){
+        		$(this).prop('checked', false)
+        	})
+        	$('#eventtypelist').find('input').each(function(){
+        		$(this).prop('checked', false)
+        	})
+        	$('.rating-set').find('input').each(function(){
+        		$(this).prop('checked', false)
+        	})
+        	updatefilter(1);
+	    })
+        $('.eventinput').each(function(){
+    		$(this).on('click',function(){
+    			var self = $(this).parent().find('input')
+					var plantypearray = $('#plantype').val().split(',')
+					
+					if(jQuery.inArray(self.val().trim(), plantypearray) !== -1){
+						
+							if(self.prop('checked') == true){
+								plantypearray.remove(self.val().trim())
+								}
+						
+					}
+					else{
+						plantypearray.push(self.val().trim())
+					}
+				if($('#plantype').val() != ''){
+					$('#plantype').val(plantypearray.join(','))
+				}
+				else{
+					$('#plantype').val(self.val().trim())
+				}
+				updatefilter(1);
+			})
+		})
+		
+	    
+	    
+	$('.amenityinput').each(function(){
+			$(this).on('click',function(){
+				var self = $(this).parent().find('input')
+					var amenityarray = $('#amenities').val().split(',')
+					
+					if(jQuery.inArray(self.val().trim(), amenityarray) !== -1){
+						
+							if(self.prop('checked') == true){
+								amenityarray.remove(self.val().trim())
+								}
+						
+					}
+					else{
+						amenityarray.push(self.val().trim())
+					}
+				if($('#amenities').val() != ''){
+					$('#amenities').val(amenityarray.join(','))}
+				else{
+					$('#amenities').val(self.val().trim())
+				}
+				
+				updatefilter(1);
+			})
+		})
+        $('.getrating').each(function(){
+			$(this).on('click',function(){
+				var self = $(this).parent().find('input');
+				var getratingarray = $('#getrating').val().split(',')
+				
+				
+				if(jQuery.inArray(self.val().trim(), getratingarray) != '-1'){
+					
+						if(self.prop('checked') == true){
+							getratingarray.remove(self.val().trim())
+							}
+					
+				}
+				else{
+					getratingarray.push(self.val().trim())
+				}
+			if($('#getrating').val() != ''){
+				$('#getrating').val(getratingarray.join(','))
+			}
+			else{
+				$('#getrating').val(self.val().trim())
+			}
+			updatefilter(1);
+			})
+	    })
+       
+        
+
+        $('.selectpicker.sort-type-value').change(function(){
+			
+	    	var self= $(this)
+	    	$('#sorttype').val(self.val())
+	    	updatefilter(1);
+	    })
+        function get_result_page_map(ne_lat,sw_lng, sw_lat, ne_lng, page){
+            
+        $.ajax({
+                        type: "GET",
+                        url: "search/filter",
+                        data: {
+                        	"plantype": $('#plantype').val(),
+                        	"amenities": $('#amenities').val(),
+                        	"start_date": $('#search_start_date').val(),
+                        	"end_date": $('#search_end_date').val(),
+                        	"attendees": $('#maxattendees').val(),
+                        	"maxValue": $('#maxValue').val(),
+                        	"minValue": $('#minValue').val(),
+                        	"location": $('#locationautocomplete').val(),
+                        	"sorttype": $('#sorttype').val(),
+                        	"view":$('#mapview').val(),
+                        	"getrating":$('#getrating').val(),
+                        	"lat":$('#lat').val(),
+                        	"long":$('#long').val(),
+                        	"radius":1000,
+                        	"ne_lat":ne_lat,
+                        	"sw_lng":sw_lng,
+                        	"sw_lat":sw_lat,
+                        	"ne_lng":ne_lng,
+                        	"page":page,
+                        	"marker":false,
+                        	
+                        }
+                    }).done(function(response) {
+                        $('.get-result').html(response);
+                        if($(".map-content-sidebar").hasClass('col-lg-12')){ 
+                            $('.update_serach_result').children().each(function(){
+                           	 if($(this).hasClass('updating-results')){
+                           		 $(this).addClass('col-md-12')
+                           	 }
+                           	 else{
+                  			  $(this).removeClass('col-md-6').addClass('col-md-3');
+                           	 }
+                  		  })
+                           }
+                        
+                        
+            	  
+            	        /* var getSlider = $("#advance_slide");
+
+						  getSlider.slider({
+						    range:true,
+						    min:0,
+						    max:5000,
+						    values:[$("#minValue").val(), $("#maxValue").val()],
+						    step:5,
+						      animate:"slow",
+						      orientation: "horizontal",
+						    slide:function(event, ui){
+						      $("#minValue").val(ui.values[0]);
+						      $("#maxValue").val(ui.values[1]);
+						      $("#minValue1").val(ui.values[0]);
+						      $("#maxValue1").val(ui.values[1]);
+						      $(".min-value").html(ui.values[0] + ' USD');
+						      $(".max-value").html(ui.values[1] + ' USD');
+						    },
+						    stop:function( event, ui ) {
+						    	$(".min-value").html(ui.values[0] + ' USD');
+						    	$(".max-value").html(ui.values[1] + ' USD');
+						
+						    	updatefilter(1);
+						    }
+						  });
+
+						
+						
+						  var getSlider1 = $("#advance_slide1");
+						  getSlider1.slider({
+						      value: $("#maxattendees").val(),
+						      max: 1000,
+						      step:5,
+							    min:0,
+						    slide:function(event, ui){
+						      $("#maxattendees").val(ui.value);
+						      $("#maxattendees1").val(ui.value);
+						      $('.attendees-dialog').val(ui.value);
+						        getSlider1.find(".maxvalue").html(ui.value);
+						        var valuedata = getSlider1.find(".ui-slider-handle").css('left')
+						        getSlider1.find(".maxvalue").css('left', valuedata)
+						        
+						    },
+						    stop:function( event, ui ) {
+						    	$("#maxattendees").val(ui.value);
+							      $('.attendees-dialog').val(ui.value);
+						        getSlider1.find(".maxvalue").html(ui.value);
+						    	updatefilter(1);
+						    }
+						  });
+
+
+					        var valuedata = getSlider1.find(".ui-slider-handle").css('left')
+					        getSlider1.find(".maxvalue").css('left', valuedata)
+					        if ($("#maxattendees").val() !== ''){
+					        	getSlider1.find(".maxvalue").html($("#maxattendees").val())
+					        }
+					        else{
+					        getSlider1.find(".maxvalue").html('0')
+					        } */
+					          
+                    });
+        return true;  
+        
+        }
+        
+        $('.selectpicker').selectpicker('refresh')         
+        
+   	var input = document.getElementById('locationautocomplete');
+	  var autocomplete = new google.maps.places.Autocomplete(input);
+	  autocomplete.setComponentRestrictions(
+	            {'country': ['us']});
+	  autocomplete.addListener('place_changed', function() {
+		  input.closest('form').submit();
+	  })
+	  $("#search_start_date").datetimepicker({
+		     format: "dd/mm/yyyy",
+		     autoclose: true,
+		     todayBtn: true,
+		     startDate: new Date(),
+		     minuteStep: 60,
+		     autoclose: true,
+		     todayBtn: true,
+		     startView: 2,
+		     minView: 2,
+		     maxView: 1,
+		     minDate: 0,
+		 }).on('changeDate',function(){
+		 	var updateddate = $(this).data("datetimepicker").getDate()
+		 	var newDate = updateddate
+			     newDate.setDate(newDate.getDate()+1);
+		 	$(this).closest('form').find("#search_end_date").closest('.form-group').removeClass('hidden').find('span.help-block').remove()
+		 $(this).closest('form').find("#search_end_date").val('')
+		 $(this).closest('form').find("#search_end_date").datetimepicker('remove')
+			
+			
+			$(this).closest('form').find("#search_end_date").datetimepicker({
+				format: "dd/mm/yyyy",
+		     autoclose: true,
+		     todayBtn: true,
+		     startDate: newDate,
+		     minuteStep: 60,
+		     autoclose: true,
+		     todayBtn: true,
+		     startView: 2,
+		     minView: 2,
+		     maxView: 1,
+		     minDate: 0,
+			    setDate: newDate,
+		   })
+		   $(this).closest('form').find("#search_end_date").datetimepicker('startDate',newDate)
+		   $(this).closest('form').find("#search_end_date").datetimepicker('setDate',newDate)
+			$(this).closest('form').find("#search_end_date").datetimepicker('update');
+		 	updatefilter(1);
+		 	
+		 })
+		 var newDate2 = new Date()
+			     newDate2.setDate(newDate2.getDate()+1);
+		 $("#search_end_date").datetimepicker({
+		     format: "dd/mm/yyyy",
+		     autoclose: true,
+		     todayBtn: true,
+		     startDate: newDate2,
+		     minuteStep: 60,
+		     autoclose: true,
+		     todayBtn: true,
+		     startView: 2,
+		     minView: 2,
+		     maxView: 1,
+		     minDate: 0,
+		 }).on('changeDate',function(){
+			 	updatefilter(1);
+			 	
+			 })
+	  
+	  
+     }
+     
+     function get_result_page_next(ne_lat,sw_lng, sw_lat, ne_lng, page){
+     $.ajax({
+                     type: "GET",
+                     url: "search/filter",
+                     data: {
+                     	"plantype": $('#plantype').val(),
+                     	"amenities": $('#amenities').val(),
+                     	"start_date": $('#search_start_date').val(),
+                     	"end_date": $('#search_end_date').val(),
+                     	"attendees": $('#maxattendees').val(),
+                     	"maxValue": $('#maxValue').val(),
+                     	"minValue": $('#minValue').val(),
+                     	"location": $('#locationautocomplete').val(),
+                     	"sorttype": $('#sorttype').val(),
+                     	"view":$('#mapview').val(),
+                     	"getrating":$('#getrating').val(),
+                     	"lat":$('#lat').val(),
+                     	"long":$('#long').val(),
+                     	"radius":1000,
+                     	"ne_lat":ne_lat,
+                     	"sw_lng":sw_lng,
+                     	"sw_lat":sw_lat,
+                     	"ne_lng":ne_lng,
+                     	"page":page,
+                     	"marker":false,
+                     	"update":true,
+                     	
+                     }
+                 }).done(function(response) {
+                	 $('.updating-results').remove();
+                     $('.update_serach_result').append(response);
+                     if($('.list-view').hasClass('active-view-btn')){ 
+                         $('.update_serach_result').children().each(function(){
+                         	
+     		      				  $(this).removeClass('col-md-6').addClass('col-md-12');
+     		      				  $(this).find('#slideshow').addClass('col-md-6')
+     		      				  $(this).find('.property-content').addClass('col-md-6')
+                         	 
+                         		 
+                         	
+           			  })
+                         }
+                         if($('.col-view').hasClass('active-view-btn')){ 
+                         	
+                         	$('.update_serach_result').children().each(function(){
+                             	
+                         		if (!$(this).hasClass('clearfix') && !$(this).hasClass('updating-results')){
+                         		$(this).removeClass('col-md-12').addClass('col-md-6');
+
+                   			  $(this).find('#slideshow').removeClass('col-md-6')
+                   			  $(this).find('.property-content').removeClass('col-md-6')
+                   			  }
+                       		 
+                       	
+         			  })
+                         	
+                         }
+                    if($(".map-content-sidebar").hasClass('col-lg-12')){ 
+                     $('.update_serach_result').children().each(function(){
+                    	 if($(this).hasClass('updating-results')){
+                    		 $(this).addClass('col-md-12')
+                    	 }
+                    	 else{
+                    		 $(this).removeClass('col-md-6').addClass('col-md-3 col-sm-6 col-xs-12');
+                    	 }
+           		  })
+                    }
+                   
+                   
+                     
+                     $('#page').attr('value',parseInt($('#page').val()) + 1);
+                      $('.map-content-sidebar').scroll(function() {
+
+          	        	if($(document).innerHeight() + $('.map-content-sidebar').scrollTop() >= $('.get-result').innerHeight()+271){
+         				get_result_page_next($('#ne_lat').val(),$('#sw_lng').val(), $('#sw_lat').val(), $('#ne_lng').val(),(parseInt($('#page').val()) + 1))
+         	
+          	        	}
+          	        	});
+                 });
+     
+     }
+     
+     $(window).bind('beforeunload',function(){
+
+    	 $('#sorttype').attr('value','');
+   	  $('#plantype').attr('value','');
+   	  $('#amenities').attr('value','');
+   	  $('#getrating').attr('value','');
+   	  $('#lat').attr('value','');
+   	  $('#long').attr('value','');
+   	  $('#page').attr('value','');
+   	$('#maxattendees').attr('value','0');
+     	$('#minValue').attr('value','');
+   	$('#maxValue').attr('value','');
+   	$('.maxValue').html('0');
+   	$('.max-value').html('0 USD');
+   	$('.min-value').html('0 USD');
+   	$('#eventtypelist').find('input').each(function(){
+   		$(this).prop('checked', false)
+   	})
+   	$('#eventtypelist').find('input').each(function(){
+   		$(this).prop('checked', false)
+   	})
+   	$('.rating-set').find('input').each(function(){
+   		$(this).prop('checked', false)
+   	})
+
+    });
+
+	    $('#map').css('height', $(this).height() - 160);
+	    $('.map-content-sidebar').css('height', $(this).height() - 160);
+	    //$('.map-view-section').hide()
+	    
+	    if($(document).width()<768){
+	    $('.map-sidebar').hide()
+    	    $('.l-view').addClass('hidden')
+		    $('.map-view').removeClass('hidden')
+	    }
+	    else{
+	    	$('.map-view-section').hide()
+	    }
+	 
+	$('.hide-overflow').on('click',function(){
+		
+		
+		if($('.fetching-properties').hasClass('hidden')){
+			$('.title-area').removeClass('hidden')
+			$('.fetching-properties').removeClass('hidden')
+			$('#options-content').addClass('hidden')
+			$(this).html($(this).html().replace('Less','More'))
+			$(this).find('.fa-minus-circle').addClass('fa-plus-circle').removeClass('fa-minus-circle')
+			
+		}
+		else{
+			$('.title-area').addClass('hidden')
+			$('.fetching-properties').addClass('hidden')
+			$('#options-content').removeClass('hidden')
+			$(this).html($(this).html().replace('More','Less'))
+			$(this).find('.fa-plus-circle').addClass('fa-minus-circle').removeClass('fa-plus-circle')
+		}
+}) 
+$('.show-overflow').on('click',function(){
+	$('.hide-overflow').html($('.hide-overflow').html().replace('Less','More'))
+	$('.hide-overflow').find('.fa-minus-circle').addClass('fa-plus-circle').removeClass('fa-minus-circle')
+	$('.title-area').removeClass('hidden')
+	$('.fetching-properties').removeClass('hidden')
+	$('#options-content').addClass('hidden')
+})  
+		 
+		 
+		 
+	 
+
+	 
+	    
+     $(window).resize(function(){
+    	    $('#map').css('height', $(this).height() - 160);
+    	    $('.map-content-sidebar').css('height', $(this).height() - 160);
+    	    $('.map-sidebar').show()
+    	    $('.l-view').addClass('hidden')
+		    $('.map-view').removeClass('hidden')
+    	    if($(document).width()<768){
+    	    	$('.map-view-section').show()
+    	    	$('.map-sidebar').hide()
+    	    	
+    	    }
+    	    else{
+    	    	$('.map-view-section').hide()
+    	    	
+    	    }
+
+       	 
+    	    $('.map-content-sidebar').on('scroll',function() {
+
+    	    	if($(document).innerHeight() + $('.map-content-sidebar').scrollTop() >= $('.get-result').innerHeight()+271){
+				get_result_page_next($('#ne_lat').val(),$('#sw_lng').val(), $('#sw_lat').val(), $('#ne_lng').val(),(parseInt($('#page').val()) + 1))
+	
+	        	}
+	        	}); 
+     })
+ 	     	            
+     
+ 	        $('.map-content-sidebar').on('scroll',function() {
+
+ 	        	if($(document).innerHeight() + $('.map-content-sidebar').scrollTop() >= $('.get-result').innerHeight()+271){
+				get_result_page_next($('#ne_lat').val(),$('#sw_lng').val(), $('#sw_lat').val(), $('#ne_lng').val(),(parseInt($('#page').val()) + 1))
+	
+ 	        	}
+ 	        	});  
+ 	
+
+ 	
+	{% if not url_contains and place_length  %}
+        $(window).on("load", function() {
+    	    	initMap();    	    	
+    	});
+        {% endif %}
+
+
+ 
+ $(document).ready(function(){
+	 $(".list-view").click(function(){
+			  $('.update_serach_result').children().each(function(){
+				  $(this).removeClass('col-md-6').addClass('col-md-12');
+				  $(this).find('#slideshow').addClass('col-md-6')
+				  $(this).find('.property-content').addClass('col-md-6')
+			  })
+			  $(this).addClass('active-view-btn')
+			  $(".col-view").removeClass('active-view-btn')
+		  });
+	 $(".col-view").click(function(){
+		 $('.update_serach_result').children().each(function(){
+			 if (!$(this).hasClass('clearfix')){
+			  $(this).removeClass('col-md-12').addClass('col-md-6');
+
+			  $(this).find('#slideshow').removeClass('col-md-6')
+			  $(this).find('.property-content').removeClass('col-md-6')
+			 }
+		  })
+		 $(this).addClass('active-view-btn')
+		  $(".list-view").removeClass('active-view-btn')
+		  });
+	 
+	 
+	  $(".l-view").click(function(){
+	    $(".map-sidebar").hide()
+		    $('.map-view').removeClass('hidden')
+		    $('.l-view').addClass('hidden')
+		  $(".map-content-sidebar").removeClass('col-md-7').removeClass('col-lg-6').addClass('col-lg-12');
+		  $(".map-content-sidebar").show()
+		  $('.update_serach_result').children().each(function(){
+			  $(this).removeClass('col-md-6').addClass('col-md-3 col-sm-6 col-xs-12');
+		  })
+		  $('.col-view').trigger('click');
+		  $('.change-view-btn').hide()
+	  });
+		  
+	  $(".map-view").click(function(){
+		    $(".map-content-sidebar").addClass('col-lg-6').addClass('col-md-7').removeClass('col-lg-12');
+
+		    $('.l-view').removeClass('hidden')
+		    $('.map-view').addClass('hidden')
+		    $(".map-sidebar").show();
+		    $('.update_serach_result').children().each(function(){
+				  $(this).removeClass('col-md-3').removeClass('col-sm-6').removeClass('col-xs-12').addClass('col-md-6');
+			  })
+			  $('.change-view-btn').show()
+	});});
+ 
+ 
+ $('.clearfilter').unbind();
+ $('.clearfilter').on('click', function(){
+ 	
+ 	
+ 	$('#sorttype').attr('value','');
+ 	  $('#plantype').attr('value','');
+ 	  $('#amenities').attr('value','');
+ 	  $('#getrating').attr('value','');
+ 	  $('#lat').attr('value','');
+ 	  $('#long').attr('value','');
+ 	  $('#page').attr('value','');
+ 	$('#maxattendees').attr('value','0');
+   	$('#minValue').attr('value','');
+ 	$('#maxValue').attr('value','');
+ 	$('.maxValue').html('0');
+ 	$('.max-value').html('0 USD');
+ 	$('.min-value').html('0 USD');
+ 	$('#eventtypelist').find('input').each(function(){
+ 		$(this).prop('checked', false)
+ 	})
+ 	$('#eventtypelist').find('input').each(function(){
+ 		$(this).prop('checked', false)
+ 	})
+ 	$('.rating-set').find('input').each(function(){
+ 		$(this).prop('checked', false)
+ 	})
+ 	updatefilter(1);
+ })
+ 
+ 
+</script>
+
+        {% endif %}
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript">
+{% if view == 'map' %} 
+
+$('#mapModal').modal({
+    show: true
+});
+
+{% endif %}
+$('[data-toggle="popover"]').popover();
+
+{% if not place_length %}
+$('#messageModal').modal({
+	show: true,
+    keyboard: false,
+    backdrop: 'static'
+});
+$('.message-update').html('<h4><i class="fa fa-map-marker text-green"></i> {{ message_update }}</h4>')
+	var input = document.getElementById('locationautocomplete_update');
+	  var autocomplete = new google.maps.places.Autocomplete(input);
+	  autocomplete.setComponentRestrictions(
+	            {'country': ['us']});
+	  autocomplete.addListener('place_changed', function() {
+		  input.closest('form').submit();
+	  })
+{% endif %}
+{% if url_contains %}
+$('#messageModal').modal({
+	show: true,
+    keyboard: false,
+    backdrop: 'static'
+});
+$('.message-update').html('<h4>{{ message_update }}</h4>')
+	var input = document.getElementById('locationautocomplete_update');
+	  var autocomplete = new google.maps.places.Autocomplete(input);
+	  autocomplete.setComponentRestrictions(
+	            {'country': ['us']});
+	  autocomplete.addListener('place_changed', function() {
+		  input.closest('form').submit();
+	  })
+{% endif %}
+
+</script>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'frontend/base.html' %}
+{% load static core_extras %}
+{% block breadcrumb-wrapper %}{% endblock %}
+
+{% block content %}
+
+      <div class="wrapper">
+         <div class="dashboard-background-grey">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-6">
+                  <div class="main-title-2">
+									<h1>
+										<span>Location</span> Information
+									</h1>
+								</div>
+                   
+                  </div>
+                  <div class="col-md-6 text-right">
+                     <a class="btn button-sm border-button-theme" href="{% url 'spaceadmin:location_edit' location.pk %}">Edit Location</a>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12 text-center">
+                     <div class="panel panel-default">
+                        <div class="panel-body">
+                           <div class="mb-20">
+                             
+                                 <table class="table table-reservation table-no-border">
+                                    <thead>
+                                       <tr style="border: none;">
+                                          <th>Name</th>
+                                          <th>Phone</th>
+                                          <th>Address</th>
+                                          <th>Rooms</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr>
+                                          <td>{{ location.location_name }}</td>
+                                          <td>{{ location.contact_no }}</td>
+                                          <td>{{ location.street_address_1 }} {{ location.city }} {{ location.state }} {{ location.zipcode }}</td>
+                                          <td>{{ facility_room.count }}</td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                           <div class="mb-20">
+                           <div class="carousel">
+           						<div
+           							class="carousel-control carousel-control-prev scroll-image-left">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           						<div>
+           							<div class="carousel-item" style="display: block;">
+           								
+           								<div id="picsCarousel" class="carousel slide">
+           								<div class="carousel-inner product-item">
+           								{% if facility_room|roompicsget %}
+           								{% for data in facility_room|roompicsget %}
+			<div class="item {% if forloop.first %}active{% endif %}">
+			<img src="/media/{{ data }}" style="width:530px;height:335px;border-radius:30px;" class="cld-responsive cld-hidpi img-responsive lazyload img-rounded" alt="vicinity">
+			</div>
+			{% endfor %}
+			{% else %}
+                        <img src="/static/images/Detail0.jpg" style="width:530px;height:312px;object-fit:cover;border-radius:16px;" alt="..."   class="img-rounded">
+                        {% endif %}
+                                   		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel" data-slide="prev">
+                                     <span class="glyphicon glyphicon-chevron-left"></span>
+                                     <span class="sr-only">Previous</span>
+                                   </a>
+                                   <a class="right carousel-control" href="#picsCarousel" role="button" data-slide="next">
+                                     <span class="glyphicon glyphicon-chevron-right"></span>
+                                     <span class="sr-only">Next</span>
+                                   </a>
+           							</div>
+           						</div>
+           						<div
+           							class="carousel-control carousel-control-next scroll-image-right">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           					</div>
+                              
+                           </div>
+                        </div>
+                    
+                  
+                  <div class="col-md-6">
+                     <div class="panel panel-default">
+                        <div class="panel-body">
+                                 <h4> Hours of operation </h4>
+                                 <hr>
+                              
+                           <div class="mb-20">
+                            
+                                 <table class="table table-reservation table-location padding-top">
+                                    <tbody>
+                                       <tr>
+                           <td>Sunday</td>
+                           <td>{{ location.sun_open_time|getsettime|date:"h:i A" }} - {{ location.sun_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                        <tr>
+                           <td>Monday</td>
+                           <td>{{ location.mon_open_time|getsettime|date:"h:i A" }} - {{ location.mon_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                        <tr>
+                           <td>Tuesday</td>
+                           <td>{{ location.tue_open_time|getsettime|date:"h:i A" }} - {{ location.tue_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                        <tr>
+                           <td>Wednesday</td>
+                           <td>{{ location.wed_open_time|getsettime|date:"h:i A" }} - {{ location.wed_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                        <tr>
+                           <td>Thursday</td>
+                           <td>{{ location.thu_open_time|getsettime|date:"h:i A" }} - {{ location.thu_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                        <tr>
+                           <td>Friday</td>
+                           <td>{{ location.fri_open_time|getsettime|date:"h:i A" }} - {{ location.fri_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                        <tr>
+                           <td>Saturday</td>
+                           <td>{{ location.sat_open_time|getsettime|date:"h:i A" }} - {{ location.sat_close_time|getsettime|date:"h:i A" }}</td>
+                        </tr>
+                                    </tbody>
+                                 </table>
+                             
+                           </div>
+                           
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                  <div class="row">
+               <div class="col-md-12">
+                  <div class="panel panel-default">
+                     <div class="panel-body">
+                              <h4>Rooms</h4>
+                        <div class="mb-20">
+                              <table class="table table-dashboard">
+                                 <thead>
+                                    <tr style="border: none;">
+                                       <th>Name</th>
+                                       <th>Occupancy</th>
+                                       <th>Availability</th>
+                                       <th>Note</th>
+                                       <th></th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                 {% for facility in facility_room %}
+                                    <tr>
+                                       <td>{{ facility.facility_name }}</td>
+                                       <td>{{ facility.capacity }}</td>
+                                       <td>	<label class="btn-onoff availability">
+		<input type="checkbox"  data-id="{{ facility.pk }}" name="name" {% if facility.availability %} checked="checked" {% endif %} data-onoff="toggle"><span></span>	
+	</label></td>
+                                       <td>...</td>
+                                       <td><a class="change-view-btn" href="{% url 'spaceadmin:room_detail' facility.pk %}"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                                       
+                                    </tr>
+                                   {% endfor %}                                   
+                                 </tbody>
+                              </table>
+                           </div>
+                       
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+{% endblock %}

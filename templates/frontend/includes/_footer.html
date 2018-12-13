@@ -1,0 +1,128 @@
+<footer class="main-footer clearfix">
+    <div class="container">
+        <!-- Footer info-->
+        <div class="footer-info">
+            <div class="row">
+                <!-- About us -->
+                <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                    <div class="footer-item">
+                        <div class="main-title-2">
+                            <h1>Contact Us</h1>
+                        </div>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's printing and
+                        </p>
+                        <ul class="personal-info">
+                            <li>
+                                <i class="fa fa-map-marker"></i>
+                                Address: 458 Grandrose St.North Fort Myers
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope"></i>
+                                Email:<a href="#">demo@gmail.com</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-phone"></i>
+                                Phone: <a href="#">87654323</a>
+                            </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+                <!-- Links -->
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="footer-item">
+                        <div class="main-title-2">
+                            <h1>Links</h1>
+                        </div>
+                        <ul class="links">
+                            <li>
+                                <a href="{% url 'core:home' %}">Home</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'about:about' %}">About Us</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'contact:contact' %}">Contact Us</a>
+                            </li>
+                        
+                        </ul>
+                    </div>
+                </div>
+                <!-- Recent cars -->
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+             <div class="footer-item">
+                        <div class="main-title-2">
+                            <h1>ACTIVITIES</h1>
+                        </div>
+                        <ul class="links">
+                        {% for event in EVENT_LIST %}
+                        {% if forloop.counter < 9 %}
+                            <li>
+                                <a href="/search?location=United+States&plantype={{ event.1 }}">{{ event.1 }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            <li>
+                                <a href="{% url 'frontend:viewactivities' %}">See All Activities</a>
+                            </li>
+                        
+                        </ul>
+                    </div>
+                </div>
+                <!-- Subscribe -->
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                     <div class="footer-item">
+                        <div class="main-title-2">
+                            <h1>LOCATIONS</h1>
+                        </div>
+                        <ul class="links">
+                            <li>
+                                <a href="#">Seattle</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer end -->
+
+<!-- Copy right start -->
+<div class="copy-right">
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-8 col-sm-12">
+              © 2018 Copyright All Rights Reserved.
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <ul class="social-list clearfix">
+                    <li>
+                        <a href="#" class="facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="linkedin">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="google">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

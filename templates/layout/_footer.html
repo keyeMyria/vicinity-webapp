@@ -1,0 +1,8 @@
+{% load static %}
+<footer class="footer"
+	{% if not request.user.is_superuser %}
+	style="left:0;"{% endif %}>
+	<span class="text-right">
+	Copyright &copy;{{ PROJECT_NAME }}
+	</span>
+</footer>

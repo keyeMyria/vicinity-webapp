@@ -1,0 +1,45 @@
+{% load i18n static core_extras %}
+{% for review in reviews %}
+									<li>
+										<div class="comment">
+											<div class="comment-author">
+												<a href="#"> <img src="/static/images/avatars/admin.png" alt="avatar-5">
+												</a>
+											</div>
+											<div class="comment-content">
+												<div class="comment-meta">
+													<div class="comment-meta-author">{{ review.created_by_id.first_name }} {{ review.created_by_id.last_name }}</div>
+
+													<div class="comment-meta-date">
+														<span class="hidden-xs"> {{ review.created_on|date:"d/m/Y" }}</span>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+												<div class="comment-body">
+												<div class="comment-rating">
+													{% if review.rate %}
+							                        {% for c in 0|filterrange:review.rate %}
+							                           <i class="fa fa-star"></i>
+							                           {% endfor %}
+							                           {% for c in review.rate|filterrange:5 %}
+							                          <i class="fa fa-star-o"></i>
+							                           {% endfor %}
+							                           {% else %}
+							                           {% for c in 0|filterrange:5 %}
+							                          <i class="fa fa-star-o"></i>
+							                           {% endfor %}
+							                           {% endif %}
+							                        </div>
+									
+													<p>{{ review.message }}</p>
+												</div>
+											</div>
+										</div>
+
+									</li>
+									  {% endfor %}
+									  {% if reviews.count < 5 %}
+									  <script type="text/javascript">
+									  $('.morereview').remove()
+									  </script>
+									  {% endif %}

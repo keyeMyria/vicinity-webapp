@@ -1,0 +1,147 @@
+{% load static i18n core_extras %}
+					<div class="login-wrapper section-padding">
+						<div class="edit-form">
+							<div class="edit-text">
+								<h3>Update Profile pic</h3>
+
+							</div>
+
+							<hr />
+
+						</div>
+
+						<div class="edit-form  ">
+								<div class="form-profile-user">
+<p class="help-block text-center text-red hidden error-pic">please upload picture in .png,.jpeg or.jpg format</p>
+											<form id="userupdate" method="POST" enctype="multipart/form-data" action="{% url 'frontend:profile_save' %}">
+											{% csrf_token %}
+											<input type="hidden" value="profilepicupdate" name="app_label">
+												<div class="form-group">
+												<div class="uploading-content-image hidden ">
+					      <div class="uploading-header">
+					        <h4 class="uploading-title">Uploading...</h4>
+					      </div>
+					      <div class="uploading-body">
+					        <div class="progress">
+					        
+					          <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
+					        </div>
+					      </div>
+					    </div>
+					    <div id="gallery-image" class="text-center image-bx">
+					   
+										
+					    </div>
+    					 <div class="text-center">
+												<button type="button" class="btn button-md button-theme button-border hidden gallery-image">Save Profile pic
+													</button>
+													</div>
+													<div class="clearfix"></div>
+				
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-12 text-center">
+
+										<div class="form-group-realtive ">
+											<div class="upload-btn-wrapper">
+												<button type="button" class="btn button-md button-theme button-border addimage">Upload Profile pic
+													</button>
+												<input name="mypicture" class="hidden" id="addimage" type="file"> <span class="up-images">
+												</span>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+						
+												</div>
+												
+
+											</form>
+
+								</div>
+
+
+						</div>
+
+					</div>
+
+				
+	<script>
+	$('.addimage').on('click', function(){
+		$('.error-pic').addClass('hidden');
+		$('#addimage').trigger('click');	
+	})
+	var filesInput = document.getElementById("addimage");
+		if (filesInput != null){
+	        
+	        filesInput.addEventListener("change", function(event){
+	        	
+	        	$(".uploading-content-image").removeClass('hidden');
+	        	
+	      	  var progress = parseInt($(this).size() * 100, 10);
+	            var strProgress = progress + "%";
+	            $(".uploading-content-image").find(".progress-bar").css({"width": strProgress});
+	            $(".uploading-content-image").find(".progress-bar").text(strProgress);
+
+	            $(".uploading-content-image").addClass('hidden');
+	            
+	            var files = event.target.files; 
+	            var output = document.getElementById("gallery-image");
+	            
+	            
+	            for(var i = 0; i< files.length; i++)
+	            {
+	                var file = files[i];
+	                if(!file.type.match('png') && !file.type.match('jpeg') && !file.type.match('jpg'))
+	                	{$('.error-pic').removeClass('hidden');}
+	                else{
+	                
+	                var picReader = new FileReader();
+	                
+	                picReader.addEventListener("load",function(event){
+	                    
+	                    var picFile = event.target;
+	                    
+	                    var div = document.createElement("span");
+	                    div.className = "gallery";
+	                    
+	                    div.innerHTML = "<img class='img-hgt' src='" + picFile.result + "'>";
+	                    output.innerHTML = '';
+	                    output.insertBefore(div,null);          
+	                
+	                });
+	                $('.gallery-image').removeClass('hidden');
+	                $('.addimage').addClass('hidden')
+	                
+	                picReader.readAsDataURL(file);
+	                }
+	            }                               
+	           
+	        });
+		}
+		function handle_post_form(value, type){
+		    var csrfmiddlewaretoken = getCookie('csrftoken');
+		    var data = new FormData($('#userupdate').get(0));
+		            $.ajax({
+		                type: 'POST',
+		                url: '/profile/save',
+		                data: data,
+		                cache: false,
+		                processData: false,
+		                contentType: false,
+		                success: function(data){
+		                	$('#update-modal').modal('hide');
+		                   	$('.userprofileupdate').html(data)
+		                }
+		            });
+		}
+		
+		$('.gallery-image').on('click', function(){
+			handle_post_form($('#addimage').val(),'image')
+		})
+		
+	</script>

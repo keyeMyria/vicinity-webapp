@@ -1,0 +1,327 @@
+{% extends 'frontend/base.html' %}
+ {% load static core_extras %}
+ {% block breadcrumb-wrapper %}
+ {% endblock %}
+  {% block content %}
+<div class="wrapper">
+	<div class="dashboard-background-grey">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="main-title-2">
+						<h1>
+							<span>Room</span> Information
+						</h1>
+					</div>
+
+				</div>
+				<div class="col-md-6 text-right">
+					<a class="btn button-sm border-button-theme"
+						href="{% url 'spaceadmin:facility_edit' facility_room.pk %}">Edit
+						Room</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<div class="panel panel-default">
+						<div class="panel-body">
+
+							<table class="table table-reservation table-no-border">
+								<thead>
+									<tr style="border: none;">
+										<th>Name</th>
+										<th>Occupancy</th>
+										<th>Availability</th>
+										<th>Note</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>{{ facility_room.facility_name }}</td>
+										<td>{{ facility_room.capacity }}</td>
+										<td>	<label class="btn-onoff availability">
+		<input type="checkbox"  data-id="{{ facility_room.pk }}" name="name" {% if facility_room.availability %} checked="checked" {% endif %} data-onoff="toggle"><span></span>	
+	</label></td>
+										<td>...</td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="mb-20">
+						<div class="carousel">
+							<div
+								class="carousel-control carousel-control-prev scroll-image-left">
+								<i class="icon-image-arrows"></i>
+							</div>
+							<div>
+								<div class="carousel-item" style="display: block;">
+
+									<div id="picsCarousel" class="carousel slide">
+										<div class="carousel-inner product-item">
+											{% if facility_room|roompics %} 
+											{% for data in facility_room|roompics %}
+											<div class="item {% if forloop.first %}active{% endif %}">
+												<img src="/media/{{ data.image_file }}"
+													style="height: 335px; border-radius: 30px;"
+													class="cld-responsive cld-hidpi img-responsive lazyload img-rounded"
+													alt="vicinity">
+											</div>
+											{% endfor %} 
+											{% else %} <img src="/static/images/Detail0.jpg"
+												style="border-radius: 16px;" alt="..." class="img-rounded">
+											{% endif %}
+										</div>
+									</div>
+									<a class="left carousel-control" role="button"
+										href="#picsCarousel" data-slide="prev"> <span
+										class="glyphicon glyphicon-chevron-left"></span> <span
+										class="sr-only">Previous</span>
+									</a> <a class="right carousel-control" href="#picsCarousel"
+										role="button" data-slide="next"> <span
+										class="glyphicon glyphicon-chevron-right"></span> <span
+										class="sr-only">Next</span>
+									</a>
+								</div>
+							</div>
+							<div
+								class="carousel-control carousel-control-next scroll-image-right">
+								<i class="icon-image-arrows"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="main-title-2">
+								<h1>
+									<span>Details</span>
+								</h1>
+							</div>
+							<hr />
+							<ul class="address-list">
+								<li><span> <i class="fa fa-tag"></i>parking_spaces:
+								</span> {{ facility_room.parking_spaces }}</li>
+								<li><span> <i class="fa fa-tag"></i>capacity:
+								</span> {{ facility_room.capacity }}</li>
+								<li><span> <i class="fa fa-tag"></i>Refundable fee
+								</span> {{ facility_room.none_refundable_fee }}</li>
+								<li><span> <i class="fa fa-tags"></i>profit :
+								</span> {{ facility_room.cost_for_profit }}</li>
+								<li><span> <i class="fa fa-tag"></i>non profit
+								</span> {{ facility_room.cost_for_non_profit }}</li>
+
+
+								<li><span> <i class="fa fa-tag"></i>fac cost misc
+										alc
+								</span> {{ facility_room.fac_cost_misc_alc }}</li>
+
+
+								<li><span> <i class="fa fa-tag"></i>cost misc
+										rental clean dep no alc
+								</span> {{ facility_room.fac_cost_misc_rental_clean_dep_no_alc }}</li>
+
+
+
+								<li><span> <i class="fa fa-tag"></i>fac cost misc
+										rental clean dep alc
+								</span> {{ facility_room.fac_cost_misc_rental_clean_dep_alc }}</li>
+
+
+								<li><span> <i class="fa fa-tag"></i>fac cost misc
+										non ref hr mtn
+								</span> {{ facility_room.fac_cost_misc_non_ref_hr_mtn }}</li>
+
+
+								<li><span> <i class="fa fa-tag"></i>staff_fee
+								</span> {{ facility_room.staff_fee }}</li>
+
+
+								<li><span> <i class="fa fa-tag"></i>fac amenities
+								</span> {{ facility_room.fac_amenities }}</li>
+
+
+							</ul>
+
+
+							<div class="conten-wrap">
+								<div class="main-title-2">
+									<h1>
+										<span>Description</span>
+									</h1>
+								</div>
+
+								<p>{{ facility_room.facility_information }}</p>
+							</div>
+
+
+							<div class="conten-wrap">
+								<div class="main-title-2">
+									<h1>
+										<span>Note 1</span>
+									</h1>
+								</div>
+								<p>{{ facility_room.note_1 }}</p>
+							</div>
+
+							<div class="conten-wrap">
+								<div class="main-title-2">
+									<h1>
+										<span>Note 2</span>
+									</h1>
+								</div>
+
+
+								<p>{{ facility_room.note_2 }}</p>
+							</div>
+
+							<div class="conten-wrap">
+								<div class="main-title-2">
+									<h1>
+										<span>Note 3</span>
+									</h1>
+								</div>
+								<p>{{ facility_room.note_3 }}</p>
+							</div>
+
+							<div class="conten-wrap">
+
+								<div class="main-title-2">
+									<h1>
+										<span>Res 1</span>
+									</h1>
+								</div>
+								<p>{{ facility_room.res_1 }}</p>
+							</div>
+
+							<div class="conten-wrap">
+								<div class="main-title-2">
+									<h1>
+										<span>Res 2</span>
+									</h1>
+								</div>
+								<p>{{ facility_room.res_2 }}</p>
+							</div>
+
+							<div class="conten-wrap">
+
+								<div class="main-title-2">
+									<h1>
+										<span>Res 3</span>
+									</h1>
+								</div>
+								<p>{{ facility_room.res_3 }}</p>
+
+							</div>
+							<br />
+							<ul class="address-list">
+								<li><span> <i class="fa fa-tag"></i>fac surf type
+								</span> {{ facility_room.fac_surf_type }}</li>
+
+								<li><span> <i class="fa fa-tag"></i>fac feature
+								</span> {{ facility_room.fac_feature }}</li>
+
+
+
+								<li><span> <i class="fa fa-tag"></i>fee based
+										amenities
+								</span> {{ facility_room.fee_based_amenities }}</li>
+
+
+								<li><span> <i class="fa fa-tag"></i>event_type
+								</span> {{ facility_room.event_type }}</li>
+							</ul>
+
+
+
+
+							<div class="mb-20">
+								<table class="table table-dashboard">
+									<tbody>
+
+									</tbody>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+
+
+							<div class="main-title-2">
+								<h1>
+									<span>Reservation</span>
+								</h1>
+							</div>
+							<hr />
+
+
+						</div>
+
+					</div>
+					<div class="row mb-40">
+						<div class="col-md-12">
+						<table class="table table-dashboard">
+								<thead>
+									<tr style="border: none;">
+										<th>Name</th>
+										<th>Room</th>
+										<th class="sorting">Date</th>
+										<th class="sorting">From</th>
+										<th class="sorting">To</th>
+										<th>Special Request</th>
+									</tr>
+								</thead>
+								<tbody>
+							{% for book in booking %}
+
+									<tr>
+										<td>{{ book.user_subscribe.get_full_name }}</td>
+										<td>{{ book.room_book }}</td>
+										<td>{{ book.start_date|date:"M. d, Y" }}</td>
+										<td>{{ book.start_date|date:"h:i a" }}</td>
+										<td>{{ book.end_date|date:"h:i a" }}</td>
+										<td>{{ book.special_request }}</td>
+									</tr>
+
+
+
+							{% endfor %}
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+{% endblock %}

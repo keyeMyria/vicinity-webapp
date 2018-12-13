@@ -1,0 +1,749 @@
+{% extends "frontend/base.html" %}
+{% load static core_extras %}
+{% block breadcrumb-wrapper %}
+{% endblock %}
+{% block content %}
+<section class="booking-section content-area booking-section">
+ <div class="container">
+
+	
+	<div class="row">
+
+		<div class="col-md-8">
+		<div class="main-title-2">
+                            <h1><span>Request </span> to book</h1>
+                        </div>
+			<div class="form-standard sidebar-widget contact-1">
+                   <div class="form-content"> 
+         <form id="checkout" method="post" action="/booking/payment">
+                    
+   <input type='hidden' id="check_date_form" name="check_date_form" value=''>
+   <input type='hidden' id='client_token' value='{{client_token}}'>
+   <input type="hidden" value='{{ roomId }}' id="roomId"  name='roomId'>
+   <input type="hidden" value='{{ next }}' name='next'>
+   <input type="hidden" value='{{ TOTAL_FORMS }}' id="id_date_extend-TOTAL_FORMS"  name='date_extend_total_forms'>
+   
+		
+					
+									<h4>1. When is your activity?</h4>
+									<hr/>
+					<div class="date_extend">
+					{% for dates in array_dates %}
+					
+						<div class="row">
+						
+						
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label">Date</label> <input value='{% getvaluedate dates "start_date" forloop.counter %}' required class="form-control search-fields form_datetime start_date_book" required="" id="start_date" name="start_date-{{ forloop.counter }}" placeholder="Start Date">
+								</div>
+
+							</div>
+							
+							
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label"> Start </label> <input value='{% getvaluedate dates "start_time" forloop.counter %}' required class="form-control search-fields start_time_book" required="" id="start_time" name="start_time-{{ forloop.counter }}" placeholder="Start Time">
+								</div>
+
+							</div>
+
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="control-label"> End </label> <input value='{% getvaluedate dates "end_time" forloop.counter %}' required class="form-control search-fields form_datetime end_time_book" required="" id="end_time" name="end_time-{{ forloop.counter }}" placeholder="End time">
+								</div>
+
+							</div>
+						</div>
+						{% endfor %}
+						</div>
+						
+							<div class="form-group text-right">
+								<a href="javascript:void(0);" class="delete-day hidden"><i class="fa fa-trash"></i>
+								Delete</a>
+								</div>
+						<div class="form-group text-right">
+							<a href="javascript:void(0);" class="extent-day hidden"><i class="fa fa-plus"></i>
+								Extent a day</a>
+						</div>
+
+<div class="errornotebooking"></div>
+						<!-- <button class="button-md button-theme btn-block quotecheckupdate" onclick="quotecheckupdate($(this), event,'');" type="button">Get Quote</button> -->
+					
+					<br/>
+					<div class="col-md-12">
+					<div class="flextime">
+						<div class="checkbox">
+						<input class="hidden"
+								id="timeflexible" name="timeflexible"
+								type="checkbox">
+							<label class="checkbox-label" for="timeflexible">My timing are flexible</label>
+						</div>
+					</div>
+					</div>
+					
+					<div class="form-group">
+							<label class="control-label"> No. of attendees</label> <input class="form-control search-fields noofattendees" value="{{ attendnumber|default_if_none:'' }}" required="required" name="attendnumber" placeholder="No. of attendees">
+						</div>
+						
+						<br/>
+
+								<h4>
+										2. Message your host,
+										{{ roomdetails.partner.userID.first_name }} {{ roomdetails.partner.userID.last_name }}
+										
+									</h4>
+									<hr/>
+						<div class="form-group message">
+						 
+							<textarea class="form-control" name="message_request" required placeholder="Describe how you plan to use the space, describe your activity" rows="4"></textarea>
+						</div>
+						<div class="form-group">
+						<div class="checkbox">
+						<input name="scheduleflexible" class="hidden"
+								id="scheduleflexible" type="checkbox">
+							<label class="checkbox-label" for="scheduleflexible">  I want to schedule a visit
+							</label>
+							</div>
+						</div>
+						
+						
+					
+						<br/>
+						<div class="clearfix">
+							
+							<div class="form-inputs">
+								<div class="payment-wrapper">
+									
+										<h4>3. How would you like to pay?</h4>
+									</div>
+										<hr/>
+										 
+          
+		<input type='hidden' name='amount' value='{{amount}}'>
+		<input type="hidden" id="nonce" name="payment_method_nonce"></input>
+		 <div id='payment-form'>
+		</div> 
+		<p class="help-block aggreeerror hidden error-msg" ></p>
+											
+										
+									</div>
+								
+							</div>
+						
+						
+						
+								<hr>
+								<h4>What's next?</h4>
+								<p>Your host will have 2 business days to respond to your
+									booking request. If they decline or don’t respond, the
+									temporary authorization on your card will be released and you
+									will not be charged.</p>
+								<p>
+									You can cancel a booking up to 48 hours after it has been
+									accepted and receive a full refund. However, cancellations for
+									bookings confirmed within 7 days of the start time are
+									non-refundable. Please see our
+									<a href="#" >Cancellation
+										Policy</a>
+									for more details regarding refunds.
+								</p>
+								<hr>
+						
+									<button type="button" class="button-md button-theme sendbookingrequest form bookings-submit">Send
+										Booking Request</button>
+								
+								
+								<div class="col-md-12">
+										<hr>
+									</div>
+								<p class="cta-disclaimer requestBkg">
+									<span>By clicking
+										<strong>Send Booking Request,
+									</strong>
+									</span><span>you agree to 
+										<a href="#">Vicinity Services Agreement</a>, which includes the
+										<a href="#">Community
+											Guidelines</a>
+									, and 
+										<a href="#">Cancellation
+											and Refund Policy</a>.
+									</span>
+								</p>
+				</form>
+				
+				</div>
+			</div>
+		</div>	
+		
+				<div class="col-md-4">
+			<div class="summary-main ">
+				<div class="summary-container ">
+				<div class="main-title-2">
+                            <h1><span>Activity </span> Details</h1>
+                        </div>
+			
+					<div class="summary-image">
+						<div class="property">
+                  <div class="product-item">
+                     <div id="slideshow" class="pi-img-wrapper">
+                     {% if roomdetails|roompics %}
+                       <div class="property-img">
+                       <div class="carousel">
+           						<div
+           							class="carousel-control carousel-control-prev scroll-image-left">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           						<div>
+           							<div class="carousel-item" style="display: block;">
+           								
+           								<div id="picsCarousel_{{ roomdetails.pk }}" class="carousel slide" onclick='window.location.href="{% url 'frontend:roomview' roomdetails.id %}"'>
+           								<div class="carousel-inner product-item">
+           								{% for data in roomdetails|roompics %}
+			<div class="item {% if forloop.first %}active{% endif %}">
+			<img src="/media/{{ data.image_file }}" class="cld-responsive cld-hidpi img-responsive lazyload" alt="vicinity">
+			</div>
+			{% endfor %}
+                                   		  </div></div><a class="left carousel-control" role="button" href="#picsCarousel_{{ roomdetails.pk }}" data-slide="prev">
+                                     <span class="glyphicon glyphicon-chevron-left"></span>
+                                     <span class="sr-only">Previous</span>
+                                   </a>
+                                   <a class="right carousel-control" href="#picsCarousel_{{ roomdetails.pk }}" role="button" data-slide="next">
+                                     <span class="glyphicon glyphicon-chevron-right"></span>
+                                     <span class="sr-only">Next</span>
+                                   </a>
+           							</div>
+           						</div>
+           						<div
+           							class="carousel-control carousel-control-next scroll-image-right">
+           							<i class="icon-image-arrows"></i>
+           						</div>
+           					</div>
+                       
+                       
+                       
+                       </div>
+                        {% else %}
+                         <div class="property-img">
+                         <div class="property-tag button sale"> <span class="pi-price right">${{ roomdetails|get_price }}/hr</span></div>
+                         <div class="property-tag button alt featured"></div><img src="/static/images/Detail0.jpg" class="img-responsive" alt="...">
+                          
+                         </div>
+                        {% endif %}
+                       
+                     </div>
+                     
+                     <div class="property-content">
+                     <h3 class="title clearfix"><span class="pull-left">{{ roomdetails.facility_name }}</span>  
+                    </h3>
+                     <h3 class="property-address">{{ roomdetails.location_id.street_address_1 }} {{ roomdetails.location_id.city }} {{ roomdetails.location_id.state }} {{ roomdetails.location_id.zipcode }}</h3>
+                    <div class="property-footer"> <span class="left"><i class="fa fa-users"></i> Occupancy - {{ roomdetails.capacity }}</span>
+                    
+                    
+                     <div class="row">
+                      <div class="p-bottom-section">
+                    
+                        <div class="col-md-6">
+                           <div class="rating">
+                        {% if roomdetails|getrating %}
+                        {% with roomdetails|getrating as endvalue %}
+                        {% for c in 0|filterrange:endvalue %}
+                           <label class="f-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% for c in endvalue|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endwith %}
+                           {% else %}
+                           {% for c in 1|filterrange:5 %}
+                           <label class="e-stars">
+                           <input type="radio" name="rating" value="c" title="{{ c }} stars"> {{ c }}
+                           </label>
+                           {% endfor %}
+                           {% endif %}
+                        </div>
+                        </div>
+                     
+                      </div>
+                       
+                    </div>
+                    
+                    
+                     </div>
+                  </div>
+                  </div>
+                  </div>
+					</div>
+					<div class="form-group quote-get-result">
+						<div class="col-xs-12" data-reactid="212">
+							<div class="summary-block">
+								<label>Price</label>
+								<div class="summary-content">
+									<span><span>$<span class="price-quote">{{ roomdetails|get_price }}</span></span>&nbsp; x &nbsp;<span class="hours-quote"></span>
+										<span>hours</span></span><span class="pull-right"><span>$<span class="total-quote total-hours-price"></span></span></span>
+									<div></div>
+								</div>
+								<hr class="summary-line fnb">
+								<h5 class="summary-total">
+									Total
+									<span class="pull-right"><span>$<span class="sub-total-quote"></span></span></span>
+								</h5>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</section>
+
+
+<div class="date_extend_form hidden">
+						<div class="row dateform">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields form_datetime start_date_book" required="" id="start_date" name="start_date-__prefix__" placeholder="Start Date">
+								</div>
+
+							</div>
+							
+							
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields start_time_book" required="" id="start_time" name="start_time-__prefix__" placeholder="Start Time">
+								</div>
+
+							</div>
+
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group"> <input required class="form-control search-fields form_datetime end_time_book" required="" id="end_time" name="end_time-__prefix__" placeholder="End time">
+								</div>
+
+							</div>
+						</div>
+						</div>
+						
+<script src="{% static 'js/dropin.min.js' %}" ></script>
+<script>
+   var clientToken = document.getElementById('client_token').value;
+
+   var form = document.querySelector('#checkout');
+   var nonceInput = document.querySelector('#nonce');
+ braintree.dropin.create({
+	  authorization: clientToken,
+	  selector: '#payment-form',
+	  locale: 'en_US',
+	  paypal: {
+		    flow: 'checkout',
+		  },
+		 paypalCredit: {
+		   flow: 'checkout',
+		  }
+	}, function (err, dropinInstance) {
+        if (err) {
+            console.error(err)
+    return;
+          }
+        $('.sendbookingrequest').attr('type','submit')
+          form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            dropinInstance.requestPaymentMethod(function (err, payload) {
+              if (err) {
+
+                  $('.error-msg').html(err);
+                  $('.error-msg').html( $('.error-msg').html().replace('available','selected').replace('Error: ',''))
+                  $('.error-msg').removeClass('hidden')
+                return;
+              }
+
+              nonceInput.value = payload.nonce;
+            	if($('#checkout').valid()){
+              	$('#checkout').submit();
+            	}
+            	
+            	
+            });
+          }); 
+	    }); 
+ 
+ 
+   var data = false
+   function quotecheckupdate (self, message) {
+
+		var validator = self.closest('form').validate();
+		//validator.resetForm();
+	/*e.preventDefault()*/
+	    var csrfmiddlewaretoken = getCookie('csrftoken');
+		var dateArry = []
+		$('.date_extend').find('.row').each(function(){
+			var self = $(this);
+			if(self.find(".start_time_book").val() != '' && self.find(".end_time_book").val() != ''){
+				var start_time_book = self.find(".start_time_book").data("datetimepicker").getDate().toString()
+				var end_time_book = self.find(".end_time_book").data("datetimepicker").getDate().toString()
+				dateArry.push({'start_time_book':start_time_book,
+					'end_time_book':end_time_book})
+			}
+		
+	    
+		});
+		 $.ajax({
+		    	url : "/get-quote-booking/",
+		    	type: 'POST',
+		    	datatype: "json",
+		    	data: {
+		    		'Id':$('#roomId').val(),
+		    		'dateArry': JSON.stringify(dateArry),
+	                "csrfmiddlewaretoken": csrfmiddlewaretoken,
+		    		},
+	    	success : function (response) {
+	    		if(response){
+	    			$('.errornotebooking').html(response)
+	    			if(self.closest('form').valid() && !response){
+	    				self.attr('type','submit');
+	        			}
+	    			else{
+	    				self.attr('type','button');
+	    			}
+	    			$('.quote-get-result').addClass('hidden')
+	    			
+	    		}
+	    		else{
+	    			$('.errornotebooking').html('')
+	    			pricearry=[]
+	    			
+	    			$('.date_extend').find('.row').each(function(){
+			var self = $(this);
+			if(self.find(".start_time_book").val() != '' && self.find(".end_time_book").val() != ''){
+				var start_time_book = moment(self.find(".start_date_book").val() + ' ' + self.find(".start_time_book").val(), 'DD/MM/YYYY hh:00 A').toDate();
+				var end_time_book = moment(self.find(".start_date_book").val() + ' ' + self.find(".end_time_book").val(), 'DD/MM/YYYY hh:00 A').toDate();
+				pricearry.push({'start_time_book':start_time_book,
+					'end_time_book':end_time_book})
+			}
+		
+	    
+		});
+
+	    			var hours = 0
+	    			for (var i = 0; i < pricearry.length; i++) {
+
+	    				hours += parseInt(Math.abs(new Date(pricearry[i]['end_time_book']) - new Date(pricearry[i]['start_time_book'])) / 36e5);
+
+	       
+	    			}
+	    			$('.hours-quote').html(hours);
+	    			$('.total-hours-price').html(parseFloat($('.price-quote').html()) * hours)
+	    			var total_quote = parseFloat('0.00')
+	    			$('.total-quote').each(function(){
+	        			total_quote += parseFloat($(this).html())
+	    			})
+	    			$('.sub-total-quote').html(total_quote)
+	    			$('#pricevalue').val(total_quote)
+	    			data = true
+
+	    	}
+	    	}
+		 })
+		 
+	    }
+   
+   var arry = []
+   var bookingdetail = [{% for date in date_generated %}
+   new Date('{{ date|date:"Y-m-d H:00" }}'),
+   {% endfor %}]
+   var bookingarry = []
+   var datenotavailable = [{% for date in date_not_available %}
+   new Date('{{ date|date:"Y-m-d H:00" }}'),
+   {% endfor %}]
+   function datepicker_setup(date, type){
+   	
+
+   $('.date_extend').find('.row').each(function(){
+   	var self = $(this);
+   	if (type=='contact'){
+   	self.find('input').each(function(){
+   		$(this).val('');
+   	})
+   	self.closest('form').find('.form-group').each(function(){
+   		$(this).removeClass('has-error');
+   		$(this).find('span.help-block').remove();
+   	})
+   	 
+       		self.closest('form').find('.quote-get-result').addClass('hidden')
+   	self.closest('form').find('.noofattendees').val('')
+   	self.closest('form').find('textarea').val('')
+   	$(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val('1');
+   }
+   	
+   	
+   self.find(".start_date_book").datetimepicker({
+   	format: 'dd/mm/yyyy',
+     minuteStep: 60,
+     autoclose: true,
+     todayBtn: true,
+     startDate: date,
+     startView: 2,
+     minView: 2,
+     maxView: 1,
+     minDate: 0,
+   }).on('changeDate', function(ev){
+    	var updateddate = $(this).data("datetimepicker").getDate()
+    	
+    	
+   	self.find(".start_date_book").closest('.form-group').removeClass('hidden').find('span.help-block').remove()
+   self.find(".start_time_book").val('')
+
+    	quotecheckupdate ($('.quotecheckupdate'), '')
+
+   	self.find(".start_time_book").datetimepicker('remove')
+   	
+   	self.find(".end_time_book").datetimepicker('remove')
+   	
+     	self.find(".start_time_book").datetimepicker({
+   	    minuteStep: 60,
+   	    pickerPosition: 'bottom-right',
+   	    format: 'HH:00 p',
+   	    autoclose: true,
+   	    showMeridian: true,
+   	    startView: 1,
+   	    minView: 1,
+   	    maxView: 0,
+   	    startDate: updateddate,
+   	    setDate: updateddate,
+         }).on('changeDate', function(ev){
+       	  self.find(".end_time_book").val('')
+       	  self.find(".end_time_book").datetimepicker('remove')
+       	  $(this).closest('form').find('.extent-day').unbind()
+       		extend_date($(this))
+
+       		var updateddate2 = new Date($(this).data("datetimepicker").getDate())
+       		var newDate = updateddate2
+      	     newDate.setDate(newDate.getDate());
+      	  	newDate.setHours(updateddate2.getHours() + 1);
+       	  self.find(".end_time_book").datetimepicker({
+       			pickDate: false,
+       		    minuteStep: 60,
+       		    pickerPosition: 'bottom-right',
+       		    format: 'HH:00 p',
+       		    autoclose: true,
+       		    showMeridian: true,
+       		    startView: 1,
+       		    minView: 1,
+       		    maxView: 0,
+       		    startDate: newDate,
+       		}).on('changeDate', function(ev){
+       			$(this).closest('form').find('.extent-day').removeClass('hidden');
+       			self.find(".end_time_book").datetimepicker('startDate',newDate)
+       			self.find(".end_time_book").datetimepicker('update'); 
+
+       			self.closest('form').find('.get-quote-booking').attr('type', 'button')
+       			self.closest('form').find('.quote-get-result').addClass('hidden')
+
+       	    	  self.closest('.date_extend').find('input').each(function(){
+       	    	 		if($(this).val() != '' ){
+       	    	 			$(this).closest('.form-group').removeClass('has-error')
+       	    	 			$(this).closest('.form-group').find('span.help-block').remove()
+       	    	 		}
+       	    	 	}) 
+       	    	 	quotecheckupdate ($('.quotecheckupdate'), '')
+       	    	 	
+       		})
+      			self.find(".end_time_book").datetimepicker('startDate',newDate)
+      			self.find(".end_time_book").datetimepicker('setDatesDisabled',bookingdetail)
+   			self.find(".end_time_book").datetimepicker('update'); 
+       		self.closest('form').find('.get-quote-booking').attr('type', 'button')
+       		self.closest('form').find('.quote-get-result').addClass('hidden')
+       		
+       	  
+       	  $(this).closest('form').find('.extent-day').unbind()
+       		extend_date($(this))
+       		
+       	  });
+    	
+    	
+
+   	self.find(".start_time_book").datetimepicker('setDate',updateddate)
+   	self.find(".start_time_book").datetimepicker('setDatesDisabled',bookingdetail)
+   	self.find(".start_time_book").datetimepicker('update');
+   	self.closest('form').find('.get-quote-booking').attr('type', 'button')
+   	self.closest('form').find('.quote-get-result').addClass('hidden')
+   	
+   	self.closest('.date_extend').find('input').each(function(){
+    		if($(this).val() != '' ){
+    			$(this).closest('.form-group').removeClass('has-error')
+    			$(this).closest('.form-group').find('span.help-block').remove()
+    		}
+    	})
+    	self.find(".end_time_book").val('')
+   	  self.find(".end_time_book").datetimepicker('remove')
+   	  $(this).closest('form').find('.extent-day').unbind()
+   		extend_date($(this))
+
+   		var updateddate2 = new Date($(this).data("datetimepicker").getDate())
+   		var newDate = updateddate2
+   	     newDate.setDate(newDate.getDate());
+   	  	newDate.setHours(updateddate2.getHours() + 1);
+   	  self.find(".end_time_book").datetimepicker({
+   			pickDate: false,
+   		    minuteStep: 60,
+   		    pickerPosition: 'bottom-right',
+   		    format: 'HH:00 p',
+   		    autoclose: true,
+   		    showMeridian: true,
+   		    startView: 1,
+   		    minView: 1,
+   		    maxView: 0,
+   		    startDate: newDate,
+   		}).on('changeDate', function(ev){
+   			$(this).closest('form').find('.extent-day').removeClass('hidden');
+   			self.find(".end_time_book").datetimepicker('startDate',newDate)
+   			self.find(".end_time_book").datetimepicker('update'); 
+
+   			self.closest('form').find('.get-quote-booking').attr('type', 'button')
+   			self.closest('form').find('.quote-get-result').addClass('hidden')
+
+   	    	  self.closest('.date_extend').find('input').each(function(){
+   	    	 		if($(this).val() != '' ){
+   	    	 			$(this).closest('.form-group').removeClass('has-error')
+   	    	 			$(this).closest('.form-group').find('span.help-block').remove()
+   	    	 		}
+   	    	 	}) 
+   	    	 	quotecheckupdate ($('.quotecheckupdate'), '')
+   	    	 	
+   		})
+   			self.find(".end_time_book").datetimepicker('startDate',newDate)
+   			self.find(".end_time_book").datetimepicker('setDatesDisabled',bookingdetail)
+   		self.find(".end_time_book").datetimepicker('update');
+   	self.find(".start_date_book").datetimepicker('setHoursDisabled',datenotavailable)
+   	+                       self.find(".start_date_book").datetimepicker('update');
+    	
+   })
+   
+   var updateddate = moment(self.find(".start_date_book").val() + ' ' + self.find(".start_time_book").val(), 'DD/MM/YYYY hh:00 A').toDate();
+   	
+     	self.find(".start_time_book").datetimepicker({
+   	    minuteStep: 60,
+   	    pickerPosition: 'bottom-right',
+   	    format: 'HH:00 p',
+   	    autoclose: true,
+   	    showMeridian: true,
+   	    startView: 1,
+   	    minView: 1,
+   	    maxView: 0,
+   	    startDate: updateddate,
+   	    setDate: updateddate,
+         }).on('changeDate', function(ev){
+        	 quotecheckupdate ($('.quotecheckupdate'), '')
+    		})
+         
+          var newDate = moment(self.find(".start_date_book").val() + ' ' +self.find(".end_time_book").val(), 'DD/MM/YYYY hh:00 A').toDate();
+   	
+     	self.find(".end_time_book").datetimepicker({
+   			pickDate: false,
+   		    minuteStep: 60,
+   		    pickerPosition: 'bottom-right',
+   		    format: 'HH:00 p',
+   		    autoclose: true,
+   		    showMeridian: true,
+   		    startView: 1,
+   		    minView: 1,
+   		    maxView: 0,
+   		    startDate: newDate,
+   		}).on('changeDate', function(ev){
+   			quotecheckupdate ($('.quotecheckupdate'), '')
+   		})
+   		$(this).closest('form').find('.extent-day').removeClass('hidden');
+     	extend_date($(this))
+   	})
+   }
+
+
+   function extend_date(self){
+   	self.closest('form').find('.extent-day').each(function(){
+   	$(this).on('click', function(){
+   		$(this).closest('form').find('.quote-get-result').addClass('hidden')
+   		 var form_idx = $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val();
+   		$(this).closest('form').find('.date_extend').append($('.date_extend_form').html().replace(/__prefix__/g, parseInt(form_idx) + 1).replace(/has-error/g, ''));
+           $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+   		
+   		
+   		datepicker_setup(new Date()); 
+
+   		if($(this).closest('form').find('.date_extend').find('.dateform').length > 0){
+   			$(this).closest('form').find('.delete-day').removeClass('hidden');
+   		}
+   		
+
+   		$(this).closest('form').find('.extent-day').unbind();
+
+   	})
+   })
+   }
+   $('.delete-day').on('click',function(){
+   	$(this).closest('form').find('.quote-get-result').addClass('hidden')
+   	 $(this).closest('form').find('.date_extend').find('.dateform:last').remove();
+   	 var form_idx = $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val();
+   	 $(this).closest('form').find('#id_date_extend-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+   	 if($(this).closest('form').find('.date_extend').find('.dateform').length < 1){
+   		 $(this).closest('form').find('.delete-day').addClass('hidden');
+   	 } 
+   	 $(this).closest('form').find('.extent-day').unbind();
+   	 extend_date($(this));
+   })
+
+   		datepicker_setup(new Date())
+   		
+   quotecheckupdate ($('.quotecheckupdate'), '')
+   function getCookie(name) {
+	    var cookieValue = null;
+	    if (document.cookie && document.cookie != '') {
+	        var cookies = document.cookie.split(';');
+	        for (var i = 0; i < cookies.length; i++) {
+	            var cookie = jQuery.trim(cookies[i]);
+
+	            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    return cookieValue;
+	}
+   $('#carddata_0').find('input').each(function(){
+    		$(this).attr('required','required')
+    	})
+   $(window).bind('beforeunload',function(){
+	   $('#carddataselect').val('0')
+	   $('#carddata_0').find('input').each(function(){
+	    		$(this).attr('required','required')
+	    	})
+   })
+   $('#carddataselect').change(function(){
+	    $('.carddetail').hide();
+	    $('#carddata_' + $(this).val()).show();
+	     if($(this).val() == 0){
+	    	 
+	    	$('#carddata_0').find('input').each(function(){
+	    		$(this).attr('required','required')
+	    	})
+	    }
+	     
+    	else{
+    		$('#carddata_0').find('input').each(function(){
+	    		$(this).removeAttr('required')
+	    	})
+    		
+    	} 
+	  });
+   
+</script>
+{% endblock %}
+{% block footer %}
+{% endblock %}
+

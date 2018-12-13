@@ -1,0 +1,376 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles core_extras %}
+{% block content %}
+<div class="wrapper">
+<div class="container">
+		<div class="row"><div class="col-md-12">
+		<ol class="progress progress--medium progress-custom">
+<li class="is-complete" data-step="S">
+   Start
+   <p>Click on next to start adding.</p>
+  </li>
+  <li class="is-complete" data-step="1">
+   1. Location
+   <p>Address</p>
+  </li>
+  <li class="is-complete" data-step="2">
+    2. About your space
+    <p >Title, Information, Parking Spaces, Capacity, Facility Amenities, Event Type</p>
+  </li>
+  <li class="is-complete" data-step="3">
+    3. Photos
+    <p >Upload photos for space</p>
+  </li>
+  
+  <li  class="is-complete" data-step="4">
+   4. Activities
+   <p >Hourly rate, Minimim hours, Discount, Cleaning, etc.</p>
+  </li>
+  <li data-step="F" class="progress__last">
+   Finish
+   <p >Review your space and click on agree to confirm</p>
+  </li>
+</ol>
+</div>
+</div>
+<div class="row"><div class="col-md-offset-2 col-md-8">
+<div class="panel panel-default">
+			<div class="form-content-box form-edit-detail">
+				<div class="details">
+				<div class="main-title-2">
+									<h1>
+										<span>Space</span> Activites
+									</h1>
+								</div>
+								<hr/>
+<form action="" method="post">
+    
+									
+									
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">None refundable fee: </label> 
+												{{ form.none_refundable_fee }}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Cost for profit: </label> 
+											{{ form.cost_for_profit }}
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Cost for non profit: </label> 
+												{{ form.cost_for_non_profit }}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc alc: </label> 
+											{{ form.fac_cost_misc_alc }}
+											</div>
+										</div>
+									</div>
+    
+    
+                                     <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc rental clean dep no alc: </label> 
+												{{ form.fac_cost_misc_rental_clean_dep_no_alc }}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc rental clean dep alc: </label> 
+											{{ form.fac_cost_misc_rental_clean_dep_alc }}
+											</div>
+										</div>
+									</div>
+    
+    
+    
+                                    <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc non ref hr mtn: </label> 
+												{{ form.fac_cost_misc_non_ref_hr_mtn }}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac cost misc: </label> 
+											{{ form.fac_cost_misc }}
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Staff fee: </label> 
+												{{ form.staff_fee }}
+											</div>
+										</div>
+										
+									</div>
+    
+    
+    
+                                   <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Note 1: </label> 
+												{{ form.note_1 }}
+											</div>
+										</div>
+									</div>
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Note 2: </label> 
+												{{ form.note_2 }}
+											</div>
+										</div>
+									</div>
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Note 3: </label> 
+												{{ form.note_3 }}
+											</div>
+										</div>
+									</div>
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Res 1: </label> 
+												{{ form.res_1 }}
+											</div>
+										</div>
+									</div>
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Res 2: </label> 
+												{{ form.res_2 }}
+											</div>
+										</div>
+									</div>
+    
+    
+    
+    
+      <div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">Res 3: </label> 
+												{{ form.res_3 }}
+											</div>
+										</div>
+									</div>
+    
+     <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac surf type: </label> 
+												{{ form.fac_surf_type }}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fac feature: </label> 
+											{{ form.fac_feature }}
+											</div>
+										</div>
+									</div>
+									
+									
+									 <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Fee based amenities: </label> 
+												{{ form.fee_based_amenities }}
+											</div>
+										</div>
+									</div>
+    
+    <div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Location type:</label> 
+												 
+                                       
+                                        {{ form.location_type }}
+                                    
+												
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label">Location name:</label> 
+{{ form.location_name }}
+											</div>
+										</div>
+									</div>
+    <div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sun open time:</label>{{ form.sun_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sun close time:</label>{{ form.sun_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Mon open time:</label>{{ form.mon_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Mon close time:</label>{{ form.mon_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Tues open time:</label> {{ form.tue_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Tues close time:</label> {{ form.tue_close_time }}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Wed open time:</label> {{ form.wed_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Wed close time:</label> {{ form.wed_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Thu open time:</label> {{ form.thu_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Thu close time:</label> {{ form.thu_close_time }}
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Fri open time:</label> {{ form.fri_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Fri close time:</label> {{ form.fri_close_time }}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sat open time:</label> {{ form.sat_open_time }}
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="control-label">Sat close time:</label> {{ form.sat_close_time }}
+				</div>
+			</div>
+		</div>
+    
+    
+    
+    
+    
+{% csrf_token %}
+									
+<hr class="cta-break">
+								
+									
+										
+	
+		
+	
+		<a href='{% url "frontend:addspacephotos" %}' class="button-sm button-theme"><i class="fa fa-angle-double-left"></i> Back</a>
+	<button type="submit"
+			class="button-sm button-theme ">Next <i class="fa fa-angle-double-right"></i></button>
+
+</form>
+	
+
+	
+	</div>
+</div>
+	</div>
+</div>
+
+</div>
+</div>
+</div>
+
+
+{% endblock %}

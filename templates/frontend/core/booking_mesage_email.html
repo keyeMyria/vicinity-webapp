@@ -1,0 +1,8 @@
+{% autoescape off %}
+{% load i18n static %}
+Hi {{ user.username }},
+
+this email is regarding for confirmation of booking for room {{ booking.room_book.title }}
+
+http://{{ domain }}{{url}}{{uid}}/{{token}}
+{% endautoescape %}
